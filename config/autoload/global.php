@@ -12,5 +12,57 @@
  */
 
 return [
-    // ...
+    'doctrine'        => [
+        // настройка миграций
+        'migrations_configuration' => [
+            'orm_default' => [
+                'directory' => 'data/DoctrineORMModule/Migrations',
+                'name'      => 'Doctrine Database Migrations',
+                'namespace' => 'Migrations',
+                'table'     => 'migrations',
+            ],
+        ],
+    ],
+    // Cache configuration.
+    'caches'          => [
+        'FilesystemCache' => [
+            'adapter' => [
+                'name'    => \Zend\Cache\Storage\Adapter\Filesystem::class,
+                'options' => [
+                    // Store cached data in this directory.
+                    'cache_dir' => './data/cache',
+                    // Store cached data for 1 hour.
+                    'ttl'       => 60 * 60 * 1,
+                ],
+            ],
+            'plugins' => [
+                [
+                    'name'    => 'serializer',
+                    'options' => [
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'translator'      => [
+        'locale' => 'en_US',
+        'cache'  => [
+            'adapter' => [
+                'name'    => 'Filesystem',
+                'options' => [
+                    'cache_dir' => __DIR__ . '/../../data/cache',
+                    'ttl'       => '3600',
+                ],
+            ],
+            'plugins' => [
+                [
+                    'name'    => 'serializer',
+                    'options' => [],
+                ],
+                'exception_handler' => [
+                    'throw_exceptions' => true,
+                ],
+            ],
+        ],
+    ],
 ];

@@ -1,0 +1,40 @@
+<?php
+// Достыпные локали
+$locales = $this->layout()->locales;
+//Текущая локаль
+$currentLocale = $this->layout()->currentLocale;
+?>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="<?= $this->url('home') ?>">
+                <img src="<?= $this->basePath('img/zf-logo-mark.svg') ?>" height="28" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>&nbsp;Skeleton Application
+            </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="<?= $this->url('home') ?>">Home</a></li>
+                <li class=""><a href="<?= $this->url('zfbuser/authentication') ?>">Login</a></li>
+                <li class=""><a href="<?= $this->url('zfbuser/registration') ?>">Reg</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= $locales[ $currentLocale ]; ?> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <?php foreach ($locales as $locale => $language): ?>
+                            <li><a class="dropdown-item dark" href="<?= $this->url('application', ['action' => 'changeLocale'],
+                                ['query' => 'locale=' . $locale . '&redirect=' . rawurlencode($this->serverUrl(true))]); ?>"><?= $language; ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

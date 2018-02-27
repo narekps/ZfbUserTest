@@ -7,11 +7,49 @@
 
 namespace Application;
 
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
+$localCfg = include __DIR__ . '/../../../config/autoload/local.php';
+
 return [
+    \ZfbUser\Module::CONFIG_KEY => [
+        'module_options' => [
+            //required, используется при формировании ссылки для подтверждения аккаунта
+            'base_url'           => 'http://zfbuser.dev/',
+
+            // required, see \ZfbUser\Entity\UserInterface
+            'user_entity_class'  => Entity\User::class,
+
+            // required, see \ZfbUser\Entity\TokenInterface
+            'token_entity_class' => Entity\Token::class,
+
+            // required, соль для хеширования паролей
+            'crypt_salt'         => 'SDAFHUKI*^&%$WE$%^Y&UGBFVCSWQE#T',
+        ],
+        'mail_sender'    => [
+            'from_email' => 'noreply@narek.pro',
+            'from_name'  => 'ADS',
+        ],
+        // required if enabled, see https://developers.google.com/recaptcha/docs/display
+        'recaptcha'      => $localCfg['google_recaptcha'],
+    ],
+    'doctrine'                  => [
+        'driver' => [
+            __NAMESPACE__ . '_driver' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [__DIR__ . '/../src/Entity'],
+            ],
+            'orm_default'             => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver',
+                ],
+            ],
+        ],
+    ],
     'router' => [
         'routes' => [
             'home' => [
