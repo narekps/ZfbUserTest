@@ -7,12 +7,9 @@ use ZfbUser\Entity\Token as ZfbToken;
 
 /**
  * @ORM\Entity(repositoryClass="ZfbUser\Repository\TokenRepository")
- * @ORM\Table(name="zfb_tokens",
- *     indexes={
+ * @ORM\Table(name="zfb_tokens", indexes={
  *     @ORM\Index(name="user_value_type_idx", columns={"user_id", "value", "type"}),
- *     @ORM\Index(name="revoked_expired_at_idx", columns={"revoked", "expired_at"}),
- *     @ORM\Index(name="revoked_expired_at_user_id_idx", columns={"revoked", "expired_at", "user_id"}),
- *     @ORM\Index(name="revoked_expired_at_type_idx", columns={"revoked", "expired_at", "type"})
+ *     @ORM\Index(name="revoked_expired_at_user_id_type_idx", columns={"revoked", "expired_at", "user_id", "type"})
  * })
  */
 class Token extends ZfbToken
