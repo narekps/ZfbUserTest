@@ -31,7 +31,8 @@
         "zendframework/zendservice-recaptcha": "^3.0",
         "doctrine/doctrine-module": "^1.2",
         "doctrine/doctrine-orm-module": "^1.1",
-        "zendframework/zend-serializer": "^2.8"
+        "zendframework/zend-serializer": "^2.8",
+        "zendframework/zend-eventmanager": "^3.2"
     },
     "autoload": {
         "psr-4": {
