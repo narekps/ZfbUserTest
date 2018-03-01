@@ -3,7 +3,7 @@
 namespace Application\Service\Listener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Zend\EventManager\Event;
+use ZfbUser\Service\Event\AddUserEvent;
 use Application\Entity\User as UserEntity;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Entity\Tracker as TrackerEntity;
@@ -32,40 +32,40 @@ class UserServiceListener
     }
 
     /**
-     * @param \Zend\EventManager\Event $event
+     * @param \ZfbUser\Service\Event\AddUserEvent $addUserEvent
      *
      * @return \ZfbUser\EventProvider\EventResult
      * @throws \ZfbUser\Service\Exception\EventResultException
      */
-    public function onAddUserBeginTransaction(Event $event)
+    public function onAddUserPre(AddUserEvent $addUserEvent)
     {
         $eventResult = new EventResult(false);
 
         /** @var UserEntity $user */
-        $user = $event->getParam('user');
-        $data = $event->getParam('data');
-        $type = $data['type'];
+        $user = $addUserEvent->getUser();
+        $formData = $addUserEvent->getFormData();
+        $type = $formData['type'];
 
         if ($type == 'provider') {
-            $this->createProvider($data, $user);
+            $this->createProvider($user, $formData);
         } else {
-            $this->createTracker($data, $user);
+            $this->createTracker($user, $formData);
         }
 
         return $eventResult;
     }
 
     /**
-     * @param array                    $data
      * @param \Application\Entity\User $user
+     * @param array                    $formData
      *
      * @return \Application\Entity\Provider
      */
-    protected function createProvider(array $data, UserEntity $user)
+    protected function createProvider(UserEntity $user, array $formData)
     {
         $provider = new ProviderEntity();
         $provider->setUser($user);
-        $provider->setFullName($data['fullName']);
+        $provider->setFullName($formData['fullName']);
 
         $this->entityManager->persist($provider);
 
@@ -73,12 +73,12 @@ class UserServiceListener
     }
 
     /**
-     * @param array                    $data
      * @param \Application\Entity\User $user
+     * @param array                    $formData
      *
      * @return \Application\Entity\Tracker
      */
-    protected function createTracker(array $data, UserEntity $user)
+    protected function createTracker(UserEntity $user, array $formData)
     {
         $tracker = new TrackerEntity();
         $tracker->setUser($user);

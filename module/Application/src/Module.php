@@ -4,6 +4,7 @@ namespace Application;
 
 use Zend\EventManager\LazyListenerAggregate;
 use Zend\Mvc\MvcEvent;
+use ZfbUser\Service\Event\AddUserEvent;
 use Zend\Validator\AbstractValidator;
 use Application\Service\Listener\UserServiceListener;
 use ZfbUser\Service\UserService;
@@ -51,8 +52,8 @@ class Module
                     [
                         [
                             'listener' => UserServiceListener::class,
-                            'method'   => 'onAddUserBeginTransaction',
-                            'event'    => 'addUser.beginTransaction',
+                            'method'   => 'onAddUserPre',
+                            'event'    => AddUserEvent::EVENT_PRE,
                             'priority' => 100,
                         ],
                     ],
