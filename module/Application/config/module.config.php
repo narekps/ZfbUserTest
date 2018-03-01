@@ -50,10 +50,10 @@ return [
             ],
         ],
     ],
-    'router' => [
+    'router'                    => [
         'routes' => [
-            'home' => [
-                'type' => Literal::class,
+            'home'        => [
+                'type'    => Literal::class,
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
@@ -74,24 +74,30 @@ return [
             ],
         ],
     ],
-    'controllers' => [
+    'controllers'               => [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
         ],
     ],
-    'view_manager' => [
+    'service_manager'           => [
+        'factories' => [
+            Service\Listener\UserServiceListener::class => Service\Listener\Factory\UserServiceListenerFactory::class,
+            'zfbuser_new_user_form'                     => Form\Factory\NewUserFormFactory::class,
+        ],
+    ],
+    'view_manager'              => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
-        'template_map' => [
+        'template_map'             => [
             'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ],
-        'template_path_stack' => [
+        'template_path_stack'      => [
             __DIR__ . '/../view',
         ],
     ],

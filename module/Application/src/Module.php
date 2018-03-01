@@ -2,8 +2,11 @@
 
 namespace Application;
 
+use Zend\EventManager\LazyListenerAggregate;
 use Zend\Mvc\MvcEvent;
 use Zend\Validator\AbstractValidator;
+use Application\Service\Listener\UserServiceListener;
+use ZfbUser\Service\UserService;
 
 /**
  * Class Module
@@ -38,7 +41,30 @@ class Module
         AbstractValidator::setDefaultTranslator($e->getApplication()->getServiceManager()->get('MvcTranslator'));
 
         $app = $e->getApplication();
-        $app->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'setTranslatorLanguage'], 100);
+        $app->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'setTranslatorLanguage'], 1);
+
+        $app->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, function (MvcEvent $e) use ($app) {
+            if ($e->getRouteMatch()->getMatchedRouteName() === 'zfbuser/new-user') {
+                /** @var \ZfbUser\Service\UserService $userService */
+                $userService = $app->getServiceManager()->get(UserService::class);
+                $aggregate = new LazyListenerAggregate(
+                    [
+                        [
+                            'listener' => UserServiceListener::class,
+                            'method'   => 'onAddUserBeginTransaction',
+                            'event'    => 'addUser.beginTransaction',
+                            'priority' => 100,
+                        ],
+                    ],
+                    $app->getServiceManager()
+                );
+                $aggregate->attach($userService->getEventManager());
+
+                return true;
+            }
+
+            return true;
+        }, 10);
     }
 
     /**
@@ -59,7 +85,7 @@ class Module
             }
 
             $sm = $e->getApplication()->getServiceManager();
-            /** @var \Zend\Mvc\I18n\Translator $translator */
+            /** @var \Zend\Mvc\I18n\Translator|\Zend\I18n\Translator\Translator $translator */
             $translator = $sm->get('MvcTranslator');
             $translator->setLocale($locale);
         }
