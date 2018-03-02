@@ -29,7 +29,7 @@ class IndexController extends AbstractActionController
         $locale = $this->params()->fromQuery('locale', '');
         $redirect = $this->params()->fromQuery('redirect', null);
 
-        if (!isset($locales[ $locale ])) {
+        if (!isset($locales[$locale])) {
             $locale = \Application\Module::DEFAULT_LOCALE;
         }
 

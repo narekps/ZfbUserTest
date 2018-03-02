@@ -1,25 +1,25 @@
 <?php
 
-namespace Application\Service\Listener\Factory;
+namespace Application\EventListener\UserService\Factory;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Service\Listener\UserServiceListener;
+use Application\EventListener\UserService\AddUserEventListener;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class UserServiceListenerFactory
+ * Class AddUserEventListenerFactory
  *
- * @package Application\Service\Listener\Factory
+ * @package Application\EventListener\UserService\Factory
  */
-class UserServiceListenerFactory implements FactoryInterface
+class AddUserEventListenerFactory implements FactoryInterface
 {
     /**
      * @param \Interop\Container\ContainerInterface $container
      * @param string                                $requestedName
      * @param array|null                            $options
      *
-     * @return \Application\Service\Listener\UserServiceListener|object
+     * @return \Application\EventListener\UserService\AddUserEventListener|object
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -28,7 +28,7 @@ class UserServiceListenerFactory implements FactoryInterface
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
-        $listener = new UserServiceListener($entityManager);
+        $listener = new AddUserEventListener($entityManager);
 
         return $listener;
     }

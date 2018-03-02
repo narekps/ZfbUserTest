@@ -4,7 +4,6 @@ namespace Application\Form\Factory;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use ZfbUser\Options\ModuleOptions;
 
 /**
  * Class NewUserFormFactory
@@ -18,31 +17,28 @@ class NewUserFormFactory implements FactoryInterface
      * @param string                                $requestedName
      * @param array|null                            $options
      *
-     * @return object|\Zend\Form\Form
+     * @return mixed|object
+     * @throws \Exception
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var ModuleOptions $moduleOptions */
-        $moduleOptions = $container->get(ModuleOptions::class);
-        $formOptions = $moduleOptions->getNewUserFormOptions();
-        $recaptchaOptions = $moduleOptions->getRecaptchaOptions();
-
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $container->get('Request');
 
-        $defaultType = 'provider';
-        $type = $request->getQuery('type', $defaultType);
-        if (!in_array($type, [$defaultType, 'tracker'])) {
-            $type = $defaultType;
+        $type = $request->getQuery('type', null);
+        if (!$type) {
+            $type = $request->getPost('type');
+        }
+
+        $type = mb_strtolower($type);
+        if (!in_array($type, ['provider', 'tracker'])) {
+            throw new \Exception('type is wrong');
         }
         $type = ucfirst($type);
-        $className = "\Application\Form\New{$type}Form";
+        $className = "Application\Form\New{$type}Form";
 
-        /** @var \Zend\Form\Form $form */
-        $form = new $className($formOptions, $recaptchaOptions);
-
-        return $form;
+        return $container->get($className);
     }
 }

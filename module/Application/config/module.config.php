@@ -81,7 +81,11 @@ return [
     ],
     'service_manager'           => [
         'factories' => [
-            Service\Listener\UserServiceListener::class => Service\Listener\Factory\UserServiceListenerFactory::class,
+            EventListener\UserService\AddUserEventListener::class => EventListener\UserService\Factory\AddUserEventListenerFactory::class,
+            Form\NewProviderForm::class                 => Form\Factory\NewProviderFormFactory::class,
+            Form\NewTrackerForm::class                  => Form\Factory\NewTrackerFormFactory::class,
+
+            //zfbuser services
             'zfbuser_new_user_form'                     => Form\Factory\NewUserFormFactory::class,
         ],
     ],

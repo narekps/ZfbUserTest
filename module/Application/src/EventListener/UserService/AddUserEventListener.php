@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service\Listener;
+namespace Application\EventListener\UserService;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ZfbUser\Service\Event\AddUserEvent;
@@ -8,13 +8,14 @@ use Application\Entity\User as UserEntity;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Entity\Tracker as TrackerEntity;
 use ZfbUser\EventProvider\EventResult;
+use Application\Repository\ProviderRepository;
 
 /**
- * Class UserServiceListener
+ * Class AddUserEventListener
  *
- * @package Application\Service\Listener
+ * @package Application\EventListener\UserService
  */
-class UserServiceListener
+class AddUserEventListener
 {
     /**
      * @var EntityManagerInterface
@@ -58,6 +59,7 @@ class UserServiceListener
     /**
      * @param \Application\Entity\User $user
      * @param array                    $formData
+     *l
      *
      * @return \Application\Entity\Provider
      */
@@ -66,6 +68,10 @@ class UserServiceListener
         $provider = new ProviderEntity();
         $provider->setUser($user);
         $provider->setFullName($formData['fullName']);
+        $provider->setInn($formData['inn']);
+        $provider->setKpp($formData['kpp']);
+        $provider->setEtpContractNumber($formData['etpContractNumber']);
+        $provider->setEtpContractDate(new \DateTime($formData['etpContractDate']));
 
         $this->entityManager->persist($provider);
 
@@ -82,6 +88,15 @@ class UserServiceListener
     {
         $tracker = new TrackerEntity();
         $tracker->setUser($user);
+
+        /** @var ProviderRepository $providerRep */
+        $providerRep = $this->entityManager->getRepository(ProviderEntity::class);
+
+        /** @var ProviderEntity[] $providers */
+        $providers = $providerRep->findBy(['id' => $formData['trackingProviders']]);
+        foreach ($providers as $provider) {
+            $tracker->addTrackingProvider($provider);
+        }
 
         $this->entityManager->persist($tracker);
 

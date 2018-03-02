@@ -100,4 +100,18 @@ class Tracker
     {
         return $this->trackingProviders;
     }
+
+    /**
+     * @param \Application\Entity\Provider $provider
+     *
+     * @return \Application\Entity\Tracker
+     */
+    public function addTrackingProvider(Provider $provider): Tracker
+    {
+        if (!$this->trackingProviders->contains($provider)) {
+            $this->trackingProviders->add($provider);
+        }
+
+        return $this;
+    }
 }

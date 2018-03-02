@@ -25,7 +25,7 @@ class User extends ZfbUser
      *
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     * @ORM\Column(name="name", type="string", length=30, nullable=false)
      */
     protected $name;
 

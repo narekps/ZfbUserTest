@@ -3,6 +3,8 @@
 namespace Application\Form;
 
 use Zend\Captcha\ReCaptcha;
+use Zend\Filter;
+use Zend\Validator;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
@@ -27,7 +29,7 @@ class NewProviderForm extends Form
     protected $recaptchaOptions;
 
     /**
-     * NewUserForm constructor.
+     * NewProviderForm constructor.
      *
      * @param \ZfbUser\Options\NewUserFormOptionsInterface $options
      * @param \ZfbUser\Options\ReCaptchaOptionsInterface   $recaptchaOptions
@@ -56,6 +58,7 @@ class NewProviderForm extends Form
     protected function addElements(): self
     {
         $this->add([
+            'type'       => Element\Hidden::class,
             'name'       => 'type',
             'attributes' => [
                 'value'    => 'provider',
@@ -65,6 +68,7 @@ class NewProviderForm extends Form
         ]);
 
         $this->add([
+            'type'       => Element\Text::class,
             'name'       => $this->getFormOptions()->getIdentityFieldName(),
             'options'    => [
                 'label' => $this->getFormOptions()->getIdentityFieldLabel(),
@@ -77,6 +81,7 @@ class NewProviderForm extends Form
         ]);
 
         $this->add([
+            'type'       => Element\Text::class,
             'name'       => 'surname',
             'options'    => [
                 'label' => 'Surname',
@@ -89,6 +94,7 @@ class NewProviderForm extends Form
         ]);
 
         $this->add([
+            'type'       => Element\Text::class,
             'name'       => 'name',
             'options'    => [
                 'label' => 'Name',
@@ -101,18 +107,20 @@ class NewProviderForm extends Form
         ]);
 
         $this->add([
+            'type'       => Element\Text::class,
             'name'       => 'patronymic',
             'options'    => [
                 'label' => 'Patronymic',
             ],
             'attributes' => [
                 'type'     => 'text',
-                'required' => true,
+                'required' => false,
                 'class'    => 'patronymic',
             ],
         ]);
 
         $this->add([
+            'type'       => Element\Text::class,
             'name'       => 'fullName',
             'options'    => [
                 'label' => 'fullName',
@@ -124,11 +132,63 @@ class NewProviderForm extends Form
             ],
         ]);
 
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'inn',
+            'options'    => [
+                'label' => 'ИНН',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'class'    => 'inn',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'kpp',
+            'options'    => [
+                'label' => 'КПП',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'class'    => 'kpp',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'etpContractNumber',
+            'options'    => [
+                'label' => 'Номер договора с ЭТП ГПБ',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'class'    => 'etpContractNumber',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Date::class,
+            'name'       => 'etpContractDate',
+            'options'    => [
+                'label' => 'Дата договора с ЭТП ГПБ',
+            ],
+            'attributes' => [
+                'type'     => 'date',
+                'required' => true,
+                'class'    => 'etpContractDate',
+            ],
+        ]);
+
         if ($this->formOptions->isEnabledRecaptcha()) {
             $reCaptcha = new ReCaptcha($this->recaptchaOptions->toArray());
             $this->add([
+                'type'    => Element\Captcha::class,
                 'name'    => 'captcha',
-                'type'    => 'captcha',
                 'options' => [
                     'captcha' => $reCaptcha,
                 ],
@@ -139,7 +199,7 @@ class NewProviderForm extends Form
         $submitElement
             ->setLabel($this->getFormOptions()->getSubmitButtonText())
             ->setAttributes([
-                'type'  => 'submit',
+                'type'  => Element\Submit::class,
                 'class' => 'submit',
             ]);
 
@@ -165,9 +225,271 @@ class NewProviderForm extends Form
         $inputFilter->add([
             'name'       => $this->getFormOptions()->getIdentityFieldName(),
             'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
             'validators' => [
                 [
-                    'name' => 'EmailAddress',
+                    'name' => Validator\EmailAddress::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 50,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'surname',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 50,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'name',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 30,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'patronymic',
+            'required'   => false,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 50,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'fullName',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 1024,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'inn',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 10,
+                        'max' => 12,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'kpp',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 9,
+                        'max' => 9,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'etpContractNumber',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 3,
+                        'max' => 50,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'etpContractDate',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name' => Validator\Date::class,
                 ],
             ],
         ]);

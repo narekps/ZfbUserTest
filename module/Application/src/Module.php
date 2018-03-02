@@ -6,7 +6,7 @@ use Zend\EventManager\LazyListenerAggregate;
 use Zend\Mvc\MvcEvent;
 use ZfbUser\Service\Event\AddUserEvent;
 use Zend\Validator\AbstractValidator;
-use Application\Service\Listener\UserServiceListener;
+use Application\EventListener\UserService\AddUserEventListener;
 use ZfbUser\Service\UserService;
 
 /**
@@ -51,7 +51,7 @@ class Module
                 $aggregate = new LazyListenerAggregate(
                     [
                         [
-                            'listener' => UserServiceListener::class,
+                            'listener' => AddUserEventListener::class,
                             'method'   => 'onAddUserPre',
                             'event'    => AddUserEvent::EVENT_PRE,
                             'priority' => 100,
