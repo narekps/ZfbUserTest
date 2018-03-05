@@ -74,6 +74,7 @@ class NewTrackerForm extends Form
             ],
         ]);
 
+        // begin user fields
         $this->add([
             'type'       => Element\Text::class,
             'name'       => $this->getFormOptions()->getIdentityFieldName(),
@@ -125,6 +126,48 @@ class NewTrackerForm extends Form
                 'class'    => 'patronymic',
             ],
         ]);
+        // end user fields
+
+        // begin contragent fields
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'fullName',
+            'options'    => [
+                'label' => 'fullName',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'class'    => 'fullName',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'inn',
+            'options'    => [
+                'label' => 'ИНН',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'class'    => 'inn',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'kpp',
+            'options'    => [
+                'label' => 'КПП',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'class'    => 'kpp',
+            ],
+        ]);
+        // end contragent fields
 
         $this->add([
             'type'       => Element\Select::class,
@@ -295,6 +338,99 @@ class NewTrackerForm extends Form
                     'options' => [
                         'min' => 2,
                         'max' => 50,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'fullName',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 1024,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'inn',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 10,
+                        'max' => 12,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'kpp',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 9,
+                        'max' => 9,
                     ],
                 ],
             ],

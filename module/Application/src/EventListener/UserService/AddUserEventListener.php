@@ -66,12 +66,13 @@ class AddUserEventListener
     protected function createProvider(UserEntity $user, array $formData)
     {
         $provider = new ProviderEntity();
-        $provider->setUser($user);
         $provider->setFullName($formData['fullName']);
         $provider->setInn($formData['inn']);
         $provider->setKpp($formData['kpp']);
         $provider->setEtpContractNumber($formData['etpContractNumber']);
         $provider->setEtpContractDate(new \DateTime($formData['etpContractDate']));
+
+        $user->setProvider($provider);
 
         $this->entityManager->persist($provider);
 
@@ -87,7 +88,9 @@ class AddUserEventListener
     protected function createTracker(UserEntity $user, array $formData)
     {
         $tracker = new TrackerEntity();
-        $tracker->setUser($user);
+        $tracker->setFullName($formData['fullName']);
+        $tracker->setInn($formData['inn']);
+        $tracker->setKpp($formData['kpp']);
 
         /** @var ProviderRepository $providerRep */
         $providerRep = $this->entityManager->getRepository(ProviderEntity::class);
@@ -97,6 +100,8 @@ class AddUserEventListener
         foreach ($providers as $provider) {
             $tracker->addTrackingProvider($provider);
         }
+
+        $user->setTracker($tracker);
 
         $this->entityManager->persist($tracker);
 

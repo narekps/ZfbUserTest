@@ -12,6 +12,30 @@ use ZfbUser\Entity\User as ZfbUser;
 class User extends ZfbUser
 {
     /**
+     * @var \Application\Entity\Tracker
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Tracker")
+     * @ORM\JoinColumn(name="tracker_id", referencedColumnName="id", nullable=true)
+     */
+    protected $tracker;
+
+    /**
+     * @var \Application\Entity\Provider
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Provider")
+     * @ORM\JoinColumn(name="provider_id", referencedColumnName="id", nullable=true)
+     */
+    protected $provider;
+
+    /**
+     * @var \Application\Entity\Client
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Client")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=true)
+     */
+    protected $client;
+
+    /**
      * Фамилия
      *
      * @var string
@@ -50,6 +74,66 @@ class User extends ZfbUser
         }
 
         return $name;
+    }
+
+    /**
+     * @return \Application\Entity\Tracker
+     */
+    public function getTracker(): Tracker
+    {
+        return $this->tracker;
+    }
+
+    /**
+     * @param \Application\Entity\Tracker $tracker
+     *
+     * @return User
+     */
+    public function setTracker(Tracker $tracker): User
+    {
+        $this->tracker = $tracker;
+
+        return $this;
+    }
+
+    /**
+     * @return \Application\Entity\Provider
+     */
+    public function getProvider(): Provider
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @param \Application\Entity\Provider $provider
+     *
+     * @return User
+     */
+    public function setProvider(Provider $provider): User
+    {
+        $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @return \Application\Entity\Client
+     */
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param \Application\Entity\Client $client
+     *
+     * @return User
+     */
+    public function setClient(Client $client): User
+    {
+        $this->client = $client;
+
+        return $this;
     }
 
     /**
