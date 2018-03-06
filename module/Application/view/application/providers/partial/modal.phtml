@@ -1,0 +1,45 @@
+<?php
+/**
+ * @var \Application\Form\NewProviderForm $newProviderForm
+ */
+
+
+$etpContractNumberField = $newProviderForm->get('etpContractNumber');
+$etpContractDateField = $newProviderForm->get('etpContractDate');
+?>
+
+<!-- Modal add new provider -->
+<div class="modal fade-scale" id="newProviderModal" tabindex="-1" role="dialog" aria-labelledby="newProviderModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="newProviderModalLabel">Добавление нового сервис-провайдера</h4>
+            </div>
+            <div class="modal-body">
+
+                <?= $this->form()->openTag($newProviderForm); ?>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <?= $this->formInput($etpContractNumberField); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <?= $this->formDate($etpContractDateField); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?= $this->form()->closeTag(); ?>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>

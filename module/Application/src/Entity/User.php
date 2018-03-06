@@ -12,7 +12,7 @@ use ZfbUser\Entity\User as ZfbUser;
 class User extends ZfbUser
 {
     /**
-     * @var \Application\Entity\Tracker
+     * @var \Application\Entity\Tracker|null
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Tracker")
      * @ORM\JoinColumn(name="tracker_id", referencedColumnName="id", nullable=true)
@@ -20,7 +20,7 @@ class User extends ZfbUser
     protected $tracker;
 
     /**
-     * @var \Application\Entity\Provider
+     * @var \Application\Entity\Provider|null
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Provider")
      * @ORM\JoinColumn(name="provider_id", referencedColumnName="id", nullable=true)
@@ -28,7 +28,7 @@ class User extends ZfbUser
     protected $provider;
 
     /**
-     * @var \Application\Entity\Client
+     * @var \Application\Entity\Client|null
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Client")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=true)
@@ -77,19 +77,39 @@ class User extends ZfbUser
     }
 
     /**
-     * @return \Application\Entity\Tracker
+     * @return \Application\Entity\Client|null
      */
-    public function getTracker(): Tracker
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param \Application\Entity\Client|null $client
+     *
+     * @return User
+     */
+    public function setClient(?Client $client): User
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return \Application\Entity\Tracker|null
+     */
+    public function getTracker(): ?Tracker
     {
         return $this->tracker;
     }
 
     /**
-     * @param \Application\Entity\Tracker $tracker
+     * @param \Application\Entity\Tracker|null $tracker
      *
      * @return User
      */
-    public function setTracker(Tracker $tracker): User
+    public function setTracker(?Tracker $tracker): User
     {
         $this->tracker = $tracker;
 
@@ -97,41 +117,21 @@ class User extends ZfbUser
     }
 
     /**
-     * @return \Application\Entity\Provider
+     * @return \Application\Entity\Provider|null
      */
-    public function getProvider(): Provider
+    public function getProvider(): ?Provider
     {
         return $this->provider;
     }
 
     /**
-     * @param \Application\Entity\Provider $provider
+     * @param \Application\Entity\Provider|null $provider
      *
      * @return User
      */
-    public function setProvider(Provider $provider): User
+    public function setProvider(?Provider $provider): User
     {
         $this->provider = $provider;
-
-        return $this;
-    }
-
-    /**
-     * @return \Application\Entity\Client
-     */
-    public function getClient(): Client
-    {
-        return $this->client;
-    }
-
-    /**
-     * @param \Application\Entity\Client $client
-     *
-     * @return User
-     */
-    public function setClient(Client $client): User
-    {
-        $this->client = $client;
 
         return $this;
     }
@@ -194,5 +194,37 @@ class User extends ZfbUser
         $this->patronymic = $patronymic;
 
         return $this;
+    }
+
+    /**
+     * @return \Application\Entity\Contragent|null
+     */
+    public function getContragent(): ?Contragent
+    {
+        if ($this->getProvider()) {
+            return $this->getProvider();
+        }
+
+        if ($this->getTracker()) {
+            return $this->getTracker();
+        }
+
+        if ($this->getClient()) {
+            return $this->getClient();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContragentName(): string
+    {
+        if ($this->getContragent()) {
+            return $this->getContragent()->getFullName();
+        }
+
+        return '';
     }
 }

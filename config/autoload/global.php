@@ -12,6 +12,31 @@
  */
 
 return [
+    'navigation' => [
+        'default' => [
+            [
+                'label' => 'Провайдеры',
+                'route' => 'providers',
+            ],
+            [
+                'label' => 'Счета',
+                'route' => 'home',
+            ],
+            [
+                'label' => 'Пользователи',
+                'route' => 'zfbuser',
+            ],
+            [
+                'label' => 'New Provider',
+                'route' => 'zfbuser/new-user',
+            ],
+        ],
+    ],
+    'service_manager' => [
+        'abstract_factories' => [
+            Zend\Navigation\Service\NavigationAbstractServiceFactory::class,
+        ],
+    ],
     'doctrine'        => [
         // настройка миграций
         'migrations_configuration' => [

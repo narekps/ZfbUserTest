@@ -176,12 +176,13 @@ class NewProviderForm extends Form
             'type'       => Element\Text::class,
             'name'       => 'etpContractNumber',
             'options'    => [
-                'label' => 'Номер договора с ЭТП ГПБ',
+                'label' => '№ договора с ЭТП ГПБ',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'class'    => 'etpContractNumber',
+                'class'    => 'form-control etpContractNumber ',
+                'placeholder'    => '№ договора с ЭТП ГПБ',
             ],
         ]);
 
@@ -194,7 +195,9 @@ class NewProviderForm extends Form
             'attributes' => [
                 'type'     => 'date',
                 'required' => true,
-                'class'    => 'etpContractDate',
+                'class'    => 'form-control etpContractDate',
+                'max'    => (new \DateTime())->format('Y-m-d'),
+                'placeholder'    => 'Дата договора',
             ],
         ]);
 

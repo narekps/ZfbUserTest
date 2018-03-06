@@ -1,11 +1,38 @@
 <?php
 /**
- * @var \Application\Entity\Provider[] $providers
+ * @var \Application\Entity\Provider[]    $providers
+ * @var \Application\Form\NewProviderForm $newProviderForm
+ * @var string                            $search значение поискового поля
  */
-?>
-<h1>Providers</h1>
 
-<table class="table">
+$this->inlineScript()->appendFile($this->basePath('js/providers.js'));
+?>
+<div class="row mb-3">
+    <div class="col-md-5">
+        <form class="form" action="?" method="get">
+            <div class="form-group has-feedback">
+                <div class="input-group search-input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-search"
+                                                          aria-hidden="true"></span></span>
+                    <input type="text" class="form-control search-field" name="search"
+                           placeholder="Введите название провайдера" value="<?= $search; ?>">
+                </div>
+            </div>
+
+            <!--Submit by enter key-->
+            <input type="submit" style="display:none"/>
+        </form>
+    </div>
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-4 text-right">
+        <button type="button" class="btn btn-primary2" id="addProvider" data-toggle="modal"
+                data-target="#newProviderModal">Добавить
+        </button>
+    </div>
+</div>
+
+<table class="table table-hover table-providers">
     <thead>
     <tr>
         <th>Название провайдера</th>
@@ -24,3 +51,8 @@
     <?php endforeach; ?>
     </tbody>
 </table>
+
+<!-- Modal add new provider -->
+<?= $this->partial('application/providers/partial/modal', [
+        'newProviderForm' => $newProviderForm,
+]); ?>

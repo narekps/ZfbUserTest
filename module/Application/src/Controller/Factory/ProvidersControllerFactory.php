@@ -8,6 +8,7 @@ use Application\Controller\ProvidersController;
 use Doctrine\ORM\EntityManagerInterface;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\ProviderRepository;
+use Application\Form\NewProviderForm;
 
 /**
  * Class ProvidersControllerFactory
@@ -33,6 +34,13 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var ProviderRepository $providerRep */
         $providerRep = $entityManager->getRepository(ProviderEntity::class);
 
-        return new ProvidersController($providerRep);
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $container->get('Request');
+        $request->getQuery()->set('type', 'provider');
+
+        /** @var NewProviderForm $newUserForm */
+        $newUserForm = $container->get('zfbuser_new_user_form');
+
+        return new ProvidersController($providerRep, $newUserForm);
     }
 }

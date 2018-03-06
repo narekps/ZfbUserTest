@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Repository\ProviderRepository;
+use Application\Form\NewProviderForm;
 
 /**
  * Class ProvidersController
@@ -19,13 +20,20 @@ class ProvidersController extends AbstractActionController
     private $providerRepository;
 
     /**
+     * @var NewProviderForm
+     */
+    private $newProviderForm;
+
+    /**
      * ProvidersController constructor.
      *
      * @param \Application\Repository\ProviderRepository $providerRepository
+     * @param \Application\Form\NewProviderForm          $newProviderForm
      */
-    public function __construct(ProviderRepository $providerRepository)
+    public function __construct(ProviderRepository $providerRepository, NewProviderForm $newProviderForm)
     {
         $this->providerRepository = $providerRepository;
+        $this->newProviderForm = $newProviderForm;
     }
 
     /**
@@ -33,10 +41,14 @@ class ProvidersController extends AbstractActionController
      */
     public function indexAction()
     {
-        $providers = $this->providerRepository->getList();
+        $search = $this->params()->fromQuery('search', '');
+
+        $providers = $this->providerRepository->getList($search);
 
         $viewModel = new ViewModel([
-            'providers' => $providers,
+            'search'          => $search,
+            'providers'       => $providers,
+            'newProviderForm' => $this->newProviderForm,
         ]);
 
         return $viewModel;

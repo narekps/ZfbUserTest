@@ -30,12 +30,19 @@ class ProviderRepository extends EntityRepository
     }
 
     /**
+     * @param string $search
+     *
      * @return \Application\Entity\Provider[]
      */
-    public function getList()
+    public function getList(string $search)
     {
+        $qb = $this->createQueryBuilder('p')->select('p');
+        if (!empty($search)) {
+            $qb->andWhere($qb->expr()->like('p.fullName', "'%{$search}%'"));
+        }
+
         /** @var ProviderEntity[] $providers */
-        $providers = $this->findAll();
+        $providers = $qb->getQuery()->getResult();
 
         return $providers;
     }
