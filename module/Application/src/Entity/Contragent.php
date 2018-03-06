@@ -47,6 +47,32 @@ abstract class Contragent
     protected $kpp;
 
     /**
+     * Дата регистрации в системе
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_created", type="datetime", nullable=false)
+     */
+    protected $dateCreated;
+
+    /**
+     * Телефон
+     *
+     * @var string|null
+     *
+     * @ORM\Column(name="phone", type="string", length=20, nullable=true)
+     */
+    protected $phone;
+
+    /**
+     * Contragent constructor.
+     */
+    public function __construct()
+    {
+        $this->dateCreated = new \DateTime();
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -125,5 +151,44 @@ abstract class Contragent
 
         return $this;
     }
-}
 
+    /**
+     * @return \DateTime
+     */
+    public function getDateCreated(): \DateTime
+    {
+        return $this->dateCreated;
+    }
+
+    /**
+     * @param \DateTime $dateCreated
+     *
+     * @return Contragent
+     */
+    public function setDateCreated(\DateTime $dateCreated): Contragent
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     *
+     * @return Contragent
+     */
+    public function setPhone(?string $phone): Contragent
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+}

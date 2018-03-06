@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Zend\Captcha\ReCaptcha;
 use Zend\Filter;
+use Zend\I18n\Validator\PhoneNumber;
 use Zend\Validator;
 use Zend\Form\Element;
 use Zend\Form\Form;
@@ -85,6 +86,19 @@ class NewTrackerForm extends Form
                 'type'     => 'email',
                 'required' => true,
                 'class'    => 'identity',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'phone',
+            'options'    => [
+                'label' => 'Phone',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => false,
+                'class'    => 'phone',
             ],
         ]);
 
@@ -248,6 +262,33 @@ class NewTrackerForm extends Form
                     'options' => [
                         'min' => 2,
                         'max' => 50,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'phone',
+            'required'   => false,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name'    => PhoneNumber::class,
+                    'options' => [
+                        'country' => 'RU',
                     ],
                 ],
             ],
@@ -468,7 +509,7 @@ class NewTrackerForm extends Form
                             }
 
                             return true;
-                        }
+                        },
                     ],
                 ],
             ],

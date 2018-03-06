@@ -3,6 +3,7 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Application\Entity\Provider as ProviderEntity;
 
 /**
  * Class ProviderRepository
@@ -24,6 +25,17 @@ class ProviderRepository extends EntityRepository
         foreach ($res as $row) {
             $providers[$row['id']] = $row['value'];
         }
+
+        return $providers;
+    }
+
+    /**
+     * @return \Application\Entity\Provider[]
+     */
+    public function getList()
+    {
+        /** @var ProviderEntity[] $providers */
+        $providers = $this->findAll();
 
         return $providers;
     }

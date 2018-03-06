@@ -67,6 +67,7 @@ class AddUserEventListener
     {
         $provider = new ProviderEntity();
         $provider->setFullName($formData['fullName']);
+        $provider->setPhone($formData['phone'] ?? null);
         $provider->setInn($formData['inn']);
         $provider->setKpp($formData['kpp']);
         $provider->setEtpContractNumber($formData['etpContractNumber']);
@@ -89,6 +90,7 @@ class AddUserEventListener
     {
         $tracker = new TrackerEntity();
         $tracker->setFullName($formData['fullName']);
+        $tracker->setPhone($formData['phone'] ?? null);
         $tracker->setInn($formData['inn']);
         $tracker->setKpp($formData['kpp']);
 

@@ -31,6 +31,8 @@ class Tracker extends Contragent
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->trackingProviders = new ArrayCollection();
     }
 

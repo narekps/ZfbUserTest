@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var \Application\Entity\Provider $provider
+ */
+?>
+<tr>
+    <td><?= $provider->getFullName(); ?></td>
+    <td><?= $provider->getDateCreated()->format('d.m.Y'); ?></td>
+    <td><?= $provider->getPhone() ? $provider->getPhone() : '—'; ?></td>
+    <td><?= $provider->getInn(); ?></td>
+    <td><?= $provider->getKpp(); ?></td>
+    <td><?= $provider->getEtpContractNumber(); ?></td>
+</tr>

@@ -1,0 +1,26 @@
+<?php
+/**
+ * @var \Application\Entity\Provider[] $providers
+ */
+?>
+<h1>Providers</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Название провайдера</th>
+        <th>Дата регистрации</th>
+        <th>Телефон</th>
+        <th>ИНН</th>
+        <th>КПП</th>
+        <th>№ договора</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($providers as $provider): ?>
+        <?= $this->partial('application/providers/partial/row', [
+            'provider' => $provider,
+        ]); ?>
+    <?php endforeach; ?>
+    </tbody>
+</table>

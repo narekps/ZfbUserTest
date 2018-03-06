@@ -72,21 +72,32 @@ return [
                     ],
                 ],
             ],
+            'providers'   => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/providers[/:action]',
+                    'defaults' => [
+                        'controller' => Controller\ProvidersController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers'               => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            Controller\IndexController::class     => InvokableFactory::class,
+            Controller\ProvidersController::class => Controller\Factory\ProvidersControllerFactory::class,
         ],
     ],
     'service_manager'           => [
         'factories' => [
             EventListener\UserService\AddUserEventListener::class => EventListener\UserService\Factory\AddUserEventListenerFactory::class,
-            Form\NewProviderForm::class                 => Form\Factory\NewProviderFormFactory::class,
-            Form\NewTrackerForm::class                  => Form\Factory\NewTrackerFormFactory::class,
+            Form\NewProviderForm::class                           => Form\Factory\NewProviderFormFactory::class,
+            Form\NewTrackerForm::class                            => Form\Factory\NewTrackerFormFactory::class,
 
             //zfbuser services
-            'zfbuser_new_user_form'                     => Form\Factory\NewUserFormFactory::class,
+            'zfbuser_new_user_form'                               => Form\Factory\NewUserFormFactory::class,
         ],
     ],
     'view_manager'              => [
