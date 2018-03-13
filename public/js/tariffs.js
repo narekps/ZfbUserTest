@@ -1,41 +1,55 @@
 $(function() {
-    var $newProviderModal = $('#newProviderModal'),
-        form = document.getElementById('addUserForm'),
-        $newProviderSaveBtn = $('#newProviderSaveBtn'),
-        $errorMsg = $('.error-msg', $newProviderModal);
+    var $tariffModal = $('#tariffModal'),
+        form = document.getElementById('tariffForm'),
+        $addTariffBtn = $('#addTariffBtn'),
+        $tariffSaveBtn = $('#tariffSaveBtn'),
+        $errorMsg = $('.error-msg', $tariffModal);
 
-    $('#etpContractDate').bootstrapMaterialDatePicker({
+    $('#saleEndDate').bootstrapMaterialDatePicker({
         time: false,
         switchOnClick: true,
         lang: 'ru'
     });
 
-    $('#phone').inputmask({"mask": "+7 (999) 999-99-99"}); //specifying options
-
     $('input', form).on('change', function () {
         validateForm();
     });
 
-    $newProviderModal.on('show.bs.modal', function (e) {
+    $addTariffBtn.on('click', function () {
         resetForm();
+        $tariffModal.modal('show');
     });
 
-    function resetForm() {
+    function resetForm(values) {
+        values = values || {};
         form.reset();
         $('.is-filled', form).removeClass('is-filled');
+
+        for (var key in values) {
+            if (!values.hasOwnProperty(key)) {
+                continue;
+            }
+
+            $('#' + key).val(values[key]);
+            $('#' + key).parents('.form-group').eq(0).addClass('is-filled');
+        }
+
+        $('#currency').parents('.form-group').eq(0).addClass('is-filled');
+        $('#nds').parents('.form-group').eq(0).addClass('is-filled');
+        validateForm()
     }
 
     function validateForm() {
         if (form.checkValidity() === true) {
-            $newProviderSaveBtn.removeAttr('disabled');
+            $tariffSaveBtn.removeAttr('disabled');
 
             return true;
         }
-        $newProviderSaveBtn.attr('disabled', 'disabled');
+        $tariffSaveBtn.attr('disabled', 'disabled');
         return false;
     }
 
-    $newProviderSaveBtn.on('click', function (e) {
+    $tariffSaveBtn.on('click', function (e) {
         e.preventDefault();
 
         $errorMsg.hide();
@@ -44,8 +58,8 @@ $(function() {
             return;
         }
 
-        var data = $('#addUserForm').serialize(),
-            url = $newProviderSaveBtn.attr('data-save-url');
+        var data = $('#tariffForm').serialize(),
+            url = $tariffSaveBtn.attr('data-save-url');
 
         var jqxhr = $.post(url, data, successCallback).fail(failCallback).always(function (response) {
         });
@@ -60,7 +74,7 @@ $(function() {
 
         if (response.success) {
             resetForm();
-            $newProviderModal.modal('hide');
+            $tariffModal.modal('hide');
             location.reload();
         } else if (response.formErrors) {
             showFormErrors(form, response.formErrors)
@@ -104,4 +118,15 @@ $(function() {
 
         form.classList.add('was-validated');
     }
+
+    $('.tariffEditBtn').on('click', function () {
+        var $btn = $(this);
+
+        $.get($btn.attr('data-get-url'), function (data) {
+            if (data.success === true) {
+                resetForm(data.tariff);
+                $tariffModal.modal('show');
+            }
+        });
+    });
 });

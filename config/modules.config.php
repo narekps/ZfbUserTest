@@ -27,7 +27,6 @@ return [
     'Zend\Cache',
     'Zend\Router',
     'Zend\Validator',
-    'ZendDeveloperTools',
     'DoctrineModule',
     'DoctrineORMModule',
     'ZfbUser',

@@ -1,0 +1,114 @@
+<?php
+/**
+ * @var \Application\Form\TariffForm $tariffForm
+ */
+
+$csrfField = $tariffForm->get('csrf');
+
+$idField = $tariffForm->get('id');
+$idField->setAttribute('id', 'id');
+
+$nameField = $tariffForm->get('name');
+$nameField->setAttribute('id', 'name');
+
+$descriptionField = $tariffForm->get('description');
+$descriptionField->setAttribute('id', 'description');
+
+$costField = $tariffForm->get('cost');
+$costField->setAttribute('id', 'cost');
+
+$ndsField = $tariffForm->get('nds');
+$ndsField->setAttribute('id', 'nds');
+
+$saleEndDateField = $tariffForm->get('saleEndDate');
+$saleEndDateField->setAttribute('id', 'saleEndDate');
+
+$currencyField = $tariffForm->get('currency');
+$currencyField->setAttribute('id', 'currency');
+
+$submitBtn = $tariffForm->get('submit');
+?>
+
+<!-- Modal add new provider -->
+<div class="modal fade" id="tariffModal" tabindex="-1" role="dialog" aria-labelledby="newTariffModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newTariffModalLabel">Добавление нового тарифа</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <?= $this->form()->openTag($tariffForm); ?>
+                <?= $this->formHidden($csrfField); ?>
+                <?= $this->formHidden($idField); ?>
+
+                <div class="form-group">
+                    <label for="<?= $nameField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $nameField->getLabel(); ?></label>
+                    <?= $this->formInput($nameField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $descriptionField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $descriptionField->getLabel(); ?></label>
+                    <?= $this->formTextarea($descriptionField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $costField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $costField->getLabel(); ?></label>
+                            <?= $this->formInput($costField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $currencyField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $currencyField->getLabel(); ?></label>
+                            <?= $this->formSelect($currencyField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $ndsField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $ndsField->getLabel(); ?></label>
+                            <?= $this->formSelect($ndsField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $saleEndDateField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $saleEndDateField->getLabel(); ?></label>
+                            <?= $this->formInput($saleEndDateField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning error-msg" role="alert" style="display: none;"></div>
+
+                <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
+                        id="tariffSaveBtn"
+                        data-save-url="<?= $this->url('tariffs', ['id' => 0, 'action' => 'save']); ?>"
+                        name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
+
+                <?= $this->form()->closeTag(); ?>
+
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

@@ -18,7 +18,7 @@ return [
     \ZfbUser\Module::CONFIG_KEY => [
         'module_options' => [
             //required, используется при формировании ссылки для подтверждения аккаунта
-            'base_url'           => 'http://zfbuser.dev/',
+            'base_url'           => 'http://zfbuser.local/',
 
             // required, see \ZfbUser\Entity\UserInterface
             'user_entity_class'  => Entity\User::class,
@@ -75,9 +75,27 @@ return [
             'providers'   => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/providers[/:action]',
-                    'defaults' => [
+                    'route'       => '/providers[/:id[/:action]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z]+',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults'    => [
                         'controller' => Controller\ProvidersController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+            'tariffs'     => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'       => '/tariffs[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z]+',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults'    => [
+                        'controller' => Controller\TariffsController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -88,6 +106,7 @@ return [
         'factories' => [
             Controller\IndexController::class     => InvokableFactory::class,
             Controller\ProvidersController::class => Controller\Factory\ProvidersControllerFactory::class,
+            Controller\TariffsController::class   => Controller\Factory\TariffsControllerFactory::class,
         ],
     ],
     'service_manager'           => [
@@ -95,6 +114,7 @@ return [
             EventListener\UserService\AddUserEventListener::class => EventListener\UserService\Factory\AddUserEventListenerFactory::class,
             Form\NewProviderForm::class                           => Form\Factory\NewProviderFormFactory::class,
             Form\NewTrackerForm::class                            => Form\Factory\NewTrackerFormFactory::class,
+            Service\TariffService::class                          => Service\Factory\TariffServiceFactory::class,
 
             //zfbuser services
             'zfbuser_new_user_form'                               => Form\Factory\NewUserFormFactory::class,

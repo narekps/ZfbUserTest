@@ -1,0 +1,38 @@
+<?php
+/**
+ * @var \Application\Entity\Provider $provider
+ * @var string                       $activeTab
+ */
+
+$tabs = [
+    'info'    => 'Информиция',
+    'tariffs' => 'Тарифы',
+    'users'   => 'Пользователи',
+];
+?>
+
+<a href="<?= $this->url('providers'); ?>" class="back_link">
+    <i class="material-icons">arrow_back</i>
+    К списку
+</a>
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="title"><?= $provider->getFullName(); ?><br/>
+            <small>№ договора: <?= $provider->getEtpContractNumber(); ?></small>
+        </h1>
+    </div>
+</div>
+
+<!--Tabs-->
+<div class="row">
+    <hr style="height: 4px; width: 100%; background: rgb(224, 226, 229); border: none; margin: 0; ">
+    <ul class="nav nav-tabs">
+        <?php foreach ($tabs as $tabKey => $tabName): ?>
+            <li class="nav-item">
+                <a class="nav-link <?= ($tabKey === $activeTab) ? 'active' : ''; ?>"
+                   href="<?= $this->url('providers', ['id' => $provider->getId(), 'action' => $tabKey]); ?>"><?= $tabName; ?></a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>

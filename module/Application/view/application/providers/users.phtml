@@ -1,0 +1,19 @@
+<?php
+/**
+ * @var \Application\Entity\Provider $provider
+ * @var string                       $activeTab
+ */
+
+$this->headLink()->appendStylesheet($this->basePath('css/providers.css'));
+$this->inlineScript()->appendFile($this->basePath('js/providers.js'));
+?>
+
+<!--provider info-->
+<div class="provider_info">
+    <?= $this->partial('application/providers/partial/header', [
+        'provider'  => $provider,
+        'activeTab' => $activeTab,
+    ]); ?>
+
+    <h3>users</h3>
+</div>

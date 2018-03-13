@@ -4,10 +4,15 @@
  */
 ?>
 <tr>
-    <td><?= $provider->getFullName(); ?></td>
-    <td><?= $provider->getDateCreated()->format('d.m.Y'); ?></td>
-    <td><?= $provider->getPhone() ? $provider->getPhone() : '—'; ?></td>
+    <td>
+        <a href="<?=$this->url('providers', ['id' => $provider->getId(), 'action' => 'info']); ?>">
+            <?= $provider->getFullName(); ?>
+        </a>
+    </td>
     <td><?= $provider->getInn(); ?></td>
     <td><?= $provider->getKpp(); ?></td>
-    <td><?= $provider->getEtpContractNumber(); ?></td>
+    <td><?= $provider->getPhone(); ?></td>
+    <td><?= $provider->getContactPerson(); ?></td>
+    <td><?= $provider->getDateCreated()->format('d.m.Y'); ?></td>
+    <td><?= $provider->getEtpContractNumber(); ?> от <?= $provider->getEtpContractDate()->format('d.m.Y'); ?></td>
 </tr>
