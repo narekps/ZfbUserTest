@@ -66,10 +66,6 @@ $(function() {
     });
 
     function successCallback(response) {
-        console.log("success");
-        console.log(response);
-        console.log(response.success);
-
         $('.invalid-feedback', form).html('');
 
         if (response.success) {
