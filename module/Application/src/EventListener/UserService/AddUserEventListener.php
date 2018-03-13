@@ -67,7 +67,10 @@ class AddUserEventListener
     {
         $provider = new ProviderEntity();
         $provider->setFullName($formData['fullName']);
-        $provider->setPhone($formData['phone'] ?? null);
+        $provider->setPhone($formData['phone']);
+        $provider->setEmail($formData['email']);
+        $provider->setAddress($formData['address']);
+        $provider->setContactPerson($formData['contactPerson']);
         $provider->setInn($formData['inn']);
         $provider->setKpp($formData['kpp']);
         $provider->setEtpContractNumber($formData['etpContractNumber']);
@@ -90,17 +93,22 @@ class AddUserEventListener
     {
         $tracker = new TrackerEntity();
         $tracker->setFullName($formData['fullName']);
-        $tracker->setPhone($formData['phone'] ?? null);
+        $tracker->setPhone($formData['phone']);
+        $tracker->setEmail($formData['email']);
+        $tracker->setAddress($formData['address']);
+        $tracker->setContactPerson($formData['contactPerson']);
         $tracker->setInn($formData['inn']);
         $tracker->setKpp($formData['kpp']);
 
         /** @var ProviderRepository $providerRep */
         $providerRep = $this->entityManager->getRepository(ProviderEntity::class);
 
-        /** @var ProviderEntity[] $providers */
-        $providers = $providerRep->findBy(['id' => $formData['trackingProviders']]);
-        foreach ($providers as $provider) {
-            $tracker->addTrackingProvider($provider);
+        if (!empty($formData['trackingProviders'])) {
+            /** @var ProviderEntity[] $providers */
+            $providers = $providerRep->findBy(['id' => $formData['trackingProviders']]);
+            foreach ($providers as $provider) {
+                $tracker->addTrackingProvider($provider);
+            }
         }
 
         $user->setTracker($tracker);

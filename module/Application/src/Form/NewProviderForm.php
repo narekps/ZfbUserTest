@@ -43,6 +43,8 @@ class NewProviderForm extends Form
         parent::__construct($options->getFormName(), []);
 
         $this->addElements()->addInputFilter();
+
+        $this->setAttribute('class', 'needs-validation');
     }
 
     /**
@@ -77,7 +79,8 @@ class NewProviderForm extends Form
             'attributes' => [
                 'type'     => 'email',
                 'required' => true,
-                'class'    => 'identity',
+                'pattern' => '.{2,50}',
+                'class'    => 'form-control ' . $this->getFormOptions()->getIdentityFieldName(),
             ],
         ]);
 
@@ -89,8 +92,8 @@ class NewProviderForm extends Form
             ],
             'attributes' => [
                 'type'     => 'text',
-                'required' => false,
-                'class'    => 'phone',
+                'required' => true,
+                'class'    => 'form-control phone',
             ],
         ]);
 
@@ -98,12 +101,13 @@ class NewProviderForm extends Form
             'type'       => Element\Text::class,
             'name'       => 'surname',
             'options'    => [
-                'label' => 'Surname',
+                'label' => 'Фамилия',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'class'    => 'surname',
+                'pattern' => '.{2,50}',
+                'class'    => 'form-control surname',
             ],
         ]);
 
@@ -111,12 +115,13 @@ class NewProviderForm extends Form
             'type'       => Element\Text::class,
             'name'       => 'name',
             'options'    => [
-                'label' => 'Name',
+                'label' => 'Имя',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'class'    => 'name',
+                'pattern' => '.{2,30}',
+                'class'    => 'form-control name',
             ],
         ]);
 
@@ -124,12 +129,13 @@ class NewProviderForm extends Form
             'type'       => Element\Text::class,
             'name'       => 'patronymic',
             'options'    => [
-                'label' => 'Patronymic',
+                'label' => 'Отчество',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => false,
-                'class'    => 'patronymic',
+                'pattern' => '.{0}|.{2,50}',
+                'class'    => 'form-control patronymic',
             ],
         ]);
 
@@ -137,17 +143,18 @@ class NewProviderForm extends Form
             'type'       => Element\Text::class,
             'name'       => 'fullName',
             'options'    => [
-                'label' => 'fullName',
+                'label' => 'Наименование сервис-провайдера',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'class'    => 'fullName',
+                'pattern' => '.{2,1024}',
+                'class'    => 'form-control fullName',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Text::class,
+            'type'       => Element\Number::class,
             'name'       => 'inn',
             'options'    => [
                 'label' => 'ИНН',
@@ -155,12 +162,13 @@ class NewProviderForm extends Form
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'class'    => 'inn',
+                'pattern' => '[0-9]{10}|[0-9]{12}',
+                'class'    => 'form-control inn',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Text::class,
+            'type'       => Element\Number::class,
             'name'       => 'kpp',
             'options'    => [
                 'label' => 'КПП',
@@ -168,7 +176,50 @@ class NewProviderForm extends Form
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'class'    => 'kpp',
+                'pattern' => '[0-9]{9}',
+                'class'    => 'form-control kpp',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'address',
+            'options'    => [
+                'label' => 'Юридический адрес',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'pattern' => '.{1,300}',
+                'class'    => 'form-control address',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'contactPerson',
+            'options'    => [
+                'label' => 'Контактное лицо',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'pattern' => '.{1,100}',
+                'class'    => 'form-control contactPerson',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'email',
+            'options'    => [
+                'label' => 'E-mail организации',
+            ],
+            'attributes' => [
+                'type'     => 'email',
+                'required' => true,
+                'pattern' => '.{2,50}',
+                'class'    => 'form-control email',
             ],
         ]);
 
@@ -179,10 +230,11 @@ class NewProviderForm extends Form
                 'label' => '№ договора с ЭТП ГПБ',
             ],
             'attributes' => [
-                'type'     => 'text',
-                'required' => true,
-                'class'    => 'form-control etpContractNumber ',
-                'placeholder'    => '№ договора с ЭТП ГПБ',
+                'type'        => 'text',
+                'required'    => true,
+                'class'       => 'form-control etpContractNumber ',
+                'pattern' => '.{3,50}',
+                'placeholder' => '',
             ],
         ]);
 
@@ -190,14 +242,14 @@ class NewProviderForm extends Form
             'type'       => Element\Date::class,
             'name'       => 'etpContractDate',
             'options'    => [
-                'label' => 'Дата договора с ЭТП ГПБ',
+                'label' => 'Дата заключения',
             ],
             'attributes' => [
-                'type'     => 'date',
-                'required' => true,
-                'class'    => 'form-control etpContractDate',
-                'max'    => (new \DateTime())->format('Y-m-d'),
-                'placeholder'    => 'Дата договора',
+                'type'        => 'text',
+                'required'    => true,
+                'class'       => 'form-control etpContractDate',
+                'max'         => (new \DateTime())->format('Y-m-d'),
+                'placeholder' => '',
             ],
         ]);
 
@@ -214,10 +266,10 @@ class NewProviderForm extends Form
 
         $submitElement = new Element\Button('submit');
         $submitElement
-            ->setLabel($this->getFormOptions()->getSubmitButtonText())
+            ->setLabel('Добавить')
             ->setAttributes([
                 'type'  => Element\Submit::class,
-                'class' => 'submit',
+                'class' => 'submit disabled',
             ]);
 
         $this->add($submitElement, [
@@ -272,7 +324,7 @@ class NewProviderForm extends Form
 
         $inputFilter->add([
             'name'       => 'phone',
-            'required'   => false,
+            'required'   => true,
             'filters'    => [
                 [
                     'name' => Filter\StripTags::class,
@@ -285,6 +337,19 @@ class NewProviderForm extends Form
                 ],
                 [
                     'name' => Filter\ToNull::class,
+                ],
+                [
+                    'name' => Filter\Callback::class,
+                    'options' => [
+                        'callback' => function($value) {
+                            $maskSymbols = ['(', ')', '-', ' '];
+                            foreach ($maskSymbols as $maskSymbol) {
+                                $value = str_replace($maskSymbol, '', $value);
+                            }
+
+                            return $value;
+                        }
+                    ],
                 ],
             ],
             'validators' => [
@@ -475,6 +540,99 @@ class NewProviderForm extends Form
                     'options' => [
                         'min' => 9,
                         'max' => 9,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'address',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 1,
+                        'max' => 300,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'contactPerson',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'email',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\EmailAddress::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 50,
                     ],
                 ],
             ],

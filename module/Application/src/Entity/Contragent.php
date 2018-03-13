@@ -47,6 +47,15 @@ abstract class Contragent
     protected $kpp;
 
     /**
+     * Юридический адрес
+     *
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=300, nullable=false)
+     */
+    protected $address;
+
+    /**
      * Дата регистрации в системе
      *
      * @var \DateTime
@@ -58,11 +67,28 @@ abstract class Contragent
     /**
      * Телефон
      *
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=20, nullable=true)
+     * @ORM\Column(name="phone", type="string", length=20, nullable=false)
      */
     protected $phone;
+
+    /**
+     * Контактное лицо
+     *
+     * @var string
+     *
+     * @ORM\Column(name="contact_person", type="string", length=100, nullable=false)
+     */
+    protected $contactPerson;
+
+    /**
+     * E-mail организации
+     *
+     * @var string
+     * @ORM\Column(name="email", type="string", unique=true, length=50, nullable=false)
+     */
+    protected $email;
 
     /**
      * Contragent constructor.
@@ -153,6 +179,26 @@ abstract class Contragent
     }
 
     /**
+     * @return string
+     */
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     *
+     * @return Contragent
+     */
+    public function setAddress(string $address): Contragent
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getDateCreated(): \DateTime
@@ -173,21 +219,61 @@ abstract class Contragent
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getPhone(): ?string
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
     /**
-     * @param string|null $phone
+     * @param string $phone
      *
      * @return Contragent
      */
-    public function setPhone(?string $phone): Contragent
+    public function setPhone(string $phone): Contragent
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactPerson(): string
+    {
+        return $this->contactPerson;
+    }
+
+    /**
+     * @param string $contactPerson
+     *
+     * @return Contragent
+     */
+    public function setContactPerson(string $contactPerson): Contragent
+    {
+        $this->contactPerson = $contactPerson;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return Contragent
+     */
+    public function setEmail(string $email): Contragent
+    {
+        $this->email = $email;
 
         return $this;
     }

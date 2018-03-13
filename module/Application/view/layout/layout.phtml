@@ -1,37 +1,53 @@
 <?= $this->doctype() ?>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <?= $this->headTitle('ZF Skeleton Application')->setSeparator(' - ')->setAutoEscape(false) ?>
+<head>
+    <meta charset="utf-8">
+    <?= $this->headTitle('Биллинг ЭТП ГПБ')->setSeparator(' - ')->setAutoEscape(false) ?>
 
-        <?= $this->headMeta()
-            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-        ?>
-
-        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;subset=cyrillic" rel="stylesheet">
-
-        <!-- Le styles -->
-        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
-            ->prependStylesheet($this->basePath('css/style.css'))
-            ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
-            ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
-        ?>
-
-        <!-- Scripts -->
-        <?= $this->headScript(); ?>
-    </head>
-    <body>
-    <?php
-    echo $this->partial('layout/partial/header', []);
+    <?= $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0, shrink-to-fit=no')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
     ?>
 
-        <div class="container">
-            <?= $this->content ?>
-        </div>
-        <?= $this->inlineScript()
-            ->prependFile($this->basePath('js/bootstrap.min.js'))
-            ->prependFile($this->basePath('js/jquery-3.1.0.min.js')); ?>
-    </body>
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+
+    <!-- Le styles -->
+    <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
+        ->prependStylesheet($this->basePath('css/style.css'))
+        ->prependStylesheet($this->basePath('inputmask/inputmask.css'))
+        ->prependStylesheet($this->basePath('datetimepicker/datetimepicker.css'))
+        ->prependStylesheet($this->basePath('css/bootstrap-material-design.min.css')); ?>
+
+    <!-- Scripts -->
+    <?= $this->headScript(); ?>
+</head>
+<body>
+<?php
+echo $this->partial('layout/partial/header', []);
+?>
+
+<div class="container">
+    <?= $this->content ?>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<?= $this->inlineScript()
+    ->prependFile($this->basePath('inputmask/phone-ru.min.js'))
+    ->prependFile($this->basePath('inputmask/inputmask.js'))
+    ->prependFile($this->basePath('datetimepicker/datetimepicker.js'))
+    ->prependFile($this->basePath('js/moment-with-locales.js'))
+    ->prependFile($this->basePath('js/bootstrap-material-design.js'))
+    ->prependFile($this->basePath('js/popper.js'))
+    ->prependFile($this->basePath('js/jquery-3.1.0.min.js'));
+?>
+
+<script>
+    $(document).ready(function () {
+        $('body').bootstrapMaterialDesign();
+    });
+</script>
+</body>
 </html>

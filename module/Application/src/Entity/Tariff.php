@@ -11,8 +11,29 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="Application\Repository\TariffRepository")
  * @ORM\Table(name="tariffs")
  */
-class Tariff
+class Tariff implements \JsonSerializable
 {
+
+    const STATUS_NEW = 'new';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_ACTIVE = 'active';
+    const STATUS_REJECTED = 'rejected';
+    const STATUS_ARCHIVE = 'archive';
+
+    /**
+     * @return array
+     */
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_NEW        => 'Новый',
+            self::STATUS_PROCESSING => 'В обработке',
+            self::STATUS_ACTIVE     => 'Действующий',
+            self::STATUS_REJECTED   => 'Отклонен',
+            self::STATUS_ARCHIVE    => 'Архивный',
+        ];
+    }
+
     /**
      * Идентификатор тарифа
      *
@@ -61,9 +82,9 @@ class Tariff
     /**
      * Ставка НДС
      *
-     * @var float
+     * @var int|null
      *
-     * @ORM\Column(name="nds", type="float", nullable=false)
+     * @ORM\Column(name="nds", type="integer", nullable=true)
      */
     protected $nds;
 
@@ -86,13 +107,13 @@ class Tariff
     protected $currency;
 
     /**
-     * Активен
+     * Статус
      *
      * @var string
      *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
+     * @ORM\Column(name="status", type="string", length=20, nullable=false)
      */
-    protected $active;
+    protected $status;
 
     /**
      * @return int
@@ -195,19 +216,19 @@ class Tariff
     }
 
     /**
-     * @return float
+     * @return int
      */
-    public function getNds(): float
+    public function getNds(): ?int
     {
         return $this->nds;
     }
 
     /**
-     * @param float $nds
+     * @param int $nds
      *
      * @return Tariff
      */
-    public function setNds(float $nds): Tariff
+    public function setNds(?int $nds): Tariff
     {
         $this->nds = $nds;
 
@@ -257,20 +278,39 @@ class Tariff
     /**
      * @return string
      */
-    public function getActive(): string
+    public function getStatus(): string
     {
-        return $this->active;
+        return $this->status;
     }
 
     /**
-     * @param string $active
+     * @param string $status
      *
      * @return Tariff
      */
-    public function setActive(string $active): Tariff
+    public function setStatus(string $status): Tariff
     {
-        $this->active = $active;
+        $this->status = $status;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = [
+            'id'          => $this->getId(),
+            'name'        => $this->getName(),
+            'description' => $this->getDescription(),
+            'cost'        => $this->getCost(),
+            'nds'         => $this->getNds() === null ? -1 : $this->getNds(),
+            'saleEndDate' => $this->getSaleEndDate()->format('Y-m-d'),
+            'currency'    => $this->getCurrency(),
+            'status'      => $this->getStatus(),
+        ];
+
+        return $data;
     }
 }

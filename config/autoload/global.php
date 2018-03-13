@@ -17,24 +17,31 @@ return [
             [
                 'label' => 'Провайдеры',
                 'route' => 'providers',
+                'class' => 'nav-item', // applied to <li> element
             ],
             [
                 'label' => 'Счета',
                 'route' => 'home',
+                'class' => 'nav-item',
             ],
             [
                 'label' => 'Пользователи',
                 'route' => 'zfbuser',
+                'class' => 'nav-item',
             ],
             [
                 'label' => 'New Provider',
                 'route' => 'zfbuser/new-user',
+                'class' => 'nav-item',
             ],
         ],
     ],
     'service_manager' => [
-        'abstract_factories' => [
-            Zend\Navigation\Service\NavigationAbstractServiceFactory::class,
+        'factories' => [
+            'navigation'         => \Zend\Navigation\Service\DefaultNavigationFactory::class,
+            'abstract_factories' => [
+                \Zend\Navigation\Service\NavigationAbstractServiceFactory::class,
+            ],
         ],
     ],
     'doctrine'        => [

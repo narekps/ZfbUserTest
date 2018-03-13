@@ -5,52 +5,61 @@
  * @var string                            $search значение поискового поля
  */
 
+$this->headLink()->appendStylesheet($this->basePath('css/providers.css'));
 $this->inlineScript()->appendFile($this->basePath('js/providers.js'));
 ?>
 <div class="row mb-3">
     <div class="col-md-5">
         <form class="form" action="?" method="get">
-            <div class="form-group has-feedback">
-                <div class="input-group search-input-group">
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-search"
-                                                          aria-hidden="true"></span></span>
-                    <input type="text" class="form-control search-field" name="search"
-                           placeholder="Введите название провайдера" value="<?= $search; ?>">
+            <div class="input-group search-input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="material-icons">&#xE8B6;</i></div>
                 </div>
+                <input class="form-control search-field" type="text" name="search" placeholder="Введите название провайдера" value="<?= $search; ?>">
             </div>
 
-            <!--Submit by enter key-->
+            <!--For submit by enter key-->
             <input type="submit" style="display:none"/>
         </form>
     </div>
     <div class="col-md-3">
     </div>
     <div class="col-md-4 text-right">
-        <button type="button" class="btn btn-primary2" id="addProvider" data-toggle="modal"
-                data-target="#newProviderModal">Добавить
+        <button type="button" class="btn btn-raised btn-primary btn-add" id="addProvider"
+                data-toggle="modal" data-target="#newProviderModal"
+        >
+            Добавить
         </button>
     </div>
 </div>
 
-<table class="table table-hover table-providers">
-    <thead>
-    <tr>
-        <th>Название провайдера</th>
-        <th>Дата регистрации</th>
-        <th>Телефон</th>
-        <th>ИНН</th>
-        <th>КПП</th>
-        <th>№ договора</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($providers as $provider): ?>
-        <?= $this->partial('application/providers/partial/row', [
-            'provider' => $provider,
-        ]); ?>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<?php if(empty($providers)): ?>
+    <div class="alert alert-dark" role="alert">
+        Нет данных для отображения
+    </div>
+<?php else: ?>
+    <table class="table table-hover table-providers">
+        <thead>
+        <tr>
+            <th>Наименование провайдера</th>
+            <th>ИНН</th>
+            <th>КПП</th>
+            <th>Телефон</th>
+            <th>Контактное лицо</th>
+            <th>Дата регистрации</th>
+            <th>Номер и дата договора</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tbody>
+        <?php foreach ($providers as $provider): ?>
+            <?= $this->partial('application/providers/partial/row', [
+                'provider' => $provider,
+            ]); ?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
 
 <!-- Modal add new provider -->
 <?= $this->partial('application/providers/partial/modal', [

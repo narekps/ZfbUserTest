@@ -1,0 +1,253 @@
+table.table-providers > thead > tr > th {
+    font-size: 12px;
+    font-weight: normal;
+    line-height: normal;
+    text-align: left;
+    color: #999999;
+    border-bottom: 2px solid #e0e2e5;
+}
+
+table.table-providers > tbody > tr > td {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.36;
+    text-align: left;
+    color: #404040;
+    border: none;
+    padding: 17px 8px;
+}
+
+#newProviderModal.modal {
+    padding-right: 0 !important;
+    height: 100%;
+}
+
+#newProviderModal .modal-dialog {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+#newProviderModal .modal-dialog .modal-content {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+#newProviderModal .modal-dialog .modal-content .modal-header,
+#newProviderModal .modal-dialog .modal-content .modal-body,
+#newProviderModal .modal-dialog .modal-content .modal-footer {
+    width: 370px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#newProviderModal .modal-dialog .modal-content .modal-header {
+    margin-top: 45px;
+    margin-bottom: 100px;
+}
+
+#newProviderModal .modal-dialog .modal-content .modal-header .modal-title {
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1.6;
+    letter-spacing: -0.2px;
+    text-align: center;
+    color: rgb(64, 64, 64);
+}
+
+#newProviderModal .modal-dialog .modal-content .modal-header .close {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    border-radius: 50%;
+    display: inline-block;
+    width: 58px;
+    height: 58px;
+    background: rgb(236, 239, 245);
+    margin-top: 0;
+    opacity: 0.7;
+}
+
+#newProviderModal .modal-dialog .modal-content .modal-header .close:hover {
+    opacity: 1;
+}
+
+#newProviderModal .modal-dialog .modal-content .modal-header .close span {
+    font-weight: normal;
+    font-size: 40px;
+    line-height: 26px;
+    color: rgb(128, 141, 151);
+}
+
+#newProviderModal .modal-dialog .modal-content .bmd-form-group .bmd-label-floating {
+    font-size: 16px;
+    font-weight: normal;
+    color: rgb(156, 174, 187);
+}
+#newProviderModal .modal-dialog .modal-content .bmd-form-group.is-focused .bmd-label-floating {
+    font-size: 12px;
+    font-weight: normal;
+    color: rgb(156, 174, 187);
+}
+
+#newProviderModal .modal-dialog .modal-content button[type="button"] {
+    margin-top: 100px;
+}
+
+
+/*begin provider info*/
+.provider_info {
+    margin-top: 30px;
+}
+.provider_info .title {
+    display: block;
+    font-size: 30px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 0.97;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(64, 64, 64);
+    margin-bottom: 62px;
+}
+
+.provider_info .title small {
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(153, 153, 153);
+}
+
+.provider_info .nav {
+    margin-top: -62px;
+    margin-bottom: 20px;
+}
+
+.provider_info .nav .nav-item {
+    margin-right: 30px;
+}
+.provider_info .nav .nav-item .nav-link {
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(64, 64, 64);
+    text-transform: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.provider_info .nav .nav-item .nav-link.active {
+    border-bottom: 4px solid #ff9e00;
+}
+
+.provider_info .row > div {
+    padding: 0;
+}
+
+.provider_info .label {
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(153, 153, 153);
+}
+
+.provider_info .value {
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(64, 64, 64);
+}
+
+.provider_info .contact_header {
+    font-size: 12px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(64, 64, 64);
+}
+/*end provider info*/
+
+/* begin provider tariffs */
+.provider_info .tariffs_accordion .card {
+    padding: 10px 20px 0 20px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.provider_info .tariffs_accordion .card .card-header {
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.provider_info .tariffs_accordion .card .card-header .name {
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.19;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(64, 64, 64);
+}
+
+.provider_info .tariffs_accordion .card .card-header .desc {
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(153, 153, 153);
+}
+
+.provider_info .tariffs_accordion .card .card-header .cost {
+    font-size: 22px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.05;
+    letter-spacing: normal;
+    text-align: right;
+    color: rgb(64, 64, 64);
+}
+
+.provider_info .tariffs_accordion .card .card-header .nds {
+    font-size: 14px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: right;
+    color: rgb(153, 153, 153);
+}
+.provider_info .tariffs_accordion .card .card-body {
+    padding-left: 0;
+}
+/* end provider tariffs */
