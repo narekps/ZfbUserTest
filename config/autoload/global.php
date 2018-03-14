@@ -20,18 +20,13 @@ return [
                 'class' => 'nav-item', // applied to <li> element
             ],
             [
-                'label' => 'Счета',
-                'route' => 'home',
+                'label' => 'Контролирующие организации',
+                'route' => 'trackers',
                 'class' => 'nav-item',
             ],
             [
                 'label' => 'Пользователи',
                 'route' => 'zfbuser',
-                'class' => 'nav-item',
-            ],
-            [
-                'label' => 'New Provider',
-                'route' => 'zfbuser/new-user',
                 'class' => 'nav-item',
             ],
         ],

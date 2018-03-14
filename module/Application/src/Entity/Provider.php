@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\ProviderRepository")
  * @ORM\Table(name="providers")
  */
-class Provider extends Contragent
+class Provider extends Contragent implements \JsonSerializable
 {
     /**
      * Номер договора с ЭТП ГПБ
@@ -68,5 +68,20 @@ class Provider extends Contragent
         $this->etpContractDate = $etpContractDate;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = parent::jsonSerialize();
+        $data = array_merge($data, [
+            'id'                => $this->getId(),
+            'etpContractNumber' => $this->getEtpContractNumber(),
+            'etpContractDate'   => $this->getEtpContractDate()->format('Y-m-d'),
+        ]);
+
+        return $data;
     }
 }

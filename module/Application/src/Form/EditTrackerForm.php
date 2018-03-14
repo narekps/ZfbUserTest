@@ -2,90 +2,53 @@
 
 namespace Application\Form;
 
-use Zend\Captcha\ReCaptcha;
 use Zend\Filter;
 use Zend\I18n\Validator\PhoneNumber;
 use Zend\Validator;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
-use ZfbUser\Options\ReCaptchaOptionsInterface;
-use ZfbUser\Options\NewUserFormOptionsInterface;
 
 /**
- * Class NewTrackerForm
+ * Class EditTrackerForm
  *
  * @package Application\Form
  */
-class NewTrackerForm extends Form
+class EditTrackerForm extends Form
 {
-    /**
-     * @var NewUserFormOptionsInterface
-     */
-    protected $formOptions;
-
-    /**
-     * @var ReCaptchaOptionsInterface
-     */
-    protected $recaptchaOptions;
-
     /**
      * @var array
      */
     protected $providerOptions;
 
     /**
-     * NewTrackerForm constructor.
+     * EditTrackerForm constructor.
      *
-     * @param \ZfbUser\Options\NewUserFormOptionsInterface $options
-     * @param \ZfbUser\Options\ReCaptchaOptionsInterface   $recaptchaOptions
-     * @param array                                        $providerOptions
+     * @param string|null $name
+     * @param array       $options
+     * @param array       $providerOptions
      */
-    public function __construct(NewUserFormOptionsInterface $options, ReCaptchaOptionsInterface $recaptchaOptions, array $providerOptions = [])
+    public function __construct(string $name = null, array $options = [], array $providerOptions = [])
     {
-        $this->formOptions = $options;
-        $this->recaptchaOptions = $recaptchaOptions;
         $this->providerOptions = $providerOptions;
 
-        parent::__construct($options->getFormName(), []);
+        parent::__construct('contragentEditForm', []);
 
         $this->addElements()->addInputFilter();
     }
 
     /**
-     * @return \ZfbUser\Options\NewUserFormOptionsInterface
-     */
-    public function getFormOptions(): NewUserFormOptionsInterface
-    {
-        return $this->formOptions;
-    }
-
-    /**
-     * @return \Application\Form\NewTrackerForm
+     * @return \Application\Form\EditTrackerForm
      */
     protected function addElements(): self
     {
         $this->add([
             'type'       => Element\Hidden::class,
-            'name'       => 'type',
+            'name'       => 'id',
             'attributes' => [
-                'value'    => 'tracker',
                 'type'     => 'hidden',
                 'required' => true,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Text::class,
-            'name'       => $this->getFormOptions()->getIdentityFieldName(),
-            'options'    => [
-                'label' => $this->getFormOptions()->getIdentityFieldLabel(),
-            ],
-            'attributes' => [
-                'type'     => 'email',
-                'required' => true,
-                'pattern'  => '.{2,50}',
-                'class'    => 'form-control ' . $this->getFormOptions()->getIdentityFieldName(),
+                'class'    => 'form-control id',
             ],
         ]);
 
@@ -99,48 +62,6 @@ class NewTrackerForm extends Form
                 'type'     => 'text',
                 'required' => true,
                 'class'    => 'form-control phone',
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'surname',
-            'options'    => [
-                'label' => 'Фамилия',
-            ],
-            'attributes' => [
-                'type'     => 'text',
-                'required' => true,
-                'pattern'  => '.{2,50}',
-                'class'    => 'form-control surname',
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'name',
-            'options'    => [
-                'label' => 'Имя',
-            ],
-            'attributes' => [
-                'type'     => 'text',
-                'required' => true,
-                'pattern'  => '.{2,30}',
-                'class'    => 'form-control name',
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'patronymic',
-            'options'    => [
-                'label' => 'Отчество',
-            ],
-            'attributes' => [
-                'type'     => 'text',
-                'required' => false,
-                'pattern'  => '.{0}|.{2,50}',
-                'class'    => 'form-control patronymic',
             ],
         ]);
 
@@ -238,25 +159,14 @@ class NewTrackerForm extends Form
             'attributes' => [
                 'type'     => 'select',
                 'multiple' => 'multiple',
-                'required' => true,
+                'required' => false,
                 'class'    => 'form-control trackingProviders',
             ],
         ]);
 
-        if ($this->formOptions->isEnabledRecaptcha()) {
-            $reCaptcha = new ReCaptcha($this->recaptchaOptions->toArray());
-            $this->add([
-                'type'    => Element\Captcha::class,
-                'name'    => 'captcha',
-                'options' => [
-                    'captcha' => $reCaptcha,
-                ],
-            ]);
-        }
-
         $submitElement = new Element\Button('submit');
         $submitElement
-            ->setLabel($this->getFormOptions()->getSubmitButtonText())
+            ->setLabel('Сохранить')
             ->setAttributes([
                 'type'  => Element\Submit::class,
                 'class' => 'submit',
@@ -267,50 +177,19 @@ class NewTrackerForm extends Form
         ]);
 
         $csrf = new Element\Csrf('csrf');
-        $csrf->getCsrfValidator()->setTimeout($this->getFormOptions()->getCsrfTimeout());
+        $csrf->getCsrfValidator()->setTimeout(60 * 5);
         $this->add($csrf);
 
         return $this;
     }
 
     /**
-     * @return \Application\Form\NewTrackerForm
+     * @return \Application\Form\EditTrackerForm
      */
     protected function addInputFilter(): self
     {
         $inputFilter = new InputFilter();
         $this->setInputFilter($inputFilter);
-
-        $inputFilter->add([
-            'name'       => $this->getFormOptions()->getIdentityFieldName(),
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\EmailAddress::class,
-                ],
-                [
-                    'name'    => Validator\StringLength::class,
-                    'options' => [
-                        'min' => 2,
-                        'max' => 50,
-                    ],
-                ],
-            ],
-        ]);
 
         $inputFilter->add([
             'name'       => 'phone',
@@ -347,96 +226,6 @@ class NewTrackerForm extends Form
                     'name'    => PhoneNumber::class,
                     'options' => [
                         'country' => 'RU',
-                    ],
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'surname',
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\NotEmpty::class,
-                ],
-                [
-                    'name'    => Validator\StringLength::class,
-                    'options' => [
-                        'min' => 2,
-                        'max' => 50,
-                    ],
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'name',
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\NotEmpty::class,
-                ],
-                [
-                    'name'    => Validator\StringLength::class,
-                    'options' => [
-                        'min' => 2,
-                        'max' => 30,
-                    ],
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'patronymic',
-            'required'   => false,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name'    => Validator\StringLength::class,
-                    'options' => [
-                        'min' => 2,
-                        'max' => 50,
                     ],
                 ],
             ],
@@ -631,7 +420,7 @@ class NewTrackerForm extends Form
         $providerOptions = $this->providerOptions;
         $inputFilter->add([
             'name'       => 'trackingProviders',
-            'required'   => true,
+            'required'   => false,
             'filters'    => [
                 [
                     'name' => Filter\StripTags::class,
@@ -650,7 +439,7 @@ class NewTrackerForm extends Form
                         'callback' => function ($values) use ($providerOptions) {
                             $values = array_filter($values);
                             if (empty($values)) {
-                                return false;
+                                return true;
                             }
 
                             foreach ($values as $value) {

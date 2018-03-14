@@ -4,25 +4,21 @@ namespace Application\Controller\Factory;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Controller\ProvidersController;
+use Application\Controller\TrackersController;
 use Doctrine\ORM\EntityManagerInterface;
-use Application\Entity\Provider as ProviderEntity;
-use Application\Repository\ProviderRepository;
-use Application\Entity\Tariff as TariffEntity;
-use Application\Entity\User as UserEntity;
-use Application\Repository\TariffRepository;
-use Application\Form\NewProviderForm;
+use Application\Entity\Tracker as TrackerEntity;
+use Application\Repository\TrackerRepository;
+use Application\Form\NewTrackerForm;
 use Application\Repository\UserRepository;
-use Application\Form\TariffForm;
-use Application\Form\EditProviderForm;
-use Application\Service\ProviderService;
+use Application\Form\EditTrackerForm;
+use Application\Service\TrackerService;
 
 /**
- * Class ProvidersControllerFactory
+ * Class TrackersControllerFactory
  *
  * @package Application\Controller\Factory
  */
-class ProvidersControllerFactory implements FactoryInterface
+class TrackersControllerFactory implements FactoryInterface
 {
     /**
      * @param \Interop\Container\ContainerInterface $container
@@ -38,11 +34,8 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
-        /** @var ProviderRepository $providerRep */
-        $providerRep = $entityManager->getRepository(ProviderEntity::class);
-
-        /** @var TariffRepository $tariffRep */
-        $tariffRep = $entityManager->getRepository(TariffEntity::class);
+        /** @var TrackerRepository $trackerRep */
+        $trackerRep = $entityManager->getRepository(TrackerEntity::class);
 
         /** @var UserRepository $userRepository */
         $userRepository = $container->get('zfbuser_user_repository');
@@ -54,27 +47,24 @@ class ProvidersControllerFactory implements FactoryInterface
         $app = $container->get('Application');
         $e = $app->getMvcEvent();
         $routeMatch = $e->getRouteMatch();
-        if ($routeMatch->getMatchedRouteName() == 'providers') {
+        if ($routeMatch->getMatchedRouteName() == 'trackers') {
             $action = $routeMatch->getParam('action');
             if ($action == 'users') {
                 $request->getQuery()->set('type', 'user');
             } else {
-                $request->getQuery()->set('type', 'provider');
+                $request->getQuery()->set('type', 'tracker');
             }
         }
 
-        /** @var NewProviderForm $newUserForm */
+        /** @var NewTrackerForm $newUserForm */
         $newUserForm = $container->get('zfbuser_new_user_form');
 
-        /** @var TariffForm $tariffForm */
-        $tariffForm = $container->get(TariffForm::class);
+        /** @var EditTrackerForm $editTrackerForm */
+        $editTrackerForm = $container->get(EditTrackerForm::class);
 
-        /** @var EditProviderForm $editProviderForm */
-        $editProviderForm = $container->get(EditProviderForm::class);
+        /** @var TrackerService $trackerService */
+        $trackerService = $container->get(TrackerService::class);
 
-        /** @var ProviderService $providerService */
-        $providerService = $container->get(ProviderService::class);
-
-        return new ProvidersController($providerService, $providerRep, $tariffRep, $userRepository, $newUserForm, $tariffForm, $editProviderForm);
+        return new TrackersController($trackerService, $trackerRep, $userRepository, $newUserForm, $editTrackerForm);
     }
 }

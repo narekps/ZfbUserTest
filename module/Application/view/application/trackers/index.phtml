@@ -1,9 +1,9 @@
 <?php
 /**
- * @var \Application\Entity\Provider[]     $providers
- * @var \Application\Form\NewProviderForm  $newProviderForm
- * @var \Application\Form\EditProviderForm $editProviderForm
- * @var string                             $search значение поискового поля
+ * @var \Application\Entity\Tracker[]     $trackers
+ * @var \Application\Form\NewTrackerForm  $newTrackerForm
+ * @var \Application\Form\EditTrackerForm $editTrackerForm
+ * @var string                            $search значение поискового поля
  */
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
@@ -16,7 +16,7 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="material-icons">&#xE8B6;</i></div>
                 </div>
-                <input class="form-control search-field" type="text" name="search" placeholder="Введите название провайдера" value="<?= $search; ?>">
+                <input class="form-control search-field" type="text" name="search" placeholder="Введите название организации" value="<?= $search; ?>">
             </div>
 
             <!--For submit by enter key-->
@@ -32,7 +32,7 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     </div>
 </div>
 
-<?php if(empty($providers)): ?>
+<?php if(empty($trackers)): ?>
     <div class="alert alert-dark" role="alert">
         Нет данных для отображения
     </div>
@@ -40,33 +40,32 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     <table class="table table-hover table-contragents">
         <thead>
         <tr>
-            <th>Наименование провайдера</th>
+            <th>Наименование организации</th>
             <th>ИНН</th>
             <th>КПП</th>
             <th>Телефон</th>
             <th>Контактное лицо</th>
             <th>Дата регистрации</th>
-            <th>Номер и дата договора</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <tbody>
-        <?php foreach ($providers as $provider): ?>
-            <?= $this->partial('application/providers/partial/row', [
-                'provider' => $provider,
+        <?php foreach ($trackers as $tracker): ?>
+            <?= $this->partial('application/trackers/partial/row', [
+                'tracker' => $tracker,
             ]); ?>
         <?php endforeach; ?>
         </tbody>
     </table>
 <?php endif; ?>
 
-<!-- Modal add new provider and user -->
-<?= $this->partial('application/providers/partial/modal', [
-        'newProviderForm' => $newProviderForm,
+<!-- Modal add new tracker and user -->
+<?= $this->partial('application/trackers/partial/modal', [
+        'newTrackerForm' => $newTrackerForm,
 ]); ?>
 
-<!-- Modal edit provider -->
-<?= $this->partial('application/providers/partial/editProviderModal', [
-        'editProviderForm' => $editProviderForm,
+<!-- Modal edit tracker -->
+<?= $this->partial('application/trackers/partial/editTrackerModal', [
+        'editTrackerForm' => $editTrackerForm,
 ]); ?>

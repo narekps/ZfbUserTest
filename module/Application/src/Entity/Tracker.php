@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="Application\Repository\TrackerRepository")
  * @ORM\Table(name="trackers")
  */
-class Tracker extends Contragent
+class Tracker extends Contragent implements \JsonSerializable
 {
     /**
      * Список Подконтрольных организаций (сервис-провайдеров)
@@ -56,5 +56,19 @@ class Tracker extends Contragent
         }
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = parent::jsonSerialize();
+        $data = array_merge($data, [
+            'id'                => $this->getId(),
+            'trackingProviders' => [],
+        ]);
+
+        return $data;
     }
 }

@@ -1,6 +1,6 @@
 $(function() {
     var $userModal = $('#userModal'),
-        form = document.getElementById('addUserForm'),
+        form = document.getElementById('contragentForm'),
         $addUserBtn = $('#addUserBtn'),
         $userSaveBtn = $('#userSaveBtn'),
         $errorMsg = $('.error-msg', $userModal);
@@ -50,7 +50,7 @@ $(function() {
             return;
         }
 
-        var data = $('#addUserForm').serialize(),
+        var data = $(form).serialize(),
             url = $userSaveBtn.attr('data-save-url');
 
         var jqxhr = $.post(url, data, successCallback).fail(failCallback).always(function (response) {

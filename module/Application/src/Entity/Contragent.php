@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Базовый класс контрагента
  */
-abstract class Contragent
+abstract class Contragent implements \JsonSerializable
 {
     /**
      * Идентификатор контрагента
@@ -276,5 +276,24 @@ abstract class Contragent
         $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = [
+            'fullName'      => $this->getFullName(),
+            'inn'           => $this->getInn(),
+            'kpp'           => $this->getKpp(),
+            'dateCreated'   => $this->getDateCreated()->format('Y-m-d'),
+            'phone'         => $this->getPhone(),
+            'address'       => $this->getAddress(),
+            'contactPerson' => $this->getContactPerson(),
+            'email'         => $this->getEmail(),
+        ];
+
+        return $data;
     }
 }

@@ -1,0 +1,171 @@
+<?php
+/**
+ * @var \Application\Form\NewTrackerForm $newTrackerForm
+ */
+
+
+$csrfField = $newTrackerForm->get('csrf');
+$typeField = $newTrackerForm->get('type');
+
+$fullNameField = $newTrackerForm->get('fullName');
+$fullNameField->setAttribute('id', 'fullName');
+
+$innField = $newTrackerForm->get('inn');
+$innField->setAttribute('id', 'inn');
+
+$kppField = $newTrackerForm->get('kpp');
+$kppField->setAttribute('id', 'kpp');
+
+$surnameField = $newTrackerForm->get('surname');
+$surnameField->setAttribute('id', 'surname');
+
+$nameField = $newTrackerForm->get('name');
+$nameField->setAttribute('id', 'name');
+
+$patronymicField = $newTrackerForm->get('patronymic');
+$patronymicField->setAttribute('id', 'patronymic');
+
+$identityField = $newTrackerForm->get('identity');
+$identityField->setAttribute('id', 'identity');
+
+$phoneField = $newTrackerForm->get('phone');
+$phoneField->setAttribute('id', 'phone');
+
+$addressField = $newTrackerForm->get('address');
+$addressField->setAttribute('id', 'address');
+
+$contactPersonField = $newTrackerForm->get('contactPerson');
+$contactPersonField->setAttribute('id', 'contactPerson');
+
+$emailField = $newTrackerForm->get('email');
+$emailField->setAttribute('id', 'email');
+
+
+$submitBtn = $newTrackerForm->get('submit');
+?>
+
+<!-- Modal add new provider -->
+<div class="modal fade" id="contragentModal" tabindex="-1" role="dialog" aria-labelledby="contragentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contragentModalLabel">Добавление новой организации</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <?= $this->form()->openTag($newTrackerForm); ?>
+
+                <?=$this->formHidden($csrfField); ?>
+                <?=$this->formHidden($typeField); ?>
+
+                <div class="form-group">
+                    <label for="<?= $fullNameField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $fullNameField->getLabel(); ?></label>
+                    <?= $this->formInput($fullNameField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $innField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $innField->getLabel(); ?></label>
+                            <?= $this->formInput($innField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $kppField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $kppField->getLabel(); ?></label>
+                            <?= $this->formInput($kppField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $addressField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $addressField->getLabel(); ?></label>
+                    <?= $this->formInput($addressField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $phoneField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $phoneField->getLabel(); ?></label>
+                            <?= $this->formInput($phoneField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $emailField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $emailField->getLabel(); ?></label>
+                            <?= $this->formInput($emailField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $contactPersonField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $contactPersonField->getLabel(); ?></label>
+                    <?= $this->formInput($contactPersonField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <h3>user info</h3>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $surnameField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $surnameField->getLabel(); ?></label>
+                            <?= $this->formInput($surnameField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $nameField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $nameField->getLabel(); ?></label>
+                            <?= $this->formInput($nameField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $patronymicField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $patronymicField->getLabel(); ?></label>
+                    <?= $this->formInput($patronymicField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $identityField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $identityField->getLabel(); ?></label>
+                    <?= $this->formInput($identityField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="alert alert-warning error-msg" role="alert" style="display: none;"></div>
+
+                <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
+                        id="contragentSaveBtn"
+                        data-save-url="<?=$this->url('zfbuser/api/new-user'); ?>?type=tracker"
+                        name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
+
+                <?= $this->form()->closeTag(); ?>
+
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

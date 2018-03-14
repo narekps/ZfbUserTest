@@ -1,7 +1,7 @@
 <?php
 /**
- * @var \Application\Entity\Provider $provider
- * @var string                       $activeTab
+ * @var \Application\Entity\Tracker $tracker
+ * @var string                      $activeTab
  */
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
@@ -10,22 +10,20 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
 
 <!--provider info-->
 <div class="contragent_info">
-    <?= $this->partial('application/providers/partial/header', [
-        'provider'  => $provider,
+    <?= $this->partial('application/trackers/partial/header', [
+        'tracker'   => $tracker,
         'activeTab' => $activeTab,
     ]); ?>
 
-    <!--Инфо провайдера-->
+    <!--Инфо организации-->
     <div class="row">
         <div class="col-md-4 col-sm-6 col-xs-6">
             <p class="label">ИНН</p>
             <p class="label">КПП</p>
-            <p class="label">Дата заключения договора</p>
         </div>
         <div class="col-md-8 col-sm-6 col-xs-6">
-            <p class="value"><?= $provider->getInn(); ?></p>
-            <p class="value"><?= $provider->getKpp(); ?></p>
-            <p class="value"><?= $provider->getEtpContractDate()->format('d.m.Y'); ?></p>
+            <p class="value"><?= $tracker->getInn(); ?></p>
+            <p class="value"><?= $tracker->getKpp(); ?></p>
         </div>
     </div>
 
@@ -42,9 +40,9 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
             <p class="label">Email</p>
         </div>
         <div class="col-md-8 col-sm-6 col-xs-6">
-            <p class="value"><?= $provider->getContactPerson(); ?></p>
-            <p class="value"><?= $provider->getPhone(); ?></p>
-            <p class="value"><?= $provider->getEmail(); ?></p>
+            <p class="value"><?= $tracker->getContactPerson(); ?></p>
+            <p class="value"><?= $tracker->getPhone(); ?></p>
+            <p class="value"><?= $tracker->getEmail(); ?></p>
         </div>
     </div>
 </div>

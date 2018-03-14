@@ -7,14 +7,14 @@
  * @var string                       $activeStatus
  */
 
-$this->headLink()->appendStylesheet($this->basePath('css/providers.css'));
+$this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/tariffs.js'));
 
 $statuses = \Application\Entity\Tariff::getStatuses();
 ?>
 
 <!--provider info-->
-<div class="provider_info">
+<div class="contragent_info">
     <?= $this->partial('application/providers/partial/header', [
         'provider'  => $provider,
         'activeTab' => $activeTab,

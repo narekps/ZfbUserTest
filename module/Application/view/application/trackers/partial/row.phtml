@@ -1,0 +1,24 @@
+<?php
+/**
+ * @var \Application\Entity\Tracker $tracker
+ */
+?>
+<tr>
+    <td>
+        <a href="<?=$this->url('trackers', ['id' => $tracker->getId(), 'action' => 'info']); ?>">
+            <?= $tracker->getFullName(); ?>
+        </a>
+    </td>
+    <td><?= $tracker->getInn(); ?></td>
+    <td><?= $tracker->getKpp(); ?></td>
+    <td><?= $tracker->getPhone(); ?></td>
+    <td><?= $tracker->getContactPerson(); ?></td>
+    <td><?= $tracker->getDateCreated()->format('d.m.Y'); ?></td>
+    <td>
+        <button type="button" class="btn btn-primary bmd-btn-fab-sm contragentEditBtn"
+                data-get-url="<?=$this->url('trackers', ['id' => $tracker->getId(), 'action' => 'get']); ?>"
+        >
+            <i class="material-icons">mode_edit</i>
+        </button>
+    </td>
+</tr>

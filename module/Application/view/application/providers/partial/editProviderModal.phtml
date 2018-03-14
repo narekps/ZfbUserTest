@@ -1,0 +1,149 @@
+<?php
+/**
+ * @var \Application\Form\EditProviderForm $editProviderForm
+ */
+
+
+$csrfField = $editProviderForm->get('csrf');
+$idField = $editProviderForm->get('id');
+$idField->setAttribute('id', 'id_edit');
+
+$etpContractNumberField = $editProviderForm->get('etpContractNumber');
+$etpContractNumberField->setAttribute('id', 'etpContractNumber');
+
+$etpContractDateField = $editProviderForm->get('etpContractDate');
+$etpContractDateField->setAttribute('id', 'etpContractDate');
+
+$fullNameField = $editProviderForm->get('fullName');
+$fullNameField->setAttribute('id', 'fullName_edit');
+
+$innField = $editProviderForm->get('inn');
+$innField->setAttribute('id', 'inn_edit');
+
+$kppField = $editProviderForm->get('kpp');
+$kppField->setAttribute('id', 'kpp_edit');
+
+$phoneField = $editProviderForm->get('phone');
+$phoneField->setAttribute('id', 'phone_edit');
+
+$addressField = $editProviderForm->get('address');
+$addressField->setAttribute('id', 'address_edit');
+
+$contactPersonField = $editProviderForm->get('contactPerson');
+$contactPersonField->setAttribute('id', 'contactPerson_edit');
+
+$emailField = $editProviderForm->get('email');
+$emailField->setAttribute('id', 'email_edit');
+
+$submitBtn = $editProviderForm->get('submit');
+?>
+
+<div class="modal fade" id="contragentEditModal" tabindex="-1" role="dialog" aria-labelledby="contragentEditModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contragentEditModalLabel">Редактирование сервис-провайдера</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <?= $this->form()->openTag($editProviderForm); ?>
+
+                <?= $this->formHidden($csrfField); ?>
+                <?= $this->formHidden($idField); ?>
+
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label for="<?= $etpContractNumberField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $etpContractNumberField->getLabel(); ?></label>
+                            <?= $this->formInput($etpContractNumberField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="<?= $etpContractDateField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $etpContractDateField->getLabel(); ?></label>
+                            <?= $this->formInput($etpContractDateField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $fullNameField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $fullNameField->getLabel(); ?></label>
+                    <?= $this->formInput($fullNameField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $innField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $innField->getLabel(); ?></label>
+                            <?= $this->formInput($innField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $kppField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $kppField->getLabel(); ?></label>
+                            <?= $this->formInput($kppField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $addressField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $addressField->getLabel(); ?></label>
+                    <?= $this->formInput($addressField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $phoneField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $phoneField->getLabel(); ?></label>
+                            <?= $this->formInput($phoneField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $emailField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $emailField->getLabel(); ?></label>
+                            <?= $this->formInput($emailField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $contactPersonField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $contactPersonField->getLabel(); ?></label>
+                    <?= $this->formInput($contactPersonField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="alert alert-warning error-msg" role="alert" style="display: none;"></div>
+
+                <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
+                        id="contragentEditSaveBtn"
+                        data-save-url="<?=$this->url('providers', ['id' => ':id', 'action' => 'save']); ?>"
+                        name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
+
+                <?= $this->form()->closeTag(); ?>
+
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

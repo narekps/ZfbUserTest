@@ -1,4 +1,4 @@
-table.table-providers > thead > tr > th {
+table.table-contragents > thead > tr > th {
     font-size: 12px;
     font-weight: normal;
     line-height: normal;
@@ -7,7 +7,7 @@ table.table-providers > thead > tr > th {
     border-bottom: 2px solid #e0e2e5;
 }
 
-table.table-providers > tbody > tr > td {
+table.table-contragents > tbody > tr > td {
     font-size: 14px;
     font-weight: normal;
     line-height: 1.36;
@@ -17,19 +17,19 @@ table.table-providers > tbody > tr > td {
     padding: 17px 8px;
 }
 
-#newProviderModal.modal {
+#contragentModal.modal {
     padding-right: 0 !important;
     height: 100%;
 }
 
-#newProviderModal .modal-dialog {
+#contragentModal .modal-dialog {
     width: 100%;
     max-width: 100%;
     height: 100%;
     margin: 0;
 }
 
-#newProviderModal .modal-dialog .modal-content {
+#contragentModal .modal-dialog .modal-content {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
@@ -38,20 +38,20 @@ table.table-providers > tbody > tr > td {
     overflow-y: auto;
 }
 
-#newProviderModal .modal-dialog .modal-content .modal-header,
-#newProviderModal .modal-dialog .modal-content .modal-body,
-#newProviderModal .modal-dialog .modal-content .modal-footer {
+#contragentModal .modal-dialog .modal-content .modal-header,
+#contragentModal .modal-dialog .modal-content .modal-body,
+#contragentModal .modal-dialog .modal-content .modal-footer {
     width: 370px;
     margin: 0 auto;
     padding: 0;
 }
 
-#newProviderModal .modal-dialog .modal-content .modal-header {
+#contragentModal .modal-dialog .modal-content .modal-header {
     margin-top: 45px;
-    margin-bottom: 100px;
+    margin-bottom: 80px;
 }
 
-#newProviderModal .modal-dialog .modal-content .modal-header .modal-title {
+#contragentModal .modal-dialog .modal-content .modal-header .modal-title {
     font-size: 20px;
     font-weight: normal;
     line-height: 1.6;
@@ -60,7 +60,7 @@ table.table-providers > tbody > tr > td {
     color: rgb(64, 64, 64);
 }
 
-#newProviderModal .modal-dialog .modal-content .modal-header .close {
+#contragentModal .modal-dialog .modal-content .modal-header .close {
     position: absolute;
     top: 30px;
     right: 50px;
@@ -73,38 +73,45 @@ table.table-providers > tbody > tr > td {
     opacity: 0.7;
 }
 
-#newProviderModal .modal-dialog .modal-content .modal-header .close:hover {
+#contragentModal .modal-dialog .modal-content .modal-header .close:hover {
     opacity: 1;
 }
 
-#newProviderModal .modal-dialog .modal-content .modal-header .close span {
+#contragentModal .modal-dialog .modal-content .modal-header .close span {
     font-weight: normal;
     font-size: 40px;
     line-height: 26px;
     color: rgb(128, 141, 151);
 }
 
-#newProviderModal .modal-dialog .modal-content .bmd-form-group .bmd-label-floating {
+#contragentModal .modal-dialog .modal-content .bmd-form-group .bmd-label-floating {
     font-size: 16px;
     font-weight: normal;
     color: rgb(156, 174, 187);
 }
-#newProviderModal .modal-dialog .modal-content .bmd-form-group.is-focused .bmd-label-floating {
+#contragentModal .modal-dialog .modal-content .bmd-form-group.is-focused .bmd-label-floating {
     font-size: 12px;
     font-weight: normal;
     color: rgb(156, 174, 187);
 }
 
-#newProviderModal .modal-dialog .modal-content button[type="button"] {
+#contragentModal .modal-dialog .modal-content button[type="button"] {
     margin-top: 100px;
 }
 
+#contragentModal .modal-dialog .modal-content fieldset {
+    margin-top: 20px;
+}
 
-/*begin provider info*/
-.provider_info {
+#contragentModal .modal-dialog .modal-content fieldset legend {
+    font-size: 16px;
+}
+
+/*begin contragent info*/
+.contragent_info {
     margin-top: 30px;
 }
-.provider_info .title {
+.contragent_info .title {
     display: block;
     font-size: 30px;
     font-weight: 300;
@@ -117,7 +124,7 @@ table.table-providers > tbody > tr > td {
     margin-bottom: 62px;
 }
 
-.provider_info .title small {
+.contragent_info .title small {
     font-size: 14px;
     font-weight: normal;
     font-style: normal;
@@ -128,15 +135,15 @@ table.table-providers > tbody > tr > td {
     color: rgb(153, 153, 153);
 }
 
-.provider_info .nav {
+.contragent_info .nav {
     margin-top: -62px;
     margin-bottom: 20px;
 }
 
-.provider_info .nav .nav-item {
+.contragent_info .nav .nav-item {
     margin-right: 30px;
 }
-.provider_info .nav .nav-item .nav-link {
+.contragent_info .nav .nav-item .nav-link {
     font-size: 14px;
     font-weight: normal;
     font-style: normal;
@@ -150,15 +157,15 @@ table.table-providers > tbody > tr > td {
     padding-right: 0;
 }
 
-.provider_info .nav .nav-item .nav-link.active {
+.contragent_info .nav .nav-item .nav-link.active {
     border-bottom: 4px solid #ff9e00;
 }
 
-.provider_info .row > div {
+.contragent_info .row > div {
     padding: 0;
 }
 
-.provider_info .label {
+.contragent_info .label {
     font-size: 14px;
     font-weight: normal;
     font-style: normal;
@@ -169,7 +176,7 @@ table.table-providers > tbody > tr > td {
     color: rgb(153, 153, 153);
 }
 
-.provider_info .value {
+.contragent_info .value {
     font-size: 14px;
     font-weight: normal;
     font-style: normal;
@@ -180,7 +187,7 @@ table.table-providers > tbody > tr > td {
     color: rgb(64, 64, 64);
 }
 
-.provider_info .contact_header {
+.contragent_info .contact_header {
     font-size: 12px;
     font-weight: bold;
     font-style: normal;
@@ -190,21 +197,21 @@ table.table-providers > tbody > tr > td {
     text-align: left;
     color: rgb(64, 64, 64);
 }
-/*end provider info*/
+/*end contragent info*/
 
 /* begin provider tariffs */
-.provider_info .tariffs_accordion .card {
+.contragent_info .tariffs_accordion .card {
     padding: 10px 20px 0 20px;
     margin-top: 15px;
     margin-bottom: 20px;
 }
 
-.provider_info .tariffs_accordion .card .card-header {
+.contragent_info .tariffs_accordion .card .card-header {
     border-bottom: none;
     cursor: pointer;
 }
 
-.provider_info .tariffs_accordion .card .card-header .name {
+.contragent_info .tariffs_accordion .card .card-header .name {
     font-size: 16px;
     font-weight: normal;
     font-style: normal;
@@ -215,7 +222,7 @@ table.table-providers > tbody > tr > td {
     color: rgb(64, 64, 64);
 }
 
-.provider_info .tariffs_accordion .card .card-header .desc {
+.contragent_info .tariffs_accordion .card .card-header .desc {
     font-size: 14px;
     font-weight: normal;
     font-style: normal;
@@ -226,7 +233,7 @@ table.table-providers > tbody > tr > td {
     color: rgb(153, 153, 153);
 }
 
-.provider_info .tariffs_accordion .card .card-header .cost {
+.contragent_info .tariffs_accordion .card .card-header .cost {
     font-size: 22px;
     font-weight: 500;
     font-style: normal;
@@ -237,7 +244,7 @@ table.table-providers > tbody > tr > td {
     color: rgb(64, 64, 64);
 }
 
-.provider_info .tariffs_accordion .card .card-header .nds {
+.contragent_info .tariffs_accordion .card .card-header .nds {
     font-size: 14px;
     font-weight: 300;
     font-style: normal;
@@ -248,13 +255,13 @@ table.table-providers > tbody > tr > td {
     color: rgb(153, 153, 153);
 }
 
-.provider_info .tariffs_accordion .card .card-header .status {
+.contragent_info .tariffs_accordion .card .card-header .status {
     font-size: 14px;
     font-weight: 300;
     color: rgb(153, 153, 153);
 }
 
-.provider_info .tariffs_accordion .card .card-body {
+.contragent_info .tariffs_accordion .card .card-body {
     padding-left: 0;
 }
 /* end provider tariffs */

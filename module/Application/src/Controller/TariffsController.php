@@ -2,7 +2,7 @@
 
 namespace Application\Controller;
 
-use \ZfbUser\Controller\Plugin;
+use ZfbUser\Controller\Plugin;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController;

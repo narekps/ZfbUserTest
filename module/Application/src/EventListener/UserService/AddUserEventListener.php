@@ -9,6 +9,7 @@ use Application\Entity\Provider as ProviderEntity;
 use Application\Entity\Tracker as TrackerEntity;
 use ZfbUser\EventProvider\EventResult;
 use Application\Repository\ProviderRepository;
+use Application\Repository\TrackerRepository;
 
 /**
  * Class AddUserEventListener
@@ -124,6 +125,12 @@ class AddUserEventListener
         return $tracker;
     }
 
+    /**
+     * @param \Application\Entity\User $user
+     * @param array                    $formData
+     *
+     * @return \Application\Entity\User
+     */
     protected function createUser(UserEntity $user, array $formData)
     {
 
@@ -137,6 +144,15 @@ class AddUserEventListener
             }
         }
 
+        if (!empty($formData['tracker_id'])) {
+            /** @var TrackerRepository $trackerRep */
+            $trackerRep = $this->entityManager->getRepository(TrackerEntity::class);
+            /** @var TrackerEntity $tracker */
+            $tracker = $trackerRep->findOneBy(['id' => intval($formData['tracker_id'])]);
+            if ($tracker) {
+                $user->setTracker($tracker);
+            }
+        }
 
         return $user;
     }

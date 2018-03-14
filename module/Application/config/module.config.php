@@ -35,6 +35,9 @@ return [
         ],
         // required if enabled, see https://developers.google.com/recaptcha/docs/display
         'recaptcha'      => $localCfg['google_recaptcha'],
+        'new_user_form'         => [
+            'form_name'            => 'contragentForm',
+        ]
     ],
     'doctrine'                  => [
         'driver' => [
@@ -86,6 +89,20 @@ return [
                     ],
                 ],
             ],
+            'trackers'   => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'       => '/trackers[/:id[/:action]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z]+',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults'    => [
+                        'controller' => Controller\TrackersController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
             'tariffs'     => [
                 'type'    => Segment::class,
                 'options' => [
@@ -106,6 +123,7 @@ return [
         'factories' => [
             Controller\IndexController::class     => InvokableFactory::class,
             Controller\ProvidersController::class => Controller\Factory\ProvidersControllerFactory::class,
+            Controller\TrackersController::class  => Controller\Factory\TrackersControllerFactory::class,
             Controller\TariffsController::class   => Controller\Factory\TariffsControllerFactory::class,
         ],
     ],
@@ -113,9 +131,14 @@ return [
         'factories' => [
             EventListener\UserService\AddUserEventListener::class => EventListener\UserService\Factory\AddUserEventListenerFactory::class,
             Form\NewProviderForm::class                           => Form\Factory\NewProviderFormFactory::class,
+            Form\EditProviderForm::class                          => Form\Factory\EditProviderFormFactory::class,
             Form\NewTrackerForm::class                            => Form\Factory\NewTrackerFormFactory::class,
+            Form\EditTrackerForm::class                           => Form\Factory\EditTrackerFormFactory::class,
             Form\NewUserForm::class                               => Form\Factory\NewUserFormFactory::class,
+            Form\TariffForm::class                                => InvokableFactory::class,
             Service\TariffService::class                          => Service\Factory\TariffServiceFactory::class,
+            Service\ProviderService::class                        => Service\Factory\ProviderServiceFactory::class,
+            Service\TrackerService::class                         => Service\Factory\TrackerServiceFactory::class,
 
             //zfbuser services
             'zfbuser_new_user_form'                               => Form\Factory\UserFormFactory::class,
