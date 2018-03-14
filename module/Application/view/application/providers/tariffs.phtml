@@ -53,36 +53,9 @@ $statuses = \Application\Entity\Tariff::getStatuses();
         <div class="row tariffs_accordion" id="accordion">
             <div class="col-12">
                 <?php foreach ($tariffs as $tariff): ?>
-                    <div class="card">
-                        <div class="card-header" id="tariff_<?= $tariff->getId(); ?>">
-                            <div class="row" data-toggle="collapse" data-target="#collapse<?= $tariff->getId(); ?>"
-                                 aria-expanded="false" aria-controls="collapse<?= $tariff->getId(); ?>">
-                                <div class="col-xl-10 col-md-8 col-sm-8 col-xs-6">
-                                    <h5 class="name"><?= $tariff->getName(); ?></h5>
-                                    <h6 class="desc"><?= $tariff->getDescription(); ?></h6>
-                                </div>
-                                <div class="col-xl-2 col-md-4 col-sm-4 col-xs-6 text-right">
-                                    <p class="cost"><?= money_format('%.2n', $tariff->getCost()); ?> <?= $tariff->getCurrency(); ?></p>
-                                    <p class="nds">
-                                        <?php if($tariff->getNds() === null): ?>
-                                        Без НДС
-                                        <?php else: ?>
-                                            <?= $tariff->getNds(); ?>%
-                                        <?php endif; ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="collapse<?= $tariff->getId(); ?>" class="collapse"
-                             aria-labelledby="heading<?= $tariff->getId(); ?>" data-parent="#accordion">
-                            <div class="card-body">
-                                <button type="button" class="btn btn-raised tariffEditBtn"
-                                        data-id="<?=$tariff->getId(); ?>"
-                                        data-get-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>"
-                                >Редактировать</button>
-                            </div>
-                        </div>
-                    </div>
+                    <?= $this->partial('application/providers/partial/tariffRow', [
+                        'tariff' => $tariff,
+                    ]); ?>
                 <?php endforeach; ?>
             </div>
         </div>

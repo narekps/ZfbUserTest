@@ -81,9 +81,6 @@ $(function() {
     }
 
     function failCallback(response) {
-        console.log("error");
-        console.log(response);
-
         if (response.status === 403) {
             location.href = '/user/authentication';
         }
@@ -122,6 +119,10 @@ $(function() {
             if (data.success === true) {
                 resetForm(data.tariff);
                 $tariffModal.modal('show');
+            }
+        }).fail(function(response){
+            if (response.status === 403) {
+                location.href = '/user/authentication';
             }
         });
     });

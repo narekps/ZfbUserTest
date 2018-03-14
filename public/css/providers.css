@@ -247,6 +247,13 @@ table.table-providers > tbody > tr > td {
     text-align: right;
     color: rgb(153, 153, 153);
 }
+
+.provider_info .tariffs_accordion .card .card-header .status {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgb(153, 153, 153);
+}
+
 .provider_info .tariffs_accordion .card .card-body {
     padding-left: 0;
 }
