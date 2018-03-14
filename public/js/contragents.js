@@ -12,13 +12,16 @@ $(function() {
     $('input[name="etpContractDate"]').bootstrapMaterialDatePicker({
         time: false,
         switchOnClick: true,
-        lang: 'ru'
+        lang: 'ru',
+        maxDate: $('input[name="etpContractDate"]').attr('max')
     });
     $('input[name="phone"]').inputmask({"mask": "+7 (999) 999-99-99"}); //specifying options
 
     $('input').on('change', function () {
         var form = document.getElementById($(this).parents('form').eq(0).attr('id'));
-        validateForm(form);
+        if (form) {
+            validateForm(form);
+        }
     });
 
     $addContragentBtn.on('click', function () {

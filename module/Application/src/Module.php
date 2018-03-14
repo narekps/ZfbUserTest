@@ -33,7 +33,7 @@ class Module
     /**
      * Дефолтная локаль
      */
-    public const DEFAULT_LOCALE = 'en_US';
+    public const DEFAULT_LOCALE = 'ru_RU';
 
     /**
      * @param \Zend\Mvc\MvcEvent $e
@@ -85,7 +85,7 @@ class Module
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $e->getRequest();
         if (!$request instanceof Request || $request->isXmlHttpRequest()) {
-            return;
+            //return;
         }
 
         $locale = self::DEFAULT_LOCALE;
@@ -94,12 +94,12 @@ class Module
             if (empty($locale)) {
                 $locale = self::DEFAULT_LOCALE;
             }
-
-            $sm = $e->getApplication()->getServiceManager();
-            /** @var \Zend\Mvc\I18n\Translator|\Zend\I18n\Translator\Translator $translator */
-            $translator = $sm->get('MvcTranslator');
-            $translator->setLocale($locale);
         }
+
+        $sm = $e->getApplication()->getServiceManager();
+        /** @var \Zend\Mvc\I18n\Translator|\Zend\I18n\Translator\Translator $translator */
+        $translator = $sm->get('MvcTranslator');
+        $translator->setLocale($locale);
 
         $e->getViewModel()->currentLocale = $locale;
         $e->getViewModel()->locales = self::LOCALES;

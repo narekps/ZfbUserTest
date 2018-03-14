@@ -266,7 +266,7 @@ class NewProviderForm extends Form
 
         $submitElement = new Element\Button('submit');
         $submitElement
-            ->setLabel('Добавить')
+            ->setLabel('Сохранить')
             ->setAttributes([
                 'type'  => Element\Submit::class,
                 'class' => 'submit disabled',

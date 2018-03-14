@@ -1,0 +1,80 @@
+<?php
+/**
+ * @var Zend\Form\Form $form
+ * @var bool           $identityNotFound - Пользователь НЕ найден?
+ */
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('method', 'POST');
+
+$csrfField = $form->get('csrf');
+$emailField = $form->get('identity');
+$captchaField = $form->get('captcha');
+$submitBtn = $form->get('submit');
+
+$emailField->setAttribute('id', 'identity');
+$emailField->setAttribute('tabindex', '1');
+$emailField->setAttribute('class', $emailField->getAttribute('class') . ' form-control');
+
+$captchaField->setAttribute('tabindex', '2');
+?>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title text-center" style="margin-bottom: 0;">Вход в систему</h3>
+            </div>
+            <div class="card-body">
+                <?php if ($identityNotFound === true): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <p><?= $this->translate('Identity not found'); ?></p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php else: ?>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <p><?= $this->translate('Submit your recovery e-mail address below.'); ?></p>
+                        <p><?= $this->translate('We will send you a secure link to reset your password shortly.'); ?></p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+
+                <?= $this->form()->openTag($form); ?>
+                <?=$this->formHidden($csrfField); ?>
+
+                <div class="form-group">
+                    <label for="<?= $emailField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $emailField->getLabel(); ?></label>
+                    <?= $this->formInput($emailField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $captchaField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $captchaField->getLabel(); ?></label>
+                    <?= $this->formElement($captchaField); ?>
+                    <?= $this->formElementErrors($captchaField, ['class' => 'errors']); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-raised btn-blue btn-block"
+                        name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
+
+
+                <?= $this->form()->closeTag(); ?>
+
+                <p class="text-right">
+                    <a href="<?= $this->url('zfbuser/recover-password'); ?>" class="blue-text ml-1"
+                       tabindex="4"><?= $this->translate('Forgot password?'); ?></a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>

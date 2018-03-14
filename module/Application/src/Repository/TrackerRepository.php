@@ -21,7 +21,10 @@ class TrackerRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('t')->select('t');
         if (!empty($search)) {
-            $qb->andWhere($qb->expr()->like('t.fullName', "'%{$search}%'"));
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like('t.fullName', "'%{$search}%'"),
+                $qb->expr()->like('t.inn', "'%{$search}%'")
+            ));
         }
 
         /** @var TrackerEntity[] $trackers */

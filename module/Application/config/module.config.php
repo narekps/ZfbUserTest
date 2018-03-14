@@ -37,7 +37,7 @@ return [
         'recaptcha'      => $localCfg['google_recaptcha'],
         'new_user_form'         => [
             'form_name'            => 'contragentForm',
-        ]
+        ],
     ],
     'doctrine'                  => [
         'driver' => [
@@ -160,5 +160,34 @@ return [
         'template_path_stack'      => [
             __DIR__ . '/../view',
         ],
+    ],
+
+    'translator'      => [
+        'locale' => 'ru_RU',
+        'translation_file_patterns' => [
+            [
+                'type'     => 'phpArray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => '%s.php',
+            ],
+        ],
+        /*'cache'  => [
+            'adapter' => [
+                'name'    => 'Filesystem',
+                'options' => [
+                    'cache_dir' => __DIR__ . '/../../../data/cache',
+                    'ttl'       => 3600,
+                ],
+            ],
+            'plugins' => [
+                [
+                    'name'    => 'serializer',
+                    'options' => [],
+                ],
+                'exception_handler' => [
+                    'throw_exceptions' => true,
+                ],
+            ],
+        ],*/
     ],
 ];

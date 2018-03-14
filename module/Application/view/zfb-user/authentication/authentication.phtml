@@ -1,0 +1,100 @@
+<?php
+/**
+ * @var Zend\Form\Form               $form
+ * @var ZfbUser\AuthenticationResult $authResult
+ * @var bool                         $enableRegistration - Включена функция регистрации?
+ * @var bool                         $confirmed          - Авторизуемся после подтверждения аккаунта?
+ * @var bool                         $passwordChanged    - Авторизуемся после смены пароля?
+ */
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('zfbuser/authentication'));
+$form->setAttribute('method', 'POST');
+
+$csrfField = $form->get('csrf');
+$emailField = $form->get('identity');
+$passwordField = $form->get('credential');
+$submitBtn = $form->get('submit');
+
+$emailField->setAttribute('id', 'identity');
+$emailField->setAttribute('tabindex', '1');
+$emailField->setAttribute('class', $emailField->getAttribute('class') . ' form-control');
+
+$passwordField->setAttribute('id', 'credential');
+$passwordField->setAttribute('tabindex', '2');
+$passwordField->setAttribute('class', $passwordField->getAttribute('class') . ' form-control');
+
+?>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title text-center" style="margin-bottom: 0;">Вход в систему</h3>
+            </div>
+            <div class="card-body">
+                <?php if (isset($authResult) && !$authResult->isValid()): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?php foreach ($authResult->getMessages() as $message): ?>
+                            <?= $this->translate($message); ?>
+                        <?php endforeach; ?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($confirmed) && $confirmed === true): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <h4 class="alert-heading"><?= $this->translate('Well done!'); ?></h4>
+                        <p><?= $this->translate('Your account has been successfully confirmed!'); ?></p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($passwordChanged) && $passwordChanged === true): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <h4 class="alert-heading"><?= $this->translate('Well done!'); ?></h4>
+                        <p><?= $this->translate('Your password has been changed successfully!'); ?></p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+
+                <?= $this->form()->openTag($form); ?>
+                <?=$this->formHidden($csrfField); ?>
+
+                <div class="form-group">
+                    <label for="<?= $emailField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $this->translate($emailField->getLabel()); ?></label>
+                    <?= $this->formInput($emailField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $passwordField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $this->translate($passwordField->getLabel()); ?></label>
+                    <?= $this->formInput($passwordField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-raised btn-blue btn-block"
+                        name="<?= $submitBtn->getName(); ?>"><?= $this->translate($submitBtn->getLabel()); ?></button>
+
+
+                <?= $this->form()->closeTag(); ?>
+
+                <p class="text-right">
+                    <a href="<?= $this->url('zfbuser/recover-password'); ?>" class="blue-text ml-1"
+                       tabindex="4"><?= $this->translate('Forgot password?'); ?></a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>

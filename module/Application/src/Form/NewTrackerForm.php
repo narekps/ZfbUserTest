@@ -238,7 +238,7 @@ class NewTrackerForm extends Form
             'attributes' => [
                 'type'     => 'select',
                 'multiple' => 'multiple',
-                'required' => true,
+                'required' => false,
                 'class'    => 'form-control trackingProviders',
             ],
         ]);
@@ -256,7 +256,7 @@ class NewTrackerForm extends Form
 
         $submitElement = new Element\Button('submit');
         $submitElement
-            ->setLabel($this->getFormOptions()->getSubmitButtonText())
+            ->setLabel('Сохранить')
             ->setAttributes([
                 'type'  => Element\Submit::class,
                 'class' => 'submit',
@@ -631,7 +631,7 @@ class NewTrackerForm extends Form
         $providerOptions = $this->providerOptions;
         $inputFilter->add([
             'name'       => 'trackingProviders',
-            'required'   => true,
+            'required'   => false,
             'filters'    => [
                 [
                     'name' => Filter\StripTags::class,
@@ -650,7 +650,7 @@ class NewTrackerForm extends Form
                         'callback' => function ($values) use ($providerOptions) {
                             $values = array_filter($values);
                             if (empty($values)) {
-                                return false;
+                                return true;
                             }
 
                             foreach ($values as $value) {

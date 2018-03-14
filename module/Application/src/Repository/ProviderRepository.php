@@ -38,7 +38,10 @@ class ProviderRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('p')->select('p');
         if (!empty($search)) {
-            $qb->andWhere($qb->expr()->like('p.fullName', "'%{$search}%'"));
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like('p.fullName', "'%{$search}%'"),
+                $qb->expr()->like('p.inn', "'%{$search}%'")
+            ));
         }
 
         /** @var ProviderEntity[] $providers */

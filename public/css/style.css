@@ -74,6 +74,10 @@ body.modal-open {
     color: rgb(159, 168, 176);
 }
 
+.search-input-group .search-field:focus {
+    color: #404040;
+}
+
 .fade-scale {
     transform: scale(0);
     opacity: 0;

@@ -15,6 +15,14 @@ table.table-contragents > tbody > tr > td {
     color: #404040;
     border: none;
     padding: 17px 8px;
+    vertical-align: middle;
+}
+
+table.table-contragents > tbody > tr > td .btn {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 #contragentModal.modal {
@@ -96,7 +104,7 @@ table.table-contragents > tbody > tr > td {
 }
 
 #contragentModal .modal-dialog .modal-content button[type="button"] {
-    margin-top: 100px;
+    margin-top: 60px;
 }
 
 #contragentModal .modal-dialog .modal-content fieldset {

@@ -1,0 +1,83 @@
+<?php
+/**
+ * @var \Zend\Form\Form                    $form     - Форма восстановления пароля
+ * @var string                             $identity - На какой email отправлена ссылка для восстановления пароля
+ * @var \ZfbUser\AuthenticationResult|null $authResult
+ */
+?>
+
+<?php if (!empty($authResult) && !$authResult->isValid()): ?>
+    <div class="jumbotron z-depth-2">
+        <?php foreach ($authResult->getMessages() as $message): ?>
+            <p class="lead"><?= $this->translate($message); ?></p>
+        <?php endforeach;; ?>
+        <hr class="my-2">
+        <p><?= $this->translate('If none of the above helps, please contact our support team'); ?></p>
+    </div>
+<?php else: ?>
+    <?php
+    $form = $this->form;
+    $form->prepare();
+    $form->setAttribute('action', $this->url('zfbuser/recover-password', ['action' => 'reset']));
+    $form->setAttribute('method', 'POST');
+
+    $csrfField = $form->get('csrf');
+    $identityField = $form->get('identity');
+    $codeField = $form->get('code');
+    $passwordField = $form->get('credential');
+    $passwordVerifyField = $form->get('credential_verify');
+    $submitBtn = $form->get('submit');
+
+    $passwordField->setAttribute('id', 'credential');
+    $passwordField->setAttribute('class', $passwordField->getAttribute('class') . ' form-control white-text validate');
+    $passwordVerifyField->setAttribute('id', 'credential_verify');
+    $passwordVerifyField->setAttribute('class',
+        $passwordVerifyField->getAttribute('class') . ' form-control white-text validate');
+    ?>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-center" style="margin-bottom: 0;">Вход в систему</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info fade show" role="alert">
+                        <p class="mt-3 text-center"><?= sprintf($this->translate('Reset password for %s.'), $identity); ?></p>
+                    </div>
+
+                    <?= $this->form()->openTag($form); ?>
+                    <?= $this->formHidden($csrfField); ?>
+                    <?= $this->formHidden($identityField); ?>
+                    <?= $this->formHidden($codeField); ?>
+
+                    <div class="form-group">
+                        <label for="<?= $passwordField->getAttribute('id'); ?>"
+                               class="bmd-label-floating"><?= $passwordField->getLabel(); ?></label>
+                        <?= $this->formInput($passwordField); ?>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="<?= $passwordVerifyField->getAttribute('id'); ?>"
+                               class="bmd-label-floating"><?= $passwordVerifyField->getLabel(); ?></label>
+                        <?= $this->formInput($passwordVerifyField); ?>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-raised btn-blue btn-block"
+                            name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
+
+
+                    <?= $this->form()->closeTag(); ?>
+
+                    <p class="text-right">
+                        <a href="<?= $this->url('zfbuser/recover-password'); ?>" class="blue-text ml-1"
+                           tabindex="4"><?= $this->translate('Forgot password?'); ?></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+<?php endif; ?>
