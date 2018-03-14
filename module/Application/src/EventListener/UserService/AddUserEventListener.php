@@ -47,10 +47,16 @@ class AddUserEventListener
         $formData = $addUserEvent->getFormData();
         $type = $formData['type'];
 
-        if ($type == 'provider') {
-            $this->createProvider($user, $formData);
-        } else {
-            $this->createTracker($user, $formData);
+        switch ($type) {
+            case 'provider':
+                $this->createProvider($user, $formData);
+                break;
+            case 'tracker':
+                $this->createTracker($user, $formData);
+                break;
+            case 'user':
+                $this->createUser($user, $formData);
+                break;
         }
 
         return $eventResult;
@@ -116,5 +122,22 @@ class AddUserEventListener
         $this->entityManager->persist($tracker);
 
         return $tracker;
+    }
+
+    protected function createUser(UserEntity $user, array $formData)
+    {
+
+        if (!empty($formData['provider_id'])) {
+            /** @var ProviderRepository $providerRep */
+            $providerRep = $this->entityManager->getRepository(ProviderEntity::class);
+            /** @var ProviderEntity $provider */
+            $provider = $providerRep->findOneBy(['id' => intval($formData['provider_id'])]);
+            if ($provider) {
+                $user->setProvider($provider);
+            }
+        }
+
+
+        return $user;
     }
 }

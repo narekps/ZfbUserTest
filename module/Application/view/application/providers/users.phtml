@@ -1,11 +1,13 @@
 <?php
 /**
  * @var \Application\Entity\Provider $provider
+ * @var \Application\Entity\User     $users
+ * @var \Zend\Form\Form              $newUserForm
  * @var string                       $activeTab
  */
 
 $this->headLink()->appendStylesheet($this->basePath('css/providers.css'));
-$this->inlineScript()->appendFile($this->basePath('js/providers.js'));
+$this->inlineScript()->appendFile($this->basePath('js/users.js'));
 ?>
 
 <!--provider info-->
@@ -15,5 +17,41 @@ $this->inlineScript()->appendFile($this->basePath('js/providers.js'));
         'activeTab' => $activeTab,
     ]); ?>
 
-    <h3>users</h3>
+    <div class="row">
+        <div class="col-12 text-right">
+            <button type="button" class="btn btn-raised btn-primary btn-add pull-right" id="addUserBtn">Добавить пользователя</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <?php if(empty($users)): ?>
+                <div class="alert alert-dark" role="alert">
+                    Нет данных для отображения
+                </div>
+            <?php else: ?>
+                <table class="table table-hover table-providers">
+                    <thead>
+                    <tr>
+                        <th>ФИО</th>
+                        <th>E-mail</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tbody>
+                    <?php foreach ($users as $user): ?>
+                        <?= $this->partial('application/providers/partial/userRow', [
+                            'user' => $user,
+                        ]); ?>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
+
+<!-- Modal add new provider -->
+<?= $this->partial('application/providers/partial/userModal', [
+    'newUserForm' => $newUserForm,
+]); ?>

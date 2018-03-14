@@ -114,10 +114,12 @@ return [
             EventListener\UserService\AddUserEventListener::class => EventListener\UserService\Factory\AddUserEventListenerFactory::class,
             Form\NewProviderForm::class                           => Form\Factory\NewProviderFormFactory::class,
             Form\NewTrackerForm::class                            => Form\Factory\NewTrackerFormFactory::class,
+            Form\NewUserForm::class                               => Form\Factory\NewUserFormFactory::class,
             Service\TariffService::class                          => Service\Factory\TariffServiceFactory::class,
 
             //zfbuser services
-            'zfbuser_new_user_form'                               => Form\Factory\NewUserFormFactory::class,
+            'zfbuser_new_user_form'                               => Form\Factory\UserFormFactory::class,
+            'zfbuser_user_repository'                             => Repository\Factory\UserRepositoryFactory::class,
         ],
     ],
     'view_manager'              => [

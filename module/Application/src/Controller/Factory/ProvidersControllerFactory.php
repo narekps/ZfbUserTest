@@ -9,8 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\ProviderRepository;
 use Application\Entity\Tariff as TariffEntity;
+use Application\Entity\User as UserEntity;
 use Application\Repository\TariffRepository;
 use Application\Form\NewProviderForm;
+use Application\Repository\UserRepository;
 
 /**
  * Class ProvidersControllerFactory
@@ -39,13 +41,28 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var TariffRepository $tariffRep */
         $tariffRep = $entityManager->getRepository(TariffEntity::class);
 
+        /** @var UserRepository $userRepository */
+        $userRepository = $container->get('zfbuser_user_repository');
+
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $container->get('Request');
-        $request->getQuery()->set('type', 'provider');
+
+        /** @var \Zend\Mvc\Application $app */
+        $app = $container->get('Application');
+        $e = $app->getMvcEvent();
+        $routeMatch = $e->getRouteMatch();
+        if ($routeMatch->getMatchedRouteName() == 'providers') {
+            $action = $routeMatch->getParam('action');
+            if ($action == 'users') {
+                $request->getQuery()->set('type', 'user');
+            } else {
+                $request->getQuery()->set('type', 'provider');
+            }
+        }
 
         /** @var NewProviderForm $newUserForm */
         $newUserForm = $container->get('zfbuser_new_user_form');
 
-        return new ProvidersController($newUserForm, $providerRep, $tariffRep);
+        return new ProvidersController($newUserForm, $providerRep, $tariffRep, $userRepository);
     }
 }

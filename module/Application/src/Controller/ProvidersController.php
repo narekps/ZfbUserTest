@@ -3,12 +3,14 @@
 namespace Application\Controller;
 
 use Application\Form\TariffForm;
+use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Repository\ProviderRepository;
-use Application\Form\NewProviderForm;
 use Application\Entity\Tariff as TariffEntity;
+use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\TariffRepository;
+use Application\Repository\UserRepository;
 
 /**
  * Class ProvidersController
@@ -18,9 +20,9 @@ use Application\Repository\TariffRepository;
 class ProvidersController extends AbstractActionController
 {
     /**
-     * @var NewProviderForm
+     * @var Form
      */
-    private $newProviderForm;
+    private $newUserForm;
 
     /**
      * @var ProviderRepository
@@ -33,19 +35,25 @@ class ProvidersController extends AbstractActionController
     private $tariffRepository;
 
     /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
      * ProvidersController constructor.
      *
-     * @param \Application\Form\NewProviderForm          $newProviderForm
+     * @param \Zend\Form\Form                            $newUserForm
      * @param \Application\Repository\ProviderRepository $providerRepository
      * @param \Application\Repository\TariffRepository   $tariffRepository
+     * @param \Application\Repository\UserRepository     $userRepository
      */
-    public function __construct(NewProviderForm $newProviderForm, ProviderRepository $providerRepository, TariffRepository $tariffRepository)
+    public function __construct(Form $newUserForm, ProviderRepository $providerRepository, TariffRepository $tariffRepository, UserRepository $userRepository)
     {
-        $this->newProviderForm = $newProviderForm;
+        $this->newUserForm = $newUserForm;
         $this->providerRepository = $providerRepository;
         $this->tariffRepository = $tariffRepository;
+        $this->userRepository = $userRepository;
     }
-
 
     /**
      * @return \Zend\View\Model\ViewModel
@@ -64,7 +72,7 @@ class ProvidersController extends AbstractActionController
         $viewModel = new ViewModel([
             'search'          => $search,
             'providers'       => $providers,
-            'newProviderForm' => $this->newProviderForm,
+            'newProviderForm' => $this->newUserForm,
         ]);
 
         return $viewModel;
@@ -114,14 +122,21 @@ class ProvidersController extends AbstractActionController
     public function usersAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
+        /** @var ProviderEntity $provider */
         $provider = $this->providerRepository->findOneBy(['id' => $id]);
         if ($provider === null) {
             return $this->notFoundAction();
         }
 
+        $this->newUserForm->get('provider_id')->setValue($provider->getId());
+
+        $users = $this->userRepository->getProviderUsers($provider);
+
         $viewModel = new ViewModel([
-            'provider'  => $provider,
-            'activeTab' => 'users'
+            'provider'    => $provider,
+            'users'       => $users,
+            'newUserForm' => $this->newUserForm,
+            'activeTab'   => 'users'
         ]);
 
         return $viewModel;

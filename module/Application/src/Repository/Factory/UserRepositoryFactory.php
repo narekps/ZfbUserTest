@@ -1,37 +1,41 @@
 <?php
 
-namespace Application\Form\Factory;
+namespace Application\Repository\Factory;
 
-use Application\Form\NewUserForm;
+use Application\Repository\UserRepository;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use ZfbUser\Options\ModuleOptions;
 
 /**
- * Class NewUserFormFactory
+ * Class UserRepositoryFactory
  *
- * @package Application\Form\Factory
+ * @package Application\Repository\Factory
  */
-class NewUserFormFactory implements FactoryInterface
+class UserRepositoryFactory implements FactoryInterface
 {
+
     /**
      * @param \Interop\Container\ContainerInterface $container
      * @param string                                $requestedName
      * @param array|null                            $options
      *
-     * @return \Application\Form\NewUserForm|object
+     * @return \Application\Repository\UserRepository|object
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $container->get('doctrine.entitymanager.orm_default');
+
         /** @var ModuleOptions $moduleOptions */
         $moduleOptions = $container->get(ModuleOptions::class);
-        $formOptions = $moduleOptions->getNewUserFormOptions();
-        $recaptchaOptions = $moduleOptions->getRecaptchaOptions();
 
-        $form = new NewUserForm($formOptions, $recaptchaOptions);
+        $classMetadata = $entityManager->getClassMetadata($moduleOptions->getUserEntityClass());
+        $repository = new UserRepository($entityManager, $classMetadata, $moduleOptions);
 
-        return $form;
+        return $repository;
     }
 }

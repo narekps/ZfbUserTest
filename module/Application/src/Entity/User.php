@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ZfbUser\Entity\User as ZfbUser;
 
 /**
- * @ORM\Entity(repositoryClass="ZfbUser\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  * @ORM\Table(name="zfb_users")
  */
 class User extends ZfbUser
