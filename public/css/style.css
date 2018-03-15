@@ -9,6 +9,10 @@ body.modal-open {
     overflow: hidden;
 }
 
+.g-recaptcha > div {
+    margin: 0 auto;
+}
+
 .btn-raised.btn-primary.btn-add {
     background-color: rgb(255, 158, 0);
     border-color: rgb(255, 158, 0);

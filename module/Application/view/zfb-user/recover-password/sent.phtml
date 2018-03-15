@@ -5,11 +5,9 @@
 ?>
 <div class="jumbotron z-depth-2">
     <p class="lead">
-        <?= sprintf($this->translate('An email has been sent to %s.'),
-            '<a href="javascript:void();">' . $identity . '</a>') ?>
+        <?= sprintf($this->translate('An email has been sent to %s.'), '<a href="javascript:void();">' . $identity . '</a>') ?>
     </p>
     <p><?= $this->translate('It includes information on changing and confirming your new password.'); ?></p>
-    <p><?= $this->translate('Please reset your password within the next <b>1 hour</b>.'); ?></p>
-    <hr class="my-2">
+    <hr class="my-3">
     <p><?= $this->translate('If none of the above helps, please contact our support team'); ?></p>
 </div>

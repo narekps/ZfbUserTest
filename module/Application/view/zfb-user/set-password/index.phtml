@@ -1,0 +1,81 @@
+<?php
+/**
+ * @var \Zend\Form\Form               $form     - Форма пароля
+ * @var string                        $identity - На какой email отправлена ссылка для восстановления пароля
+ * @var ?\ZfbUser\AuthenticationResult $authResult
+ */
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('zfbuser/set-password'));
+$form->setAttribute('method', 'POST');
+
+$csrfField = $form->get('csrf');
+$codeField = $form->get('code');
+
+$identityField = $form->get('identity');
+$identityField->setAttribute('class', $identityField->getAttribute('class') . ' form-control');
+
+$passwordField = $form->get('credential');
+$passwordField->setAttribute('class', $passwordField->getAttribute('class') . ' form-control');
+
+$passwordVerifyField = $form->get('credential_verify');
+$passwordVerifyField->setAttribute('class', $passwordVerifyField->getAttribute('class') . ' form-control');
+
+$submitBtn = $form->get('submit');
+?>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title text-center" style="margin-bottom: 0;"><?=$this->translate('Account confirmation'); ?></h3>
+            </div>
+            <div class="card-body">
+                <?php if (isset($authResult) && !$authResult->isValid()): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?php foreach ($authResult->getMessages() as $message): ?>
+                            <?= $this->translate($message); ?>
+                        <?php endforeach; ?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+
+                <?= $this->form()->openTag($form); ?>
+                <?=$this->formHidden($csrfField); ?>
+                <?=$this->formHidden($codeField); ?>
+
+                <div class="form-group">
+                    <label for="<?= $identityField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $this->translate($identityField->getLabel()); ?></label>
+                    <?= $this->formInput($identityField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $passwordField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $this->translate($passwordField->getLabel()); ?></label>
+                    <?= $this->formInput($passwordField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $passwordVerifyField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $this->translate($passwordVerifyField->getLabel()); ?></label>
+                    <?= $this->formInput($passwordVerifyField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-raised btn-blue btn-block"
+                        name="<?= $submitBtn->getName(); ?>"><?= $this->translate($submitBtn->getLabel()); ?></button>
+
+
+                <?= $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
