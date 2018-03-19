@@ -50,7 +50,7 @@ class EditProviderForm extends Form
             'type'       => Element\Text::class,
             'name'       => 'phone',
             'options'    => [
-                'label' => 'Phone',
+                'label' => 'Телефон',
             ],
             'attributes' => [
                 'type'     => 'text',
