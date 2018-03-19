@@ -297,6 +297,11 @@ body.modal-open {
     }
 }
 
+.card-body .row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
 .z-depth {
     box-shadow: 0 8px 30px 0 rgba(178, 178, 178, 0.25);
 }
