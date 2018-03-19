@@ -29,10 +29,12 @@
     <div id="collapse<?= $tariff->getId(); ?>" class="collapse"
          aria-labelledby="heading<?= $tariff->getId(); ?>" data-parent="#accordion">
         <div class="card-body">
-            <button type="button" class="btn btn-raised tariffEditBtn"
+            <button type="button" class="btn btn-raised btn-default btn-edit btn-sm tariffEditBtn"
                     data-id="<?=$tariff->getId(); ?>"
-                    data-get-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>"
-            >Редактировать</button>
+                    data-get-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>">
+                <i class="material-icons">mode_edit</i>
+                Редактировать
+            </button>
         </div>
     </div>
 </div>

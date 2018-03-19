@@ -40,6 +40,16 @@ body.modal-open {
     color: rgb(255, 255, 255);
 }
 
+.btn-raised.btn-default.btn-edit {
+    font-size: 14px;
+    text-transform: none;
+    font-weight: normal;
+    line-height: 18px;
+}
+.btn-raised.btn-default.btn-edit .material-icons {
+    font-size: 14px;
+}
+
 .btn-raised.btn-primary.btn-blue:disabled {
     opacity: .5;
 }
