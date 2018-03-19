@@ -5,7 +5,7 @@
 ?>
 <tr>
     <td>
-        <a href="<?=$this->url('providers', ['id' => $provider->getId(), 'action' => 'info']); ?>">
+        <a href="<?=$this->url('providers', ['id' => $provider->getId(), 'action' => 'info']); ?>" class="color-blue">
             <?= $provider->getFullName(); ?>
         </a>
     </td>
@@ -16,7 +16,7 @@
     <td><?= $provider->getDateCreated()->format('d.m.Y'); ?></td>
     <td><?= $provider->getEtpContractNumber(); ?> от <?= $provider->getEtpContractDate()->format('d.m.Y'); ?></td>
     <td>
-        <button type="button" class="btn btn-primary bmd-btn-fab-sm contragentEditBtn"
+        <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm contragentEditBtn"
                 data-get-url="<?=$this->url('providers', ['id' => $provider->getId(), 'action' => 'get']); ?>"
         >
             <i class="material-icons">mode_edit</i>

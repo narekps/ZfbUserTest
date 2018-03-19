@@ -61,6 +61,14 @@ class NewUserForm extends Form
     {
         $this->add([
             'type'       => Element\Hidden::class,
+            'name'       => 'id',
+            'attributes' => [
+                'type'     => 'hidden',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Hidden::class,
             'name'       => 'type',
             'attributes' => [
                 'value'    => 'user',

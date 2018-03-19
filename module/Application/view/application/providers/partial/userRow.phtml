@@ -3,7 +3,36 @@
  * @var \Application\Entity\User $user
  */
 ?>
-<tr>
-    <td><?= $user->getDisplayName(); ?></td>
-    <td><?= $user->getIdentity() ?></td>
-</tr>
+
+
+<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+    <div class="card z-depth">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                    <h5 class="card-title name"><?=$user->getDisplayName(); ?></h5>
+                    <p class="card-text email"><?=$user->getIdentity(); ?></p>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <div class="dropdown">
+                        <button type="button" class="btn bmd-btn-icon dropdown-toggle" id="userDropdownMenuButton_<?=$user->getId(); ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="userDropdownMenuButton_<?=$user->getId(); ?>" style="min-width: 200px;">
+                            <a class="dropdown-item userEditBtn" href="#"
+                               data-get-url="<?=$this->url('zfbuser/api/get', ['identity' => $user->getIdentity()]); ?>"
+                            >
+                                <i class="material-icons">mode_edit</i>
+                                <span class="ml-1">Редактировать</span>
+                            </a>
+                            <a class="dropdown-item color-red" href="#">
+                                <i class="material-icons">delete</i>
+                                <span class="ml-1">Удалить</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

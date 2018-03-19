@@ -9,7 +9,7 @@ use ZfbUser\Entity\User as ZfbUser;
  * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  * @ORM\Table(name="zfb_users")
  */
-class User extends ZfbUser
+class User extends ZfbUser implements \JsonSerializable
 {
     /**
      * @var \Application\Entity\Tracker|null
@@ -226,5 +226,21 @@ class User extends ZfbUser
         }
 
         return '';
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $data = [
+            'id'         => $this->getId(),
+            'surname'    => $this->getSurname(),
+            'name'       => $this->getName(),
+            'patronymic' => $this->getPatronymic(),
+            'identity'   => $this->getIdentity(),
+        ];
+
+        return $data;
     }
 }

@@ -273,3 +273,48 @@ table.table-contragents > tbody > tr > td .btn {
     padding-left: 0;
 }
 /* end provider tariffs */
+
+.contragent_info .user-cards {
+    margin-top: 20px;
+}
+
+.contragent_info .user-cards > div:nth-child(2n) {
+    padding-left: 30px;
+}
+
+.contragent_info .user-cards > div {
+    margin-top: 30px;
+}
+
+.contragent_info .user-cards .dropdown {
+    height: 100%;
+}
+
+.contragent_info .user-cards .dropdown .dropdown-toggle {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+
+.contragent_info .user-cards .card .name {
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.19;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(64, 64, 64);
+}
+
+.contragent_info .user-cards .card .email {
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(153, 153, 153);
+}

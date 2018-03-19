@@ -19,7 +19,7 @@ $this->inlineScript()->appendFile($this->basePath('js/users.js'));
 
     <div class="row">
         <div class="col-12 text-right">
-            <button type="button" class="btn btn-raised btn-primary btn-add pull-right" id="addUserBtn">Добавить пользователя</button>
+            <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addUserBtn">Добавить пользователя</button>
         </div>
     </div>
 
@@ -30,22 +30,15 @@ $this->inlineScript()->appendFile($this->basePath('js/users.js'));
                     Нет данных для отображения
                 </div>
             <?php else: ?>
-                <table class="table table-hover table-contragents">
-                    <thead>
-                    <tr>
-                        <th>ФИО</th>
-                        <th>E-mail</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tbody>
-                    <?php foreach ($users as $user): ?>
-                        <?= $this->partial('application/providers/partial/userRow', [
-                            'user' => $user,
-                        ]); ?>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
+
+            <div class="row user-cards">
+                <?php foreach ($users as $user): ?>
+                    <?= $this->partial('application/providers/partial/userRow', [
+                        'user' => $user,
+                    ]); ?>
+                <?php endforeach; ?>
+            </div>
+
             <?php endif; ?>
         </div>
     </div>

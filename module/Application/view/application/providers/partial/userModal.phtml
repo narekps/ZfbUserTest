@@ -7,6 +7,9 @@
 $csrfField = $newUserForm->get('csrf');
 $typeField = $newUserForm->get('type');
 
+$idField = $newUserForm->get('id');
+$idField->setAttribute('id', 'id');
+
 $surnameField = $newUserForm->get('surname');
 $surnameField->setAttribute('id', 'surname');
 
@@ -44,6 +47,7 @@ $submitBtn = $newUserForm->get('submit');
                 <?= $this->form()->openTag($newUserForm); ?>
 
                 <?=$this->formHidden($csrfField); ?>
+                <?=$this->formHidden($idField); ?>
                 <?=$this->formHidden($typeField); ?>
                 <?=$this->formHidden($providerField); ?>
                 <?=$this->formHidden($trackerField); ?>

@@ -8,7 +8,8 @@ $(function() {
     $('#saleEndDate').bootstrapMaterialDatePicker({
         time: false,
         switchOnClick: true,
-        lang: 'ru'
+        lang: 'ru',
+        minDate: $('input[name="saleEndDate"]').attr('min')
     });
 
     $('input', form).on('change', function () {
