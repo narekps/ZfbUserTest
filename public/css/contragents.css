@@ -214,6 +214,11 @@ table.table-contragents > tbody > tr > td .btn {
     margin-bottom: 20px;
 }
 
+.contragent_info .tariffs_accordion .card.archived {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 .contragent_info .tariffs_accordion .card .card-header {
     border-bottom: none;
     cursor: pointer;
@@ -273,6 +278,11 @@ table.table-contragents > tbody > tr > td .btn {
 .contragent_info .tariffs_accordion .card .card-body {
     padding-left: 0;
 }
+
+.contragent_info .tariffs_accordion .card .card-body .btn-group .btn {
+    margin-right: 20px;
+}
+
 /* end provider tariffs */
 
 .contragent_info .user-cards {

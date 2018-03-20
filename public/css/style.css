@@ -28,10 +28,13 @@ body.modal-open {
     font-size: 14px;
     text-transform: none;
     font-weight: normal;
-    line-height: 18px;
+    line-height: 24px;
 }
-.btn-raised.btn-default.btn-edit .material-icons {
-    font-size: 14px;
+.btn .material-icons {
+    font-size: 24px;
+    line-height: 24px;
+    float: left;
+    padding-right: 5px;
 }
 
 .btn-raised.btn-primary.btn-blue:disabled {
@@ -318,4 +321,12 @@ a:hover, a.color-blue:hover {
 
 .is-focused [class*=" bmd-label"], .is-focused [class^="bmd-label"] {
     color: #9caebb;
+}
+
+.checkbox label input[type=checkbox]:checked+.checkbox-decorator .check, label.checkbox-inline input[type=checkbox]:checked+.checkbox-decorator .check {
+    color: #0085FF;
+    border-color: #0085FF;
+}
+.checkbox label input[type=checkbox]:checked+.checkbox-decorator .check:before, label.checkbox-inline input[type=checkbox]:checked+.checkbox-decorator .check:before {
+    color: #0085FF;
 }

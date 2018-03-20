@@ -181,6 +181,15 @@ return [
         ],
     ],
 
+    'view_helpers'       => [
+        'factories'  => [
+            View\Helper\DateFormat::class => InvokableFactory::class,
+        ],
+        'aliases'    => [
+            'dateFormat' => View\Helper\DateFormat::class,
+        ],
+    ],
+
     'translator'      => [
         'locale' => 'ru_RU',
         'translation_file_patterns' => [

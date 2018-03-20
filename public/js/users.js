@@ -166,30 +166,47 @@ $(function() {
             confirmButtonColor: '#0085FF',
             cancelButtonColor: '#FF2519',
             cancelButtonText: 'Нет',
-            confirmButtonText: 'Да, удалить!'
-        }).then(function (result) {
-            if (result.value) {
-                var jqxhr = $.post(url, {}, deleteCallback).fail(deleteCallback);
-            }
-        });
+            confirmButtonText: 'Да, удалить!',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: function () {
+                return !swal.isLoading();
+            },
+            preConfirm: function () {
+                return new Promise(function (resolve, reject) {
+                    var jqxhr = $.post(url, {}, deleteCallback).fail(deleteCallback);
 
-        function deleteCallback(response) {
+                    function deleteCallback(response) {
+                        resolve(response);
+                    }
+                });
+            }
+        }).then(function (result) {
+            if (result.dismiss) {
+                return;
+            }
+
+            var response = result.value;
+
             if (response.success) {
                 $btn.parents('.user_block').eq(0).remove();
-                swal(
-                    'Удален!',
-                    'Пользователь ' + username + ' успешно удален.',
-                    'success'
-                );
+                swal({
+                    title: 'Удален!',
+                    html: '<p>Пользователь ' + username + ' успешно удален.<br/><br/><br/><small>Окно закроется через 5 секунд.</small></p>',
+                    type: 'success',
+                    timer: 5000,
+                    onOpen: function () {
+                        swal.showLoading();
+                    }
+                });
             } else if (response.status === 403) {
                 location.href = '/user/authentication';
             } else {
-                swal(
-                    'Ошибка',
-                    'Не удалось удалить пользователя.',
-                    'error'
-                );
+                swal({
+                    title: 'Ошибка',
+                    html: '<p>Не удалось удалить пользователя.</p>',
+                    type: 'error'
+                });
             }
-        }
+        });
     });
 });

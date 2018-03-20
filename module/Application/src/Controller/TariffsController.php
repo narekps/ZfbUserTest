@@ -162,4 +162,57 @@ class TariffsController extends AbstractActionController
 
         return $jsonModel;
     }
+
+    /**
+     * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     */
+    public function archiveAction()
+    {
+        sleep(2);
+
+        /** @var Request $request */
+        $request = $this->getRequest();
+
+        /** @var Response $response */
+        $response = $this->getResponse();
+        if (!$request->isPost()) {
+            $response->setStatusCode(Response::STATUS_CODE_405);
+
+            return $response;
+        }
+
+        if (!$this->zfbAuthentication()->hasIdentity()) {
+            $response->setStatusCode(Response::STATUS_CODE_403);
+
+            return $response;
+        }
+
+        $jsonModel = new JsonModel(['success' => false]);
+
+        /** @var UserEntity $user */
+        $user = $this->zfbAuthentication()->getIdentity();
+        if (!$user->getProvider()) {
+            $jsonModel->setVariable('message', 'Не указан сервис-провайдер');
+
+            return $jsonModel;
+        }
+
+        $id = intval($this->params()->fromRoute('id', 0));
+        $tariff = $this->tariffRepository->getById($id);
+        if ($tariff === null) {
+            return $this->notFoundAction();
+        }
+
+        try {
+            $tariff = $this->tariffService->archive($tariff);
+
+            $jsonModel->setVariable('tariff', $tariff);
+            $jsonModel->setVariable('success', true);
+        } catch (\Exception $ex) {
+            $jsonModel->setVariable('hasError', true);
+            $jsonModel->setVariable('message', $ex->getMessage());
+        }
+
+        return $jsonModel;
+    }
 }

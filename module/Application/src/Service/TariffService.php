@@ -67,4 +67,32 @@ class TariffService
         return $tariff;
 
     }
+
+    /**
+     * @param \Application\Entity\Tariff $tariff
+     *
+     * @return \Application\Entity\Tariff
+     * @throws \Exception
+     */
+    public function archive(TariffEntity $tariff): TariffEntity
+    {
+        if ($tariff->getStatus() == TariffEntity::STATUS_PROCESSING) {
+            throw new \Exception('Тариф в обработке - архивировать нельзя.');
+        }
+        try {
+            $this->entityManager->beginTransaction();
+
+            $tariff->setStatus(TariffEntity::STATUS_ACTIVE);
+            $tariff->setArchivedDate(new \DateTime());
+
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+        } catch (\Exception $ex) {
+            $this->entityManager->rollback();
+
+            throw $ex;
+        }
+
+        return $tariff;
+    }
 }

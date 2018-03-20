@@ -125,6 +125,33 @@ class Tariff implements ArraySerializableInterface, \JsonSerializable
     protected $status;
 
     /**
+     * Опубликован провайдером?
+     *
+     * @var boolean
+     *
+     * @ORM\Column(name="published", type="boolean", nullable=false, options={"default": 0})
+     */
+    protected $published = false;
+
+    /**
+     * Дата публикации тарифа
+     *
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="published_date", type="datetime", nullable=true)
+     */
+    protected $publishedDate;
+
+    /**
+     * Дата архивирование тарифа
+     *
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="archived_date", type="datetime", nullable=true)
+     */
+    protected $archivedDate;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -325,6 +352,74 @@ class Tariff implements ArraySerializableInterface, \JsonSerializable
     }
 
     /**
+     * @return bool
+     */
+    public function isArchived()
+    {
+        return $this->getStatus() === self::STATUS_ACTIVE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished(): bool
+    {
+        return $this->published;
+    }
+
+    /**
+     * @param bool $published
+     *
+     * @return Tariff
+     */
+    public function setPublished(bool $published): Tariff
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getPublishedDate(): ?\DateTime
+    {
+        return $this->publishedDate;
+    }
+
+    /**
+     * @param \DateTime|null $publishedDate
+     *
+     * @return Tariff
+     */
+    public function setPublishedDate(?\DateTime $publishedDate): Tariff
+    {
+        $this->publishedDate = $publishedDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getArchivedDate(): ?\DateTime
+    {
+        return $this->archivedDate;
+    }
+
+    /**
+     * @param \DateTime|null $archivedDate
+     *
+     * @return Tariff
+     */
+    public function setArchivedDate(?\DateTime $archivedDate): Tariff
+    {
+        $this->archivedDate = $archivedDate;
+
+        return $this;
+    }
+
+    /**
      * Exchange internal values from provided array
      *
      * @param  array $data
@@ -363,6 +458,10 @@ class Tariff implements ArraySerializableInterface, \JsonSerializable
         if (!empty($data['status'])) {
             $this->setStatus($data['status']);
         }
+
+        if (!empty($data['published'])) {
+            $this->setPublished((bool)$data['published']);
+        }
     }
 
     /**
@@ -373,16 +472,19 @@ class Tariff implements ArraySerializableInterface, \JsonSerializable
     public function getArrayCopy()
     {
         $data = [
-            'id'          => $this->getId(),
-            'name'        => $this->getName(),
-            'description' => $this->getDescription(),
-            'cost'        => $this->getCost(),
-            'nds'         => $this->getNds() === null ? -1 : $this->getNds(),
-            'saleEndDate' => $this->getSaleEndDate()->format('Y-m-d'),
-            'currency'    => $this->getCurrency(),
-            'status'      => $this->getStatus(),
-            'contract_id' => $this->getContract()->getId(),
-            'provider_id' => $this->getProvider()->getId(),
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'description'   => $this->getDescription(),
+            'cost'          => $this->getCost(),
+            'nds'           => $this->getNds() === null ? -1 : $this->getNds(),
+            'saleEndDate'   => $this->getSaleEndDate()->format('Y-m-d'),
+            'currency'      => $this->getCurrency(),
+            'status'        => $this->getStatus(),
+            'published'     => $this->isPublished() ? 1 : 0,
+            'publishedDate' => $this->getPublishedDate() ? $this->getPublishedDate()->format('Y-m-d') : null,
+            'archivedDate'  => $this->getArchivedDate() ? $this->getArchivedDate()->format('Y-m-d'): null,
+            'contract_id'   => $this->getContract()->getId(),
+            'provider_id'   => $this->getProvider()->getId(),
         ];
 
         return $data;

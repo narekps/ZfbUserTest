@@ -2,16 +2,22 @@
 /**
  * @var \Application\Entity\Tariff $tariff
  */
+
+
+$cssClass = '';
+if ($tariff->isArchived()) {
+    $cssClass = 'archived';
+}
 ?>
 
-<div class="card">
+<div class="card <?=$cssClass; ?>">
     <div class="card-header" id="tariff_<?= $tariff->getId(); ?>">
         <div class="row" data-toggle="collapse" data-target="#collapse<?= $tariff->getId(); ?>"
              aria-expanded="false" aria-controls="collapse<?= $tariff->getId(); ?>">
             <div class="col-xl-10 col-md-8 col-sm-8 col-6">
-                <h5 class="name"><?= $tariff->getName(); ?></h5>
-                <p class="desc"><?= $tariff->getDescription(); ?></p>
-                <p class="desc"><?=$tariff->getContract()->getDisplayName(); ?></p>
+                <h5 class="name"><?= $this->escapeHtml($tariff->getName()); ?></h5>
+                <p class="desc"><?= $this->escapeHtml($tariff->getDescription()); ?></p>
+                <p class="desc"><?= $this->escapeHtml($tariff->getContract()->getDisplayName()); ?></p>
             </div>
             <div class="col-xl-2 col-md-4 col-sm-4 col-6 text-right">
                 <p class="cost"><?= money_format('%.2n', $tariff->getCost()); ?> <?= $tariff->getCurrency(); ?></p>
@@ -27,15 +33,28 @@
             </div>
         </div>
     </div>
-    <div id="collapse<?= $tariff->getId(); ?>" class="collapse"
-         aria-labelledby="heading<?= $tariff->getId(); ?>" data-parent="#accordion">
+    <div id="collapse<?= $tariff->getId(); ?>" class="collapse" aria-labelledby="heading<?= $tariff->getId(); ?>" data-parent="#accordion">
         <div class="card-body">
-            <button type="button" class="btn btn-raised btn-default btn-edit btn-sm tariffEditBtn"
-                    data-id="<?=$tariff->getId(); ?>"
-                    data-get-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>">
-                <i class="material-icons">mode_edit</i>
-                Редактировать
-            </button>
+
+            <?php if($tariff->isArchived()): ?>
+                <p>Тариф архивирован <?= ($tariff->getArchivedDate() ? $this->dateFormat($tariff->getArchivedDate()) : ''); ?></p>
+            <?php else: ?>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-raised btn-default btn-edit btn-sm tariffEditBtn"
+                            data-id="<?=$tariff->getId(); ?>"
+                            data-get-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>">
+                        <i class="material-icons">mode_edit</i>
+                        Редактировать
+                    </button>
+
+                    <button type="button" class="btn btn-raised btn-default btn-edit btn-sm tariffArchiveBtn"
+                            data-name="<?= $this->escapeHtml($tariff->getName()); ?>"
+                            data-archive-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'archive']); ?>">
+                        <i class="material-icons">remove_circle_outline</i>
+                        Архивировать
+                    </button>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

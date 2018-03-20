@@ -29,6 +29,10 @@ $saleEndDateField->setAttribute('id', 'saleEndDate');
 $currencyField = $tariffForm->get('currency');
 $currencyField->setAttribute('id', 'currency');
 
+/** @var \Zend\Form\Element\Checkbox $publishedField */
+$publishedField = $tariffForm->get('published');
+$publishedField->setAttribute('id', 'published');
+
 $submitBtn = $tariffForm->get('submit');
 ?>
 
@@ -106,6 +110,16 @@ $submitBtn = $tariffForm->get('submit');
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="<?=$publishedField->getName(); ?>" value="1">
+                            <?= $publishedField->getLabel(); ?>
+                        </label>
+                    </div>
+                    <small class="text-muted">После публикации мы проверим тариф и опубликуем его для всех клиентов.</small>
                 </div>
 
                 <div class="alert alert-warning error-msg" role="alert" style="display: none;"></div>

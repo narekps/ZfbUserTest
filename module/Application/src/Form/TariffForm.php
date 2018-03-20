@@ -192,6 +192,18 @@ class TariffForm extends Form
             ],
         ]);
 
+        $this->add([
+            'type'       => Element\Checkbox::class,
+            'name'       => 'published',
+            'options'    => [
+                'label' => 'Опубликовать',
+            ],
+            'attributes' => [
+                'type'     => 'checkbox',
+                'class'    => 'form-control published',
+            ],
+        ]);
+
         $submitElement = new Element\Button('submit');
         $submitElement
             ->setLabel('Сохранить')
@@ -424,6 +436,33 @@ class TariffForm extends Form
                     'name'    => Validator\InArray::class,
                     'options' => [
                         'haystack' => ['RUB', 'USD', 'EUR'],
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'published',
+            'required'   => false,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToInt::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name'    => Validator\InArray::class,
+                    'options' => [
+                        'haystack' => [0, 1],
                     ],
                 ],
             ],

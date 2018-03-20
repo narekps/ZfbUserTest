@@ -30,4 +30,17 @@ class TariffRepository extends EntityRepository
 
         return $tariffs;
     }
+
+    /**
+     * @param int $id
+     *
+     * @return \Application\Entity\Tariff|null
+     */
+    public function getById(int $id): ?TariffEntity
+    {
+        /** @var TariffEntity $tariff */
+        $tariff = $this->findOneBy(['id' => $id]);
+
+        return $tariff;
+    }
 }

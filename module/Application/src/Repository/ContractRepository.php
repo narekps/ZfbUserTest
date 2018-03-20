@@ -32,9 +32,9 @@ class ContractRepository extends EntityRepository
     /**
      * @param int $id
      *
-     * @return \Application\Entity\Contract
+     * @return \Application\Entity\Contract|null
      */
-    public function getById(int $id)
+    public function getById(int $id): ?ContractEntity
     {
         /** @var ContractEntity $contract */
         $contract = $this->findOneBy(['id' => $id]);

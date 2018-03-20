@@ -31,8 +31,14 @@ $(function() {
                 continue;
             }
 
-            $('#' + key).val(values[key]);
-            $('#' + key).parents('.form-group').eq(0).addClass('is-filled');
+            if (key === 'published') {
+                if (values[key]) {
+                    $('[name="published"]').prop('checked', true);
+                }
+            } else {
+                $('#' + key).val(values[key]);
+                $('#' + key).parents('.form-group').eq(0).addClass('is-filled');
+            }
         }
 
         $('#currency').parents('.form-group').eq(0).addClass('is-filled');
@@ -121,9 +127,67 @@ $(function() {
                 resetForm(data.tariff);
                 $tariffModal.modal('show');
             }
-        }).fail(function(response){
+        }).fail(function (response) {
             if (response.status === 403) {
                 location.href = '/user/authentication';
+            }
+        });
+    });
+
+    $('.tariffArchiveBtn').on('click', function () {
+        var $btn = $(this), url = $btn.attr('data-archive-url'),
+            name = $btn.attr('data-name');
+
+        swal({
+            title: 'Вы действительно хотите архивировать тариф \"' + name + '\"?',
+            text: "Действие нельзя будет отменить!",
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#0085FF',
+            cancelButtonColor: '#FF2519',
+            cancelButtonText: 'Нет',
+            confirmButtonText: 'Да, архивировать!',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: function () {
+                return !swal.isLoading();
+            },
+            preConfirm: function () {
+                return new Promise(function (resolve, reject) {
+                    var jqxhr = $.post(url, {}, archiveCallback).fail(archiveCallback);
+
+                    function archiveCallback(response) {
+                        resolve(response);
+                    }
+                });
+            }
+        }).then(function (result) {
+            if (result.dismiss) {
+                return;
+            }
+
+            var response = result.value;
+
+            if (response.success) {
+                $btn.parents('.card').eq(0).addClass('archived');
+                $btn.parents('.card-body').eq(0).html('<p>Тариф архивирован</p>');
+                $btn.parents('.btn-group').eq(0).remove();
+                swal({
+                    title: 'Тариф архивирован!',
+                    html: '<p>Тариф \"' + name + '\" успешно архивирован.<br/><br/><br/><small>Окно закроется через 5 секунд.</small></p>',
+                    type: 'success',
+                    timer: 5000,
+                    onOpen: function () {
+                        swal.showLoading();
+                    }
+                });
+            } else if (response.status === 403) {
+                location.href = '/user/authentication';
+            } else {
+                swal({
+                    title: 'Ошибка',
+                    html: '<p>Не удалось архивировать тариф.</p>',
+                    type: 'error'
+                });
             }
         });
     });
