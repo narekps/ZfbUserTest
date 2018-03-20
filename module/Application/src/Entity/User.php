@@ -9,7 +9,7 @@ use ZfbUser\Entity\User as ZfbUser;
  * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  * @ORM\Table(name="zfb_users")
  */
-class User extends ZfbUser implements \JsonSerializable
+class User extends ZfbUser
 {
     /**
      * @var \Application\Entity\Tracker|null
@@ -229,17 +229,33 @@ class User extends ZfbUser implements \JsonSerializable
     }
 
     /**
+     * Exchange internal values from provided array
+     *
+     * @param  array $data
+     *
+     * @return void
+     */
+    public function exchangeArray(array $data)
+    {
+        parent::exchangeArray($data);
+
+        $this->setSurname((string)$data['surname']);
+        $this->setName((string)$data['name']);
+        $this->setPatronymic((string)$data['patronymic']);
+    }
+
+    /**
+     * Return an array representation of the object
+     *
      * @return array
      */
-    public function jsonSerialize()
+    public function getArrayCopy()
     {
-        $data = [
-            'id'         => $this->getId(),
+        $data = array_merge(parent::getArrayCopy(), [
             'surname'    => $this->getSurname(),
             'name'       => $this->getName(),
             'patronymic' => $this->getPatronymic(),
-            'identity'   => $this->getIdentity(),
-        ];
+        ]);
 
         return $data;
     }

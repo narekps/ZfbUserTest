@@ -18,7 +18,7 @@ class Token extends ZfbToken
      * @var \ZfbUser\Entity\UserInterface
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected $user;
 }

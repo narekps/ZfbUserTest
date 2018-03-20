@@ -135,6 +135,7 @@ return [
             Form\NewTrackerForm::class                            => Form\Factory\NewTrackerFormFactory::class,
             Form\EditTrackerForm::class                           => Form\Factory\EditTrackerFormFactory::class,
             Form\NewUserForm::class                               => Form\Factory\NewUserFormFactory::class,
+            Form\UpdateUserForm::class                            => Form\Factory\UpdateUserFormFactory::class,
             Form\TariffForm::class                                => InvokableFactory::class,
             Service\TariffService::class                          => Service\Factory\TariffServiceFactory::class,
             Service\ProviderService::class                        => Service\Factory\ProviderServiceFactory::class,
@@ -142,6 +143,7 @@ return [
 
             //zfbuser services
             'zfbuser_new_user_form'                               => Form\Factory\UserFormFactory::class,
+            'zfbuser_update_user_form'                            => Form\Factory\UpdateUserFormFactory::class,
             'zfbuser_user_repository'                             => Repository\Factory\UserRepositoryFactory::class,
         ],
     ],

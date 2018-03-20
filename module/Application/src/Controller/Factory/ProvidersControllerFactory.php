@@ -15,6 +15,7 @@ use Application\Form\NewProviderForm;
 use Application\Repository\UserRepository;
 use Application\Form\TariffForm;
 use Application\Form\EditProviderForm;
+use Application\Form\UpdateUserForm;
 use Application\Service\ProviderService;
 
 /**
@@ -66,6 +67,9 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var NewProviderForm $newUserForm */
         $newUserForm = $container->get('zfbuser_new_user_form');
 
+        /** @var UpdateUserForm $updateUserForm */
+        $updateUserForm = $container->get('zfbuser_update_user_form');
+
         /** @var TariffForm $tariffForm */
         $tariffForm = $container->get(TariffForm::class);
 
@@ -75,6 +79,6 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var ProviderService $providerService */
         $providerService = $container->get(ProviderService::class);
 
-        return new ProvidersController($providerService, $providerRep, $tariffRep, $userRepository, $newUserForm, $tariffForm, $editProviderForm);
+        return new ProvidersController($providerService, $providerRep, $tariffRep, $userRepository, $newUserForm, $updateUserForm, $tariffForm, $editProviderForm);
     }
 }

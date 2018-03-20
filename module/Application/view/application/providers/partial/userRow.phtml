@@ -4,8 +4,7 @@
  */
 ?>
 
-
-<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 user_block">
     <div class="card z-depth">
         <div class="card-body">
             <div class="row">
@@ -20,12 +19,15 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="userDropdownMenuButton_<?=$user->getId(); ?>" style="min-width: 200px;">
                             <a class="dropdown-item userEditBtn" href="#"
-                               data-get-url="<?=$this->url('zfbuser/api/get', ['identity' => $user->getIdentity()]); ?>"
+                               data-get-url="<?=$this->url('zfbuser/api/get', ['id' => $user->getId()]); ?>"
                             >
                                 <i class="material-icons">mode_edit</i>
                                 <span class="ml-1">Редактировать</span>
                             </a>
-                            <a class="dropdown-item color-red" href="#">
+                            <a class="dropdown-item color-red userDeleteBtn" href="#"
+                               data-delete-url="<?=$this->url('zfbuser/api/delete', ['id' => $user->getId()]); ?>"
+                               data-name="<?=$user->getDisplayName(); ?>"
+                            >
                                 <i class="material-icons">delete</i>
                                 <span class="ml-1">Удалить</span>
                             </a>

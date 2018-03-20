@@ -3,6 +3,7 @@
  * @var \Application\Entity\Provider $provider
  * @var \Application\Entity\User     $users
  * @var \Zend\Form\Form              $newUserForm
+ * @var \Zend\Form\Form              $updateUserForm
  * @var string                       $activeTab
  */
 
@@ -47,4 +48,10 @@ $this->inlineScript()->appendFile($this->basePath('js/users.js'));
 <!-- Modal add new user -->
 <?= $this->partial('application/providers/partial/userModal', [
     'newUserForm' => $newUserForm,
+]); ?>
+
+
+<!-- Modal edit user -->
+<?= $this->partial('application/providers/partial/editUserModal', [
+    'updateUserForm' => $updateUserForm,
 ]); ?>

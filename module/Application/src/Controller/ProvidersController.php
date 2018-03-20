@@ -53,6 +53,11 @@ class ProvidersController extends AbstractActionController
     private $newUserForm;
 
     /**
+     * @var Form
+     */
+    private $updateUserForm;
+
+    /**
      * @var TariffForm
      */
     private $tariffForm;
@@ -70,6 +75,7 @@ class ProvidersController extends AbstractActionController
      * @param \Application\Repository\TariffRepository   $tariffRepository
      * @param \Application\Repository\UserRepository     $userRepository
      * @param \Zend\Form\Form                            $newUserForm
+     * @param \Zend\Form\Form                            $updateUserForm
      * @param \Application\Form\TariffForm               $tariffForm
      * @param \Application\Form\EditProviderForm         $editProviderForm
      */
@@ -79,6 +85,7 @@ class ProvidersController extends AbstractActionController
         TariffRepository $tariffRepository,
         UserRepository $userRepository,
         Form $newUserForm,
+        Form $updateUserForm,
         TariffForm $tariffForm,
         EditProviderForm $editProviderForm
     )
@@ -88,6 +95,7 @@ class ProvidersController extends AbstractActionController
         $this->tariffRepository = $tariffRepository;
         $this->userRepository = $userRepository;
         $this->newUserForm = $newUserForm;
+        $this->updateUserForm = $updateUserForm;
         $this->tariffForm = $tariffForm;
         $this->editProviderForm = $editProviderForm;
     }
@@ -257,10 +265,11 @@ class ProvidersController extends AbstractActionController
         $users = $this->userRepository->getProviderUsers($provider);
 
         $viewModel = new ViewModel([
-            'provider'    => $provider,
-            'users'       => $users,
-            'newUserForm' => $this->newUserForm,
-            'activeTab'   => 'users'
+            'provider'       => $provider,
+            'users'          => $users,
+            'newUserForm'    => $this->newUserForm,
+            'updateUserForm' => $this->updateUserForm,
+            'activeTab'      => 'users'
         ]);
 
         return $viewModel;

@@ -51,7 +51,7 @@ $(function() {
     $contragentEditSaveBtn.on('click', function (e) {
         e.preventDefault();
 
-        $errorMsg.hide();
+        $editErrorMsg.hide();
 
         if (validateForm(editForm) !== true) {
             return;

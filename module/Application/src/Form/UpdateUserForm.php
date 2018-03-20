@@ -9,17 +9,17 @@ use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use ZfbUser\Options\ReCaptchaOptionsInterface;
-use ZfbUser\Options\NewUserFormOptionsInterface;
+use ZfbUser\Options\UpdateUserFormOptionsInterface;
 
 /**
- * Class NewUserForm
+ * Class UpdateUserForm
  *
  * @package Application\Form
  */
-class NewUserForm extends Form
+class UpdateUserForm extends Form
 {
     /**
-     * @var NewUserFormOptionsInterface
+     * @var UpdateUserFormOptionsInterface
      */
     protected $formOptions;
 
@@ -29,12 +29,12 @@ class NewUserForm extends Form
     protected $recaptchaOptions;
 
     /**
-     * NewProviderForm constructor.
+     * UpdateProviderForm constructor.
      *
-     * @param \ZfbUser\Options\NewUserFormOptionsInterface $options
-     * @param \ZfbUser\Options\ReCaptchaOptionsInterface   $recaptchaOptions
+     * @param \ZfbUser\Options\UpdateUserFormOptionsInterface $options
+     * @param \ZfbUser\Options\ReCaptchaOptionsInterface      $recaptchaOptions
      */
-    public function __construct(NewUserFormOptionsInterface $options, ReCaptchaOptionsInterface $recaptchaOptions)
+    public function __construct(UpdateUserFormOptionsInterface $options, ReCaptchaOptionsInterface $recaptchaOptions)
     {
         $this->formOptions = $options;
         $this->recaptchaOptions = $recaptchaOptions;
@@ -47,43 +47,24 @@ class NewUserForm extends Form
     }
 
     /**
-     * @return \ZfbUser\Options\NewUserFormOptionsInterface
+     * @return \ZfbUser\Options\UpdateUserFormOptionsInterface
      */
-    public function getFormOptions(): NewUserFormOptionsInterface
+    public function getFormOptions(): UpdateUserFormOptionsInterface
     {
         return $this->formOptions;
     }
 
     /**
-     * @return \Application\Form\NewUserForm
+     * @return \Application\Form\UpdateUserForm
      */
     protected function addElements(): self
     {
         $this->add([
             'type'       => Element\Hidden::class,
-            'name'       => 'type',
+            'name'       => 'id',
             'attributes' => [
-                'value'    => 'user',
-                'type'     => 'hidden',
-                'required' => true,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Hidden::class,
-            'name'       => 'provider_id',
-            'attributes' => [
-                'type'     => 'hidden',
-                'required' => false,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Hidden::class,
-            'name'       => 'tracker_id',
-            'attributes' => [
-                'type'     => 'hidden',
-                'required' => false,
+                'type'  => 'hidden',
+                'class' => 'id'
             ],
         ]);
 
@@ -174,7 +155,7 @@ class NewUserForm extends Form
     }
 
     /**
-     * @return \Application\Form\NewUserForm
+     * @return \Application\Form\UpdateUserForm
      */
     protected function addInputFilter(): self
     {
@@ -298,44 +279,6 @@ class NewUserForm extends Form
                         'min' => 2,
                         'max' => 50,
                     ],
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'provider_id',
-            'required'   => false,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToInt::class,
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'tracker_id',
-            'required'   => false,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToInt::class,
                 ],
             ],
         ]);

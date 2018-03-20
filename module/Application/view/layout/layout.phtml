@@ -16,6 +16,7 @@
     <!-- Le styles -->
     <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
         ->prependStylesheet($this->basePath('css/style.css'))
+        ->prependStylesheet($this->basePath('sweetalert2/sweetalert2.min.css'))
         ->prependStylesheet($this->basePath('inputmask/inputmask.css'))
         ->prependStylesheet($this->basePath('datetimepicker/datetimepicker.css'))
         ->prependStylesheet($this->basePath('css/bootstrap-material-design.min.css')); ?>
@@ -35,6 +36,7 @@ echo $this->partial('layout/partial/header', []);
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <?= $this->inlineScript()
+    ->prependFile($this->basePath('sweetalert2/sweetalert2.all.min.js'))
     ->prependFile($this->basePath('inputmask/phone-ru.min.js'))
     ->prependFile($this->basePath('inputmask/inputmask.js'))
     ->prependFile($this->basePath('datetimepicker/datetimepicker.js'))
