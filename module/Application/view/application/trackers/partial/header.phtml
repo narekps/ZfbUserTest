@@ -18,7 +18,7 @@ $tabs = [
 <div class="row">
     <div class="col-md-12">
         <h1 class="title"><?= $tracker->getFullName(); ?><br/>
-            <small>зарегистрирован <?=$tracker->getDateCreated()->format('d.m.Y'); ?></small>
+            <small>зарегистрирован <?= $this->dateFormat($tracker->getDateCreated()); ?></small>
         </h1>
     </div>
 </div>

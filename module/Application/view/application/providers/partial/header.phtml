@@ -19,7 +19,7 @@ $tabs = [
 <div class="row">
     <div class="col-md-12">
         <h1 class="title"><?= $provider->getFullName(); ?><br>
-            <small>зарегистрирован <?=$provider->getDateCreated()->format('d.m.Y'); ?></small>
+            <small>зарегистрирован <?= $this->dateFormat($provider->getDateCreated()); ?></small>
         </h1>
     </div>
 </div>

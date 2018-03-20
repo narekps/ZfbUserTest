@@ -356,7 +356,23 @@ class Tariff implements ArraySerializableInterface, \JsonSerializable
      */
     public function isArchived()
     {
-        return $this->getStatus() === self::STATUS_ACTIVE;
+        return $this->getStatus() === self::STATUS_ARCHIVE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProcessing()
+    {
+        return $this->getStatus() === self::STATUS_PROCESSING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEditable()
+    {
+        return in_array($this->getStatus(), [self::STATUS_NEW, self::STATUS_ACTIVE, self::STATUS_REJECTED]);
     }
 
     /**

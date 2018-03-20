@@ -10,7 +10,7 @@ if ($tariff->isArchived()) {
 }
 ?>
 
-<div class="card <?=$cssClass; ?>">
+<div class="card <?= $cssClass; ?>">
     <div class="card-header" id="tariff_<?= $tariff->getId(); ?>">
         <div class="row" data-toggle="collapse" data-target="#collapse<?= $tariff->getId(); ?>"
              aria-expanded="false" aria-controls="collapse<?= $tariff->getId(); ?>">
@@ -22,37 +22,62 @@ if ($tariff->isArchived()) {
             <div class="col-xl-2 col-md-4 col-sm-4 col-6 text-right">
                 <p class="cost"><?= money_format('%.2n', $tariff->getCost()); ?> <?= $tariff->getCurrency(); ?></p>
                 <p class="nds">
-                    <?php if($tariff->getNds() === null): ?>
+                    <?php if ($tariff->getNds() === null): ?>
                         Без НДС
                     <?php else: ?>
                         <?= $tariff->getNds(); ?>%
                     <?php endif; ?>
                 </p>
-                <p class="status"><?=\Application\Entity\Tariff::getStatuses()[$tariff->getStatus()]; ?></p>
+                <p class="status"><?= \Application\Entity\Tariff::getStatuses()[$tariff->getStatus()]; ?></p>
 
             </div>
         </div>
     </div>
-    <div id="collapse<?= $tariff->getId(); ?>" class="collapse" aria-labelledby="heading<?= $tariff->getId(); ?>" data-parent="#accordion">
+    <div id="collapse<?= $tariff->getId(); ?>" class="collapse" aria-labelledby="heading<?= $tariff->getId(); ?>"
+         data-parent="#accordion">
         <div class="card-body">
 
-            <?php if($tariff->isArchived()): ?>
-                <p>Тариф архивирован <?= ($tariff->getArchivedDate() ? $this->dateFormat($tariff->getArchivedDate()) : ''); ?></p>
+            <?php if ($tariff->isArchived()): ?>
+                <p>Тариф
+                    архивирован <?= ($tariff->getArchivedDate() ? $this->dateFormat($tariff->getArchivedDate()) : ''); ?></p>
             <?php else: ?>
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-raised btn-default btn-edit btn-sm tariffEditBtn"
-                            data-id="<?=$tariff->getId(); ?>"
-                            data-get-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>">
+
+                    <?php if (!$tariff->isEditable()): ?>
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                          title="Можно редактировать новые, действующие и отклоненные тарифы">
+                    <?php endif; ?>
+                        <button type="button"
+                                class="btn btn-raised btn-default btn-edit btn-sm tariffEditBtn <?= $tariff->isProcessing() ? 'disabled' : ''; ?>"
+                            <?= (!$tariff->isEditable() ? 'style="pointer-events: none;"' : ''); ?>
+                                data-id="<?= $tariff->getId(); ?>"
+                                data-get-url="<?= $this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>">
                         <i class="material-icons">mode_edit</i>
                         Редактировать
                     </button>
+                    <?php if (!$tariff->isEditable()): ?>
+                        </span>
+                    <?php endif; ?>
 
-                    <button type="button" class="btn btn-raised btn-default btn-edit btn-sm tariffArchiveBtn"
-                            data-name="<?= $this->escapeHtml($tariff->getName()); ?>"
-                            data-archive-url="<?=$this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'archive']); ?>">
-                        <i class="material-icons">remove_circle_outline</i>
-                        Архивировать
-                    </button>
+
+
+                    <?php if ($tariff->isProcessing()): ?>
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                          title="Тариф в обработке - архивировать нельзя">
+                    <?php endif; ?>
+                        <button type="button"
+                                class="btn btn-raised btn-default btn-edit btn-sm tariffArchiveBtn <?= $tariff->isProcessing() ? 'disabled' : ''; ?>"
+
+                            <?= ($tariff->isProcessing() ? 'style="pointer-events: none;"' : ''); ?>
+
+                                data-name="<?= $this->escapeHtml($tariff->getName()); ?>"
+                                data-archive-url="<?= $this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'archive']); ?>">
+                            <i class="material-icons">remove_circle_outline</i>
+                            Архивировать
+                        </button>
+                    <?php if ($tariff->isProcessing()): ?>
+                        </span>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>

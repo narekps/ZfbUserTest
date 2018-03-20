@@ -201,9 +201,14 @@ $(function() {
             } else if (response.status === 403) {
                 location.href = '/user/authentication';
             } else {
+                var msg = '<p>Не удалось удалить пользователя.</p>';
+                if (response.message) {
+                    msg += '<p>' + response.message + '</p>';
+                }
+
                 swal({
                     title: 'Ошибка',
-                    html: '<p>Не удалось удалить пользователя.</p>',
+                    html: msg,
                     type: 'error'
                 });
             }

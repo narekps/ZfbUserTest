@@ -138,6 +138,7 @@ class TariffsController extends AbstractActionController
             $id = intval($data['id']);
         }
         if ($id > 0) {
+            /** @var TariffEntity $tariff */
             $tariff = $this->tariffRepository->findOneBy(['id' => $id]);
 
             if ($tariff === null) {
@@ -146,14 +147,13 @@ class TariffsController extends AbstractActionController
         } else {
             $tariff = new TariffEntity();
             $tariff->setStatus(TariffEntity::STATUS_NEW);
+            $tariff->setProvider($provider);
         }
 
         try {
-            $tariff->setProvider($provider);
             $tariff = $this->tariffService->save($tariff, $data);
 
             $jsonModel->setVariable('tariff', $tariff);
-
             $jsonModel->setVariable('success', true);
         } catch (\Exception $ex) {
             $jsonModel->setVariable('hasError', true);
@@ -168,8 +168,6 @@ class TariffsController extends AbstractActionController
      */
     public function archiveAction()
     {
-        sleep(2);
-
         /** @var Request $request */
         $request = $this->getRequest();
 

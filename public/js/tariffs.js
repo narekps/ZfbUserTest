@@ -183,9 +183,13 @@ $(function() {
             } else if (response.status === 403) {
                 location.href = '/user/authentication';
             } else {
+                var msg = '<p>Не удалось архивировать тариф.</p>';
+                if (response.message) {
+                    msg += '<p>' + response.message + '</p>';
+                }
                 swal({
                     title: 'Ошибка',
-                    html: '<p>Не удалось архивировать тариф.</p>',
+                    html: msg,
                     type: 'error'
                 });
             }

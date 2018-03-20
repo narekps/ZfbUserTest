@@ -46,6 +46,16 @@ class TariffService
     {
         $this->entityManager->beginTransaction();
         try {
+            if ($tariff->getId()) {
+                if (!$tariff->isEditable()) {
+                    throw new \Exception('Можно редактировать новые, действующие и отклоненные тарифы');
+                }
+            }
+
+            if ($tariff->getStatus() === TariffEntity::STATUS_ACTIVE) {
+                $data['status'] = TariffEntity::STATUS_NEW;
+            }
+
             $tariff->exchangeArray($data);
 
             $data['contract_id'] = intval($data['contract_id']);
@@ -82,7 +92,7 @@ class TariffService
         try {
             $this->entityManager->beginTransaction();
 
-            $tariff->setStatus(TariffEntity::STATUS_ACTIVE);
+            $tariff->setStatus(TariffEntity::STATUS_ARCHIVE);
             $tariff->setArchivedDate(new \DateTime());
 
             $this->entityManager->flush();
