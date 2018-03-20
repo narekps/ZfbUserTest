@@ -143,36 +143,6 @@ class EditProviderForm extends Form
             ],
         ]);
 
-        $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'etpContractNumber',
-            'options'    => [
-                'label' => '№ договора с ЭТП ГПБ',
-            ],
-            'attributes' => [
-                'type'        => 'text',
-                'required'    => true,
-                'class'       => 'form-control etpContractNumber ',
-                'pattern'     => '.{3,50}',
-                'placeholder' => '',
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Date::class,
-            'name'       => 'etpContractDate',
-            'options'    => [
-                'label' => 'Дата заключения',
-            ],
-            'attributes' => [
-                'type'        => 'text',
-                'required'    => true,
-                'class'       => 'form-control etpContractDate',
-                'max'         => (new \DateTime())->format('Y-m-d'),
-                'placeholder' => '',
-            ],
-        ]);
-
         $submitElement = new Element\Button('submit');
         $submitElement
             ->setLabel('Сохранить')
@@ -422,64 +392,6 @@ class EditProviderForm extends Form
                         'min' => 2,
                         'max' => 50,
                     ],
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'etpContractNumber',
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\NotEmpty::class,
-                ],
-                [
-                    'name'    => Validator\StringLength::class,
-                    'options' => [
-                        'min' => 3,
-                        'max' => 50,
-                    ],
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'etpContractDate',
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\NotEmpty::class,
-                ],
-                [
-                    'name' => Validator\Date::class,
                 ],
             ],
         ]);

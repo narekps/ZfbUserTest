@@ -239,6 +239,7 @@ table.table-contragents > tbody > tr > td .btn {
     letter-spacing: normal;
     text-align: left;
     color: rgb(153, 153, 153);
+    margin-bottom: 0.5rem;
 }
 
 .contragent_info .tariffs_accordion .card .card-header .cost {
@@ -279,11 +280,12 @@ table.table-contragents > tbody > tr > td .btn {
 }
 
 .contragent_info .user-cards > div:nth-child(2n) {
-    padding-left: 30px;
+    /*padding-left: 30px;*/
 }
 
 .contragent_info .user-cards > div {
     margin-top: 30px;
+    padding: 0 15px 0 15px;
 }
 
 .contragent_info .user-cards .dropdown {

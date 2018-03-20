@@ -15,4 +15,6 @@ return [
     'Password Verify' => 'Повтор пароля',
     'Well done!' => 'Отлично!',
     'Your password has been changed successfully!' => 'Ваш пароль был успешно изменен!',
+    'I remember my password' => 'Я помню свой пароль',
+    'Account confirmation' => 'Подтверждение учетной записи',
 ];

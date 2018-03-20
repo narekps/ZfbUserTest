@@ -3,11 +3,12 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Zend\Stdlib\ArraySerializableInterface;
 
 /**
  * Базовый класс контрагента
  */
-abstract class Contragent implements \JsonSerializable
+abstract class Contragent implements ArraySerializableInterface, \JsonSerializable
 {
     /**
      * Идентификатор контрагента
@@ -279,11 +280,59 @@ abstract class Contragent implements \JsonSerializable
     }
 
     /**
+     * Exchange internal values from provided array
+     *
+     * @param  array $data
+     *
+     * @return void
+     */
+    public function exchangeArray(array $data)
+    {
+        if (!empty($data['fullName'])) {
+            $this->setFullName((string)$data['fullName']);
+        }
+
+        if (!empty($data['inn'])) {
+            $this->setInn((string)$data['inn']);
+        }
+
+        if (!empty($data['kpp'])) {
+            $this->setKpp((string)$data['kpp']);
+        }
+
+        if (!empty($data['dateCreated'])) {
+            if (!$data['dateCreated'] instanceof \DateTime) {
+                $data['dateCreated'] = new \DateTime($data['dateCreated']);
+            }
+            $this->setDateCreated($data['dateCreated']);
+        }
+
+        if (!empty($data['phone'])) {
+            $this->setPhone((string)$data['phone']);
+        }
+
+        if (!empty($data['address'])) {
+            $this->setAddress((string)$data['address']);
+        }
+
+        if (!empty($data['contactPerson'])) {
+            $this->setContactPerson((string)$data['contactPerson']);
+        }
+
+        if (!empty($data['email'])) {
+            $this->setEmail((string)$data['email']);
+        }
+    }
+
+    /**
+     * Return an array representation of the object
+     *
      * @return array
      */
-    public function jsonSerialize()
+    public function getArrayCopy()
     {
         $data = [
+            'id'            => $this->getId(),
             'fullName'      => $this->getFullName(),
             'inn'           => $this->getInn(),
             'kpp'           => $this->getKpp(),
@@ -295,5 +344,13 @@ abstract class Contragent implements \JsonSerializable
         ];
 
         return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->getArrayCopy();
     }
 }

@@ -1,7 +1,8 @@
 <?php
 /**
- * @var \Application\Entity\Provider $provider
- * @var string                       $activeTab
+ * @var \Application\Entity\Provider   $provider
+ * @var \Application\Entity\Contract[] $contracts
+ * @var string                         $activeTab
  */
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
@@ -17,15 +18,13 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
 
     <!--Инфо провайдера-->
     <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-6">
+        <div class="col-md-4 col-sm-6 col-6">
             <p class="label">ИНН</p>
             <p class="label">КПП</p>
-            <p class="label">Дата заключения договора</p>
         </div>
-        <div class="col-md-8 col-sm-6 col-xs-6">
+        <div class="col-md-8 col-sm-6 col-6">
             <p class="value"><?= $provider->getInn(); ?></p>
             <p class="value"><?= $provider->getKpp(); ?></p>
-            <p class="value"><?= $provider->getEtpContractDate()->format('d.m.Y'); ?></p>
         </div>
     </div>
 
@@ -36,15 +35,24 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     </div>
 
     <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-6">
+        <div class="col-md-4 col-sm-6 col-6">
             <p class="label">Контактное лицо</p>
             <p class="label">Телефон</p>
             <p class="label">Email</p>
         </div>
-        <div class="col-md-8 col-sm-6 col-xs-6">
+        <div class="col-md-8 col-sm-6 col-6">
             <p class="value"><?= $provider->getContactPerson(); ?></p>
             <p class="value"><?= $provider->getPhone(); ?></p>
             <p class="value"><?= $provider->getEmail(); ?></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <p class="contact_header">Договоры</p>
+            <?php foreach ($contracts as $contract): ?>
+                <p class="label"><?=$contract->getDisplayName(); ?></p>
+            <?php endforeach;; ?>
         </div>
     </div>
 </div>

@@ -17,11 +17,11 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
 
     <!--Инфо организации-->
     <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-6">
+        <div class="col-md-4 col-sm-6 col-6">
             <p class="label">ИНН</p>
             <p class="label">КПП</p>
         </div>
-        <div class="col-md-8 col-sm-6 col-xs-6">
+        <div class="col-md-8 col-sm-6 col-6">
             <p class="value"><?= $tracker->getInn(); ?></p>
             <p class="value"><?= $tracker->getKpp(); ?></p>
         </div>
@@ -34,12 +34,12 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     </div>
 
     <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-6">
+        <div class="col-md-4 col-sm-6 col-6">
             <p class="label">Контактное лицо</p>
             <p class="label">Телефон</p>
             <p class="label">Email</p>
         </div>
-        <div class="col-md-8 col-sm-6 col-xs-6">
+        <div class="col-md-8 col-sm-6 col-6">
             <p class="value"><?= $tracker->getContactPerson(); ?></p>
             <p class="value"><?= $tracker->getPhone(); ?></p>
             <p class="value"><?= $tracker->getEmail(); ?></p>

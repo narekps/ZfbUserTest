@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Tariff as TariffEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Application\Repository\ContractRepository;
 
 /**
  * Class TariffService
@@ -18,13 +19,20 @@ class TariffService
     protected $entityManager;
 
     /**
+     * @var ContractRepository
+     */
+    protected $contractRepository;
+
+    /**
      * TariffService constructor.
      *
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \Doctrine\ORM\EntityManagerInterface       $entityManager
+     * @param \Application\Repository\ContractRepository $contractRepository
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ContractRepository $contractRepository)
     {
         $this->entityManager = $entityManager;
+        $this->contractRepository = $contractRepository;
     }
 
     /**
@@ -34,17 +42,19 @@ class TariffService
      * @return \Application\Entity\Tariff
      * @throws \Exception
      */
-    public function save(TariffEntity $tariff, array $data)
+    public function save(TariffEntity $tariff, array $data): TariffEntity
     {
-        $tariff->setName($data['name']);
-        $tariff->setDescription($data['description']);
-        $tariff->setCost(floatval($data['cost']));
-        $tariff->setNds($data['nds']);
-        $tariff->setSaleEndDate(new \DateTime($data['saleEndDate']));
-        $tariff->setCurrency($data['currency']);
-
         $this->entityManager->beginTransaction();
         try {
+            $tariff->exchangeArray($data);
+
+            $data['contract_id'] = intval($data['contract_id']);
+            $contract = $this->contractRepository->getById($data['contract_id']);
+            if ($contract === null) {
+                throw new \Exception('Договор не найден');
+            }
+            $tariff->setContract($contract);
+
             $this->entityManager->persist($tariff);
             $this->entityManager->flush();
             $this->entityManager->commit();

@@ -18,8 +18,8 @@ $tabs = [
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="title"><?= $provider->getFullName(); ?><br/>
-            <small>№ договора: <?= $provider->getEtpContractNumber(); ?></small>
+        <h1 class="title"><?= $provider->getFullName(); ?><br>
+            <small>зарегистрирован <?=$provider->getDateCreated()->format('d.m.Y'); ?></small>
         </h1>
     </div>
 </div>

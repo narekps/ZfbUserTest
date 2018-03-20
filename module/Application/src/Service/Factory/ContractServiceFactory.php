@@ -4,25 +4,23 @@ namespace Application\Service\Factory;
 
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
-use Application\Service\TrackerService;
+use Application\Service\ContractService;
 use Doctrine\ORM\EntityManagerInterface;
-use Application\Entity\Provider as ProviderEntity;
-use Application\Entity\Tracker as TrackerEntity;
-use Application\Repository\ProviderRepository;
+use Application\Entity\Contract as ContractEntity;
 
 /**
- * Class TrackerServiceFactory
+ * Class ContractServiceFactory
  *
  * @package Application\Service\Factory
  */
-class TrackerServiceFactory implements FactoryInterface
+class ContractServiceFactory implements FactoryInterface
 {
     /**
      * @param \Interop\Container\ContainerInterface $container
      * @param string                                $requestedName
      * @param array|null                            $options
      *
-     * @return \Application\Service\TrackerService|object
+     * @return \Application\Service\TariffService|object
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -31,9 +29,6 @@ class TrackerServiceFactory implements FactoryInterface
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
-        /** @var ProviderRepository $providerRepository */
-        $providerRepository = $entityManager->getRepository(ProviderEntity::class);
-
-        return new TrackerService($entityManager, $providerRepository);
+        return new ContractService($entityManager);
     }
 }

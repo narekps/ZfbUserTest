@@ -2,16 +2,15 @@
 
 namespace Application\Service;
 
-use Application\Entity\Provider as ProviderEntity;
 use Application\Entity\Contract as ContractEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class ProviderService
+ * Class ContractService
  *
  * @package Application\Service
  */
-class ProviderService
+class ContractService
 {
     /**
      * @var EntityManagerInterface
@@ -19,7 +18,7 @@ class ProviderService
     protected $entityManager;
 
     /**
-     * TariffService constructor.
+     * ContractService constructor.
      *
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      */
@@ -29,19 +28,19 @@ class ProviderService
     }
 
     /**
-     * @param \Application\Entity\Provider $provider
+     * @param \Application\Entity\Contract $contract
      * @param array                        $data
      *
-     * @return \Application\Entity\Provider
+     * @return \Application\Entity\Contract
      * @throws \Exception
      */
-    public function update(ProviderEntity $provider, array $data): ProviderEntity
+    public function save(ContractEntity $contract, array $data): ContractEntity
     {
-        $provider->exchangeArray($data);
+        $contract->exchangeArray($data);
 
         $this->entityManager->beginTransaction();
         try {
-            $this->entityManager->persist($provider);
+            $this->entityManager->persist($contract);
             $this->entityManager->flush();
             $this->entityManager->commit();
         } catch (\Exception $ex) {
@@ -50,7 +49,7 @@ class ProviderService
             throw $ex;
         }
 
-        return $provider;
+        return $contract;
 
     }
 }

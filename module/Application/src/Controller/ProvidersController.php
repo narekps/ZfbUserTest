@@ -13,9 +13,11 @@ use Zend\View\Model\ViewModel;
 use Application\Repository\ProviderRepository;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\TariffRepository;
+use Application\Repository\ContractRepository;
 use Application\Repository\UserRepository;
 use Application\Form\EditProviderForm;
 use Application\Service\ProviderService;
+use Zend\Validator;
 
 /**
  * Class ProvidersController
@@ -41,6 +43,11 @@ class ProvidersController extends AbstractActionController
      * @var TariffRepository
      */
     private $tariffRepository;
+
+    /**
+     * @var ContractRepository
+     */
+    private $contractRepository;
 
     /**
      * @var UserRepository
@@ -73,6 +80,7 @@ class ProvidersController extends AbstractActionController
      * @param \Application\Service\ProviderService       $providerService
      * @param \Application\Repository\ProviderRepository $providerRepository
      * @param \Application\Repository\TariffRepository   $tariffRepository
+     * @param \Application\Repository\ContractRepository   $contractRepository
      * @param \Application\Repository\UserRepository     $userRepository
      * @param \Zend\Form\Form                            $newUserForm
      * @param \Zend\Form\Form                            $updateUserForm
@@ -83,6 +91,7 @@ class ProvidersController extends AbstractActionController
         ProviderService $providerService,
         ProviderRepository $providerRepository,
         TariffRepository $tariffRepository,
+        ContractRepository $contractRepository,
         UserRepository $userRepository,
         Form $newUserForm,
         Form $updateUserForm,
@@ -93,6 +102,7 @@ class ProvidersController extends AbstractActionController
         $this->providerService = $providerService;
         $this->providerRepository = $providerRepository;
         $this->tariffRepository = $tariffRepository;
+        $this->contractRepository = $contractRepository;
         $this->userRepository = $userRepository;
         $this->newUserForm = $newUserForm;
         $this->updateUserForm = $updateUserForm;
@@ -215,6 +225,7 @@ class ProvidersController extends AbstractActionController
     public function infoAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
+        /** @var ProviderEntity $provider */
         $provider = $this->providerRepository->findOneBy(['id' => $id]);
         if ($provider === null) {
             return $this->notFoundAction();
@@ -222,6 +233,7 @@ class ProvidersController extends AbstractActionController
 
         $viewModel = new ViewModel([
             'provider'  => $provider,
+            'contracts'  => $this->contractRepository->getByProvider($provider),
             'activeTab' => 'info'
         ]);
 
@@ -231,14 +243,16 @@ class ProvidersController extends AbstractActionController
     public function tariffsAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
+        /** @var ProviderEntity $provider */
         $provider = $this->providerRepository->findOneBy(['id' => $id]);
         if ($provider === null) {
             return $this->notFoundAction();
         }
 
         $status = $this->params()->fromQuery('status', '');
-
         $tariffs = $this->tariffRepository->getList($status);
+
+        $this->tariffForm->prepareForProvider($provider);
 
         $viewModel = new ViewModel([
             'tariffForm'   => $this->tariffForm,

@@ -7,6 +7,7 @@ use ZfbUser\Service\Event\AddUserEvent;
 use Application\Entity\User as UserEntity;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Entity\Tracker as TrackerEntity;
+use Application\Entity\Contract as ContractEntity;
 use ZfbUser\EventProvider\EventResult;
 use Application\Repository\ProviderRepository;
 use Application\Repository\TrackerRepository;
@@ -73,18 +74,14 @@ class AddUserEventListener
     protected function createProvider(UserEntity $user, array $formData)
     {
         $provider = new ProviderEntity();
-        $provider->setFullName($formData['fullName']);
-        $provider->setPhone($formData['phone']);
-        $provider->setEmail($formData['email']);
-        $provider->setAddress($formData['address']);
-        $provider->setContactPerson($formData['contactPerson']);
-        $provider->setInn($formData['inn']);
-        $provider->setKpp($formData['kpp']);
-        $provider->setEtpContractNumber($formData['etpContractNumber']);
-        $provider->setEtpContractDate(new \DateTime($formData['etpContractDate']));
-
+        $provider->exchangeArray($formData);
         $user->setProvider($provider);
 
+        $contract = new ContractEntity();
+        $contract->exchangeArray($formData);
+        $contract->setProvider($provider);
+
+        $this->entityManager->persist($contract);
         $this->entityManager->persist($provider);
 
         return $provider;
@@ -99,13 +96,7 @@ class AddUserEventListener
     protected function createTracker(UserEntity $user, array $formData)
     {
         $tracker = new TrackerEntity();
-        $tracker->setFullName($formData['fullName']);
-        $tracker->setPhone($formData['phone']);
-        $tracker->setEmail($formData['email']);
-        $tracker->setAddress($formData['address']);
-        $tracker->setContactPerson($formData['contactPerson']);
-        $tracker->setInn($formData['inn']);
-        $tracker->setKpp($formData['kpp']);
+        $tracker->exchangeArray($formData);
 
         /** @var ProviderRepository $providerRep */
         $providerRep = $this->entityManager->getRepository(ProviderEntity::class);

@@ -2,21 +2,21 @@
 
 namespace Application\Controller\Factory;
 
-use Application\Form\TariffForm;
+use Application\Form\ContractForm;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Controller\TariffsController;
+use Application\Controller\ContractsController;
 use Doctrine\ORM\EntityManagerInterface;
-use Application\Service\TariffService;
-use Application\Repository\TariffRepository;
-use Application\Entity\Tariff as TariffEntity;
+use Application\Service\ContractService;
+use Application\Repository\ContractRepository;
+use Application\Entity\Contract as ContractEntity;
 
 /**
- * Class TariffsControllerFactory
+ * Class ContractsControllerFactory
  *
  * @package Application\Controller\Factory
  */
-class TariffsControllerFactory implements FactoryInterface
+class ContractsControllerFactory implements FactoryInterface
 {
     /**
      * @param \Interop\Container\ContainerInterface $container
@@ -32,14 +32,14 @@ class TariffsControllerFactory implements FactoryInterface
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
-        /** @var TariffService $tariffService */
-        $tariffService = $container->get(TariffService::class);
+        /** @var ContractService $contractService */
+        $contractService = $container->get(ContractService::class);
 
-        /** @var TariffRepository $tariffRepository */
-        $tariffRepository = $entityManager->getRepository(TariffEntity::class);
+        /** @var ContractRepository $contractRepository */
+        $contractRepository = $entityManager->getRepository(ContractEntity::class);
 
-        $tariffForm = $container->get(TariffForm::class);
+        $contractForm = new ContractForm();
 
-        return new TariffsController($tariffService, $tariffRepository, $tariffForm);
+        return new ContractsController($contractService, $contractRepository, $contractForm);
     }
 }

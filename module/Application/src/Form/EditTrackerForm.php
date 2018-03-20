@@ -153,7 +153,7 @@ class EditTrackerForm extends Form
             'type'       => Element\Select::class,
             'name'       => 'trackingProviders',
             'options'    => [
-                'label'         => 'trackingProviders',
+                'label'         => 'Подконтрольные сервис-провайдеры',
                 'value_options' => $this->providerOptions,
             ],
             'attributes' => [

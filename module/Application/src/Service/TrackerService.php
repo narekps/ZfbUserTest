@@ -40,22 +40,14 @@ class TrackerService
      * @return \Application\Entity\Tracker
      * @throws \Exception
      */
-    public function update(TrackerEntity $tracker, array $data)
+    public function update(TrackerEntity $tracker, array $data): TrackerEntity
     {
-        $tracker->setFullName($data['fullName']);
-        $tracker->setPhone($data['phone']);
-        $tracker->setEmail($data['email']);
-        $tracker->setAddress($data['address']);
-        $tracker->setContactPerson($data['contactPerson']);
-        $tracker->setInn($data['inn']);
-        $tracker->setKpp($data['kpp']);
+        $tracker->exchangeArray($data);
+        $tracker->getTrackingProviders()->clear();
 
-        /** @var ProviderRepository $providerRep */
-        $providerRep = $this->entityManager->getRepository(ProviderEntity::class);
-
-        if (!empty($formData['trackingProviders'])) {
+        if (!empty($data['trackingProviders'])) {
             /** @var ProviderEntity[] $providers */
-            $providers = $providerRep->findBy(['id' => $formData['trackingProviders']]);
+            $providers = $this->providerRepository->findBy(['id' => $data['trackingProviders']]);
             foreach ($providers as $provider) {
                 $tracker->addTrackingProvider($provider);
             }

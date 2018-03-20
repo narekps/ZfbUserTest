@@ -101,6 +101,11 @@ $(function() {
             $('[name="' + key + '"].' + key, form).parents('.form-group').eq(0).addClass('is-filled');
         }
 
+        if (values['trackingProviders']) {
+            var $select = $('[name="trackingProviders[]"]', form);
+            $select.val(values['trackingProviders']);
+        }
+
         validateForm(form)
     }
 

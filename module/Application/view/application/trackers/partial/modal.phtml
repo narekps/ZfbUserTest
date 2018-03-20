@@ -40,6 +40,9 @@ $contactPersonField->setAttribute('id', 'contactPerson');
 $emailField = $newTrackerForm->get('email');
 $emailField->setAttribute('id', 'email');
 
+$trackingProvidersField = $newTrackerForm->get('trackingProviders');
+$trackingProvidersField->setAttribute('id', 'trackingProviders');
+
 
 $submitBtn = $newTrackerForm->get('submit');
 ?>
@@ -119,6 +122,14 @@ $submitBtn = $newTrackerForm->get('submit');
                         <label for="<?= $contactPersonField->getAttribute('id'); ?>"
                                class="bmd-label-floating"><?= $contactPersonField->getLabel(); ?></label>
                         <?= $this->formInput($contactPersonField); ?>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="<?= $trackingProvidersField->getAttribute('id'); ?>"
+                               class="bmd-label-static"><?= $trackingProvidersField->getLabel(); ?></label>
+                        <?= $this->formSelect($trackingProvidersField); ?>
+                        <small class="text-muted">Для выбора нескольких провайдеров используйте клавишу CTRL</small>
                         <div class="invalid-feedback"></div>
                     </div>
                 </fieldset>

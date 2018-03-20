@@ -26,7 +26,7 @@ use Application\Service\TrackerService;
 class TrackersController extends AbstractActionController
 {
     /**
-     * @var TrackerService$tra
+     * @var TrackerService $tra
      */
     private $trackerService;
 
@@ -46,6 +46,11 @@ class TrackersController extends AbstractActionController
     private $newUserForm;
 
     /**
+     * @var Form
+     */
+    private $updateUserForm;
+
+    /**
      * @var EditTrackerForm
      */
     private $editTrackerForm;
@@ -57,6 +62,7 @@ class TrackersController extends AbstractActionController
      * @param \Application\Repository\TrackerRepository $trackerRepository
      * @param \Application\Repository\UserRepository    $userRepository
      * @param \Zend\Form\Form                           $newUserForm
+     * @param \Zend\Form\Form                           $updateUserForm
      * @param \Application\Form\EditTrackerForm         $editTrackerForm
      */
     public function __construct(
@@ -64,6 +70,7 @@ class TrackersController extends AbstractActionController
         TrackerRepository $trackerRepository,
         UserRepository $userRepository,
         Form $newUserForm,
+        Form $updateUserForm,
         EditTrackerForm $editTrackerForm
     )
     {
@@ -71,6 +78,7 @@ class TrackersController extends AbstractActionController
         $this->trackerRepository = $trackerRepository;
         $this->userRepository = $userRepository;
         $this->newUserForm = $newUserForm;
+        $this->updateUserForm = $updateUserForm;
         $this->editTrackerForm = $editTrackerForm;
     }
 
@@ -212,10 +220,11 @@ class TrackersController extends AbstractActionController
         $users = $this->userRepository->getTrackerUsers($tracker);
 
         $viewModel = new ViewModel([
-            'tracker'     => $tracker,
-            'users'       => $users,
-            'newUserForm' => $this->newUserForm,
-            'activeTab'   => 'users'
+            'tracker'        => $tracker,
+            'users'          => $users,
+            'newUserForm'    => $this->newUserForm,
+            'updateUserForm' => $this->updateUserForm,
+            'activeTab'      => 'users'
         ]);
 
         return $viewModel;

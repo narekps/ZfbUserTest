@@ -7,49 +7,49 @@ use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Application\Service\TariffService;
-use Application\Form\TariffForm;
-use Application\Repository\TariffRepository;
-use Application\Entity\Tariff as TariffEntity;
+use Application\Service\ContractService;
+use Application\Form\ContractForm;
+use Application\Repository\ContractRepository;
+use Application\Entity\Contract as ContractEntity;
 use Application\Entity\User as UserEntity;
 
 /**
- * Class TariffsController
+ * Class ContractsController
  *
  * @method Plugin\ZfbAuthentication zfbAuthentication()
  * @method \Zend\Http\Response|array prg(string $redirect = null, bool $redirectToUrl = false)
  *
  * @package Application\Controller
  */
-class TariffsController extends AbstractActionController
+class ContractsController extends AbstractActionController
 {
     /**
-     * @var TariffService
+     * @var ContractService
      */
-    private $tariffService;
+    private $contractService;
 
     /**
-     * @var TariffRepository
+     * @var ContractRepository
      */
-    private $tariffRepository;
+    private $contractRepository;
 
     /**
-     * @var TariffForm
+     * @var ContractForm
      */
-    private $tariffForm;
+    private $contractForm;
 
     /**
-     * TariffsController constructor.
+     * ContractsController constructor.
      *
-     * @param \Application\Service\TariffService       $tariffService
-     * @param \Application\Repository\TariffRepository $tariffRepository
-     * @param \Application\Form\TariffForm             $tariffForm
+     * @param \Application\Service\ContractService       $contractService
+     * @param \Application\Repository\ContractRepository $contractRepository
+     * @param \Application\Form\ContractForm             $contractForm
      */
-    public function __construct(TariffService $tariffService, TariffRepository $tariffRepository, TariffForm $tariffForm)
+    public function __construct(ContractService $contractService, ContractRepository $contractRepository, ContractForm $contractForm)
     {
-        $this->tariffService = $tariffService;
-        $this->tariffRepository = $tariffRepository;
-        $this->tariffForm = $tariffForm;
+        $this->contractService = $contractService;
+        $this->contractRepository = $contractRepository;
+        $this->contractForm = $contractForm;
     }
 
     /**
@@ -75,14 +75,14 @@ class TariffsController extends AbstractActionController
         }
 
         $id = intval($this->params()->fromRoute('id', 0));
-        $tariff = $this->tariffRepository->findOneBy(['id' => $id]);
-        if ($tariff === null) {
+        $contract = $this->contractRepository->findOneBy(['id' => $id]);
+        if ($contract === null) {
             return $this->notFoundAction();
         }
 
         $jsonModel = new JsonModel([
-            'success' => true,
-            'tariff'  => $tariff,
+            'success'  => true,
+            'contract' => $contract,
         ]);
 
         return $jsonModel;
@@ -120,40 +120,35 @@ class TariffsController extends AbstractActionController
             return $jsonModel;
         }
 
-        $provider = $user->getProvider();
-        $this->tariffForm->prepareForProvider($provider);
-
         $post = $request->getPost();
-        $this->tariffForm->setData($post);
-        if (!$this->tariffForm->isValid()) {
-            $jsonModel->setVariable('formErrors', $this->tariffForm->getMessages());
+        $this->contractForm->setData($post);
+        if (!$this->contractForm->isValid()) {
+            $jsonModel->setVariable('formErrors', $this->contractForm->getMessages());
 
             return $jsonModel;
         }
-        $data = $this->tariffForm->getData();
+        $data = $this->contractForm->getData();
 
-        $tariff = null;
+        $contract = null;
         $id = intval($this->params()->fromRoute('id', 0));
         if ($id == 0) {
             $id = intval($data['id']);
         }
         if ($id > 0) {
-            $tariff = $this->tariffRepository->findOneBy(['id' => $id]);
+            $contract = $this->contractRepository->findOneBy(['id' => $id]);
 
-            if ($tariff === null) {
+            if ($contract === null) {
                 return $this->notFoundAction();
             }
         } else {
-            $tariff = new TariffEntity();
-            $tariff->setStatus(TariffEntity::STATUS_NEW);
+            $contract = new ContractEntity();
         }
 
         try {
-            $tariff->setProvider($provider);
-            $tariff = $this->tariffService->save($tariff, $data);
+            $contract->setProvider($user->getProvider());
+            $contract = $this->contractService->save($contract, $data);
 
-            $jsonModel->setVariable('tariff', $tariff);
-
+            $jsonModel->setVariable('contract', $contract);
             $jsonModel->setVariable('success', true);
         } catch (\Exception $ex) {
             $jsonModel->setVariable('hasError', true);

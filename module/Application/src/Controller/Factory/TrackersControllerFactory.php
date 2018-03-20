@@ -12,6 +12,7 @@ use Application\Form\NewTrackerForm;
 use Application\Repository\UserRepository;
 use Application\Form\EditTrackerForm;
 use Application\Service\TrackerService;
+use Application\Form\UpdateUserForm;
 
 /**
  * Class TrackersControllerFactory
@@ -59,12 +60,15 @@ class TrackersControllerFactory implements FactoryInterface
         /** @var NewTrackerForm $newUserForm */
         $newUserForm = $container->get('zfbuser_new_user_form');
 
+        /** @var UpdateUserForm $updateUserForm */
+        $updateUserForm = $container->get('zfbuser_update_user_form');
+
         /** @var EditTrackerForm $editTrackerForm */
         $editTrackerForm = $container->get(EditTrackerForm::class);
 
         /** @var TrackerService $trackerService */
         $trackerService = $container->get(TrackerService::class);
 
-        return new TrackersController($trackerService, $trackerRep, $userRepository, $newUserForm, $editTrackerForm);
+        return new TrackersController($trackerService, $trackerRep, $userRepository, $newUserForm, $updateUserForm, $editTrackerForm);
     }
 }

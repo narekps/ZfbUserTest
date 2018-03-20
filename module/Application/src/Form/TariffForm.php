@@ -7,6 +7,8 @@ use Zend\Validator;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
+use Application\Entity\Provider as ProviderEntity;
+use Application\Repository\ContractRepository;
 
 /**
  * Class TariffForm
@@ -16,15 +18,57 @@ use Zend\InputFilter\InputFilter;
 class TariffForm extends Form
 {
     /**
-     * TariffForm constructor.
+     * @var
      */
-    public function __construct()
+    private $contractRepository;
+
+    /**
+     * TariffForm constructor.
+     *
+     * @param \Application\Repository\ContractRepository $contractRepository
+     */
+    public function __construct(ContractRepository $contractRepository)
     {
         parent::__construct('tariffForm', []);
 
+        $this->contractRepository = $contractRepository;
         $this->addElements()->addInputFilter();
-
         $this->setAttribute('class', 'needs-validation');
+    }
+
+    /**
+     * @param \Application\Entity\Provider $provider
+     *
+     * @return \Application\Form\TariffForm
+     */
+    public function prepareForProvider(ProviderEntity $provider): self
+    {
+        $contractOptions = $this->contractRepository->getForSelect($provider);
+
+        /** \Zend\Form\Element\Select */
+        $contractIdField = $this->get('contract_id');
+        $contractIdField->setOptions([
+            'value_options' => $contractOptions,
+        ]);
+
+
+        $contractIdFilter = $this->getInputFilter()->get('contract_id');
+        $contractIdFilter->getValidatorChain()->attachByName(Validator\Callback::class, [
+            'callback' => function ($value) use ($contractOptions, $contractIdFilter) {
+                if (empty($value)) {
+                    return !$contractIdFilter->isRequired();
+                }
+
+
+                if (!isset($contractOptions[$value])) {
+                    return false;
+                }
+
+                return true;
+            },
+        ]);
+
+        return $this;
     }
 
     /**
@@ -36,7 +80,7 @@ class TariffForm extends Form
             'type'       => Element\Hidden::class,
             'name'       => 'id',
             'attributes' => [
-                'type'     => 'hidden',
+                'type' => 'hidden',
             ],
         ]);
 
@@ -70,6 +114,20 @@ class TariffForm extends Form
         ]);
 
         $this->add([
+            'type'       => Element\Select::class,
+            'name'       => 'contract_id',
+            'options'    => [
+                'label'         => 'Договор',
+                'value_options' => [],
+            ],
+            'attributes' => [
+                'type'     => 'select',
+                'required' => true,
+                'class'    => 'form-control contract',
+            ],
+        ]);
+
+        $this->add([
             'type'       => Element\Text::class,
             'name'       => 'cost',
             'options'    => [
@@ -78,7 +136,7 @@ class TariffForm extends Form
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'pattern' => '[0-9]{1,12}',
+                'pattern'  => '[0-9]{1,12}',
                 'class'    => 'form-control cost',
             ],
         ]);
@@ -87,7 +145,7 @@ class TariffForm extends Form
             'type'       => Element\Select::class,
             'name'       => 'nds',
             'options'    => [
-                'label' => 'Ставка НДС',
+                'label'         => 'Ставка НДС',
                 'value_options' => [
                     '-1' => 'Без НДС',
                     '0'  => '0%',
@@ -120,7 +178,7 @@ class TariffForm extends Form
             'type'       => Element\Select::class,
             'name'       => 'currency',
             'options'    => [
-                'label' => 'Валюта',
+                'label'         => 'Валюта',
                 'value_options' => [
                     'RUB' => 'RUB',
                     'USD' => 'USD',
@@ -221,6 +279,27 @@ class TariffForm extends Form
         ]);
 
         $inputFilter->add([
+            'name'       => 'contract_id',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
             'name'       => 'cost',
             'required'   => true,
             'filters'    => [
@@ -271,9 +350,9 @@ class TariffForm extends Form
                     'name' => Filter\ToInt::class,
                 ],
                 [
-                    'name' => Filter\Callback::class,
+                    'name'    => Filter\Callback::class,
                     'options' => [
-                        'callback' => function($value) {
+                        'callback' => function ($value) {
                             if ($value == -1) {
                                 return null;
                             }

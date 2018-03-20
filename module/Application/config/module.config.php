@@ -117,6 +117,20 @@ return [
                     ],
                 ],
             ],
+            'contracts'     => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'       => '/contracts[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z]+',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults'    => [
+                        'controller' => Controller\ContractsController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers'               => [
@@ -125,6 +139,7 @@ return [
             Controller\ProvidersController::class => Controller\Factory\ProvidersControllerFactory::class,
             Controller\TrackersController::class  => Controller\Factory\TrackersControllerFactory::class,
             Controller\TariffsController::class   => Controller\Factory\TariffsControllerFactory::class,
+            Controller\ContractsController::class => Controller\Factory\ContractsControllerFactory::class,
         ],
     ],
     'service_manager'           => [
@@ -136,8 +151,10 @@ return [
             Form\EditTrackerForm::class                           => Form\Factory\EditTrackerFormFactory::class,
             Form\NewUserForm::class                               => Form\Factory\NewUserFormFactory::class,
             Form\UpdateUserForm::class                            => Form\Factory\UpdateUserFormFactory::class,
-            Form\TariffForm::class                                => InvokableFactory::class,
+            Form\TariffForm::class                                => Form\Factory\TariffFormFactory::class,
+            Form\ContractForm::class                              => InvokableFactory::class,
             Service\TariffService::class                          => Service\Factory\TariffServiceFactory::class,
+            Service\ContractService::class                        => Service\Factory\ContractServiceFactory::class,
             Service\ProviderService::class                        => Service\Factory\ProviderServiceFactory::class,
             Service\TrackerService::class                         => Service\Factory\TrackerServiceFactory::class,
 

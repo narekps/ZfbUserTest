@@ -14,7 +14,6 @@
     <td><?= $provider->getPhone(); ?></td>
     <td><?= $provider->getContactPerson(); ?></td>
     <td><?= $provider->getDateCreated()->format('d.m.Y'); ?></td>
-    <td><?= $provider->getEtpContractNumber(); ?> от <?= $provider->getEtpContractDate()->format('d.m.Y'); ?></td>
     <td>
         <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm contragentEditBtn"
                 data-get-url="<?=$this->url('providers', ['id' => $provider->getId(), 'action' => 'get']); ?>"

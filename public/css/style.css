@@ -13,27 +13,11 @@ body.modal-open {
     margin: 0 auto;
 }
 
-.btn-raised.btn-primary.btn-add {
-    background-color: rgb(255, 158, 0);
-    border-color: rgb(255, 158, 0);
-    font-size: 14px;
-    text-align: center;
-    color: rgb(255, 255, 255);
-    padding: 7px 12px;
-    min-width: 130px;
-    text-transform: none;
-}
-
-.btn-raised.btn-primary.btn-add:hover, .btn-raised.btn-primary.btn-add:active, .btn-raised.btn-primary.btn-add:focus {
-    background-color: rgb(255, 140, 0) !important;
-    color: rgb(255, 255, 255);
-}
-
 .btn-raised.btn-primary.btn-blue {
     border-radius: 2px;
     background-color: rgb(0, 133, 255);
     border-color: rgb(0, 133, 255);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     text-align: center;
     text-transform: none;
@@ -316,11 +300,11 @@ body.modal-open {
     box-shadow: 0 8px 30px 0 rgba(178, 178, 178, 0.25);
 }
 
-.color-blue {
+a, .color-blue {
     color: rgb(0, 133, 255);
 }
 
-a.color-blue:hover {
+a:hover, a.color-blue:hover {
     color: rgb(0, 133, 255);
 }
 
@@ -330,4 +314,8 @@ a.color-blue:hover {
 
 .color-red:hover {
     color: rgb(255, 37, 25);
+}
+
+.is-focused [class*=" bmd-label"], .is-focused [class^="bmd-label"] {
+    color: #9caebb;
 }

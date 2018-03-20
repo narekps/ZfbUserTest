@@ -4,6 +4,7 @@ namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Zend\Stdlib\ArraySerializableInterface;
 
 /**
  * Тариф сервис-провайдера
@@ -11,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="Application\Repository\TariffRepository")
  * @ORM\Table(name="tariffs")
  */
-class Tariff implements \JsonSerializable
+class Tariff implements ArraySerializableInterface, \JsonSerializable
 {
 
     const STATUS_NEW = 'new';
@@ -51,6 +52,14 @@ class Tariff implements \JsonSerializable
      * @ORM\JoinColumn(name="provider_id", referencedColumnName="id", nullable=false)
      */
     protected $provider;
+
+    /**
+     * @var \Application\Entity\Contract
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Contract")
+     * @ORM\JoinColumn(name="contract_id", referencedColumnName="id", nullable=false)
+     */
+    protected $contract;
 
     /**
      * Наименование тарифа
@@ -151,6 +160,26 @@ class Tariff implements \JsonSerializable
     public function setProvider(Provider $provider): Tariff
     {
         $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @return \Application\Entity\Contract
+     */
+    public function getContract(): Contract
+    {
+        return $this->contract;
+    }
+
+    /**
+     * @param \Application\Entity\Contract $contract
+     *
+     * @return Tariff
+     */
+    public function setContract(Contract $contract): Tariff
+    {
+        $this->contract = $contract;
 
         return $this;
     }
@@ -296,9 +325,52 @@ class Tariff implements \JsonSerializable
     }
 
     /**
+     * Exchange internal values from provided array
+     *
+     * @param  array $data
+     *
+     * @return void
+     */
+    public function exchangeArray(array $data)
+    {
+        if (!empty($data['name'])) {
+            $this->setName($data['name']);
+        }
+
+        if (!empty($data['description'])) {
+            $this->setDescription($data['description']);
+        }
+
+        if (!empty($data['cost'])) {
+            $this->setCost(floatval($data['cost']));
+        }
+
+        if (!empty($data['nds'])) {
+            $this->setNds($data['nds']);
+        }
+
+        if (!empty($data['saleEndDate'])) {
+            if (!$data['saleEndDate'] instanceof \DateTime) {
+                $data['saleEndDate'] = new \DateTime($data['saleEndDate']);
+            }
+            $this->setSaleEndDate($data['saleEndDate']);
+        }
+
+        if (!empty($data['currency'])) {
+            $this->setCurrency($data['currency']);
+        }
+
+        if (!empty($data['status'])) {
+            $this->setStatus($data['status']);
+        }
+    }
+
+    /**
+     * Return an array representation of the object
+     *
      * @return array
      */
-    public function jsonSerialize()
+    public function getArrayCopy()
     {
         $data = [
             'id'          => $this->getId(),
@@ -309,8 +381,18 @@ class Tariff implements \JsonSerializable
             'saleEndDate' => $this->getSaleEndDate()->format('Y-m-d'),
             'currency'    => $this->getCurrency(),
             'status'      => $this->getStatus(),
+            'contract_id' => $this->getContract()->getId(),
+            'provider_id' => $this->getProvider()->getId(),
         ];
 
         return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->getArrayCopy();
     }
 }

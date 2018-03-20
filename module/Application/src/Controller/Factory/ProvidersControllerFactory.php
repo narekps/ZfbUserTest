@@ -9,8 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\ProviderRepository;
 use Application\Entity\Tariff as TariffEntity;
+use Application\Entity\Contract as ContractEntity;
 use Application\Entity\User as UserEntity;
 use Application\Repository\TariffRepository;
+use Application\Repository\ContractRepository;
 use Application\Form\NewProviderForm;
 use Application\Repository\UserRepository;
 use Application\Form\TariffForm;
@@ -44,6 +46,9 @@ class ProvidersControllerFactory implements FactoryInterface
 
         /** @var TariffRepository $tariffRep */
         $tariffRep = $entityManager->getRepository(TariffEntity::class);
+
+        /** @var ContractRepository $contractRep */
+        $contractRep = $entityManager->getRepository(ContractEntity::class);
 
         /** @var UserRepository $userRepository */
         $userRepository = $container->get('zfbuser_user_repository');
@@ -79,6 +84,6 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var ProviderService $providerService */
         $providerService = $container->get(ProviderService::class);
 
-        return new ProvidersController($providerService, $providerRep, $tariffRep, $userRepository, $newUserForm, $updateUserForm, $tariffForm, $editProviderForm);
+        return new ProvidersController($providerService, $providerRep, $tariffRep, $contractRep, $userRepository, $newUserForm, $updateUserForm, $tariffForm, $editProviderForm);
     }
 }
