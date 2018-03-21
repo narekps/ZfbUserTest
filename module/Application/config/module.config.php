@@ -199,6 +199,9 @@ return [
     ],
 
     'view_helpers' => [
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
         'factories' => [
             View\Helper\DateFormat::class => InvokableFactory::class,
         ],
