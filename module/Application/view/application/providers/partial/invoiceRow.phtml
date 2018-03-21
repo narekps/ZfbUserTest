@@ -1,0 +1,100 @@
+<?php
+/**
+ * @var \Application\Entity\Invoice $invoice
+ */
+
+$cssClass = '';
+if ($invoice->isPaid()) {
+    $cssClass = 'paid';
+}
+?>
+
+<div class="card <?= $cssClass; ?>">
+    <div class="card-header" id="invoice_<?= $invoice->getId(); ?>">
+        <div class="row" data-toggle="collapse" data-target="#collapse<?= $invoice->getId(); ?>"
+             aria-expanded="false" aria-controls="collapse<?= $invoice->getId(); ?>">
+            <div class="col-xl-10 col-md-8 col-sm-8 col-6">
+                <h5 class="client_name"><?= $this->escapeHtml($invoice->getClientFullName()); ?></h5>
+                <p class="name"><?= $this->escapeHtml($invoice->getName()); ?></p>
+                <p class="name">Дата выставления счета: <?=$this->dateFormat($invoice->getInvoiceDate()); ?>г.</p>
+            </div>
+            <div class="col-xl-2 col-md-4 col-sm-4 col-6 text-right">
+                <p class="sum"><?= money_format('%.2n', $invoice->getSum()); ?> <?= $invoice->getCurrency(); ?></p>
+                <p class="nds">
+                    <?php if ($invoice->getNds() === null): ?>
+                        Без НДС
+                    <?php else: ?>
+                        <?= $invoice->getNds(); ?>%
+                    <?php endif; ?>
+                </p>
+                <p class="status"><?= \Application\Entity\Invoice::getStatuses()[$invoice->getStatus()]; ?></p>
+            </div>
+        </div>
+    </div>
+    <div id="collapse<?= $invoice->getId(); ?>" class="collapse" aria-labelledby="heading<?= $invoice->getId(); ?>"
+         data-parent="#accordion">
+        <div class="card-body">
+            <button type="button"
+                    class="btn btn-raised btn-default btn-edit btn-sm invoiceDownloadBtn"
+                    data-id="<?= $invoice->getId(); ?>"
+                    data-download-url="<?= $this->url('invoices', ['id' => $invoice->getId(), 'action' => 'download']); ?>">
+                <i class="material-icons">file_download</i>
+                Скачать
+            </button>
+
+            <div class="row">
+                <div class="col-4">
+                    <p class="label">№ счета</p>
+                    <p class="label">Дата выставления</p>
+                </div>
+                <div class="col-8">
+                    <p class="value"><?=$invoice->getNumber(); ?></p>
+                    <p class="value"><?=$this->dateFormat($invoice->getInvoiceDate()); ?>г.</p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <p class="contact_header">Реквизиты плательщика</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <p class="label">ИНН</p>
+                    <p class="label">КПП</p>
+                    <p class="label">Юридический адрес</p>
+                </div>
+                <div class="col-8">
+                    <p class="value"><?=$invoice->getClientInn(); ?></p>
+                    <p class="value"><?=$invoice->getClientKpp(); ?></p>
+                    <p class="value"><?=$invoice->getClientAddress(); ?></p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <p class="contact_header">Данные об оплате</p>
+                </div>
+            </div>
+
+            <?php if($invoice->getPayments()->isEmpty()): ?>
+                <p class="label">Нет данных для отобрадения</p>
+            <?php else: ?>
+                <table class="table table-contragents">
+                    <thead>
+                    <tr>
+                        <th>Сумма оплаты</th>
+                        <th>№ п/п оплаты</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($invoice->getPayments() as $payment): ?>
+                        <tr>
+                            <td><?= money_format('%.2n', $payment->getSum()); ?> <?= $invoice->getCurrency(); ?></td>
+                            <td><?=$payment->getNumber(); ?> от <?=$payment->getPayDateTime()->format('d.m.Y'); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

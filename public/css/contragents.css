@@ -216,7 +216,6 @@ table.table-contragents > tbody > tr > td .btn {
 
 .contragent_info .tariffs_accordion .card.archived {
     opacity: 0.7;
-    cursor: not-allowed;
 }
 
 .contragent_info .tariffs_accordion .card .card-header {
@@ -267,12 +266,14 @@ table.table-contragents > tbody > tr > td .btn {
     letter-spacing: normal;
     text-align: right;
     color: rgb(153, 153, 153);
+    margin-top: 0.4rem;
 }
 
 .contragent_info .tariffs_accordion .card .card-header .status {
     font-size: 14px;
     font-weight: 300;
     color: rgb(153, 153, 153);
+    margin-top: 0.3rem;
 }
 
 .contragent_info .tariffs_accordion .card .card-body {
@@ -284,6 +285,85 @@ table.table-contragents > tbody > tr > td .btn {
 }
 
 /* end provider tariffs */
+
+/* begin invoices */
+.contragent_info .invoices_accordion .card {
+    padding: 10px 20px 0 20px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.contragent_info .invoices_accordion .card.paid {
+    opacity: 0.7;
+}
+
+.contragent_info .invoices_accordion .card .card-header {
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.contragent_info .invoices_accordion .card .card-header .client_name {
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.19;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(64, 64, 64);
+}
+
+.contragent_info .invoices_accordion .card .card-header .name {
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgb(153, 153, 153);
+    margin-bottom: 0.5rem;
+}
+
+.contragent_info .invoices_accordion .card .card-header .sum {
+    font-size: 22px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.05;
+    letter-spacing: normal;
+    text-align: right;
+    color: rgb(64, 64, 64);
+}
+
+.contragent_info .invoices_accordion .card .card-header .nds {
+    font-size: 14px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: right;
+    color: rgb(153, 153, 153);
+    margin-top: 0.4rem;
+}
+
+.contragent_info .invoices_accordion .card .card-header .status {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgb(153, 153, 153);
+    margin-top: 0.3rem;
+}
+
+.contragent_info .invoices_accordion .card .card-body {
+    padding-left: 0;
+}
+
+.contragent_info .invoices_accordion .card .card-body .btn-group .btn {
+    margin-right: 20px;
+}
+
+/* end invoices */
 
 .contragent_info .user-cards {
     margin-top: 20px;

@@ -1,0 +1,156 @@
+<?php
+/**
+ * @var \Application\Form\InvoiceForm $invoiceForm
+ */
+
+$csrfField = $invoiceForm->get('csrf');
+
+$contractIdField = $invoiceForm->get('contract_id');
+$contractIdField->setAttribute('id', 'contract_id');
+
+$invoiceDateField = $invoiceForm->get('invoiceDate');
+$invoiceDateField->setAttribute('id', 'invoiceDate');
+
+$nameField = $invoiceForm->get('name');
+$nameField->setAttribute('id', 'name');
+
+$sumField = $invoiceForm->get('sum');
+$sumField->setAttribute('id', 'sum');
+
+$currencyField = $invoiceForm->get('currency');
+$currencyField->setAttribute('id', 'currency');
+
+$ndsField = $invoiceForm->get('nds');
+$ndsField->setAttribute('id', 'nds');
+
+$clientFullNameField = $invoiceForm->get('clientFullName');
+$clientFullNameField->setAttribute('id', 'clientFullName');
+
+$clientInnField = $invoiceForm->get('clientInn');
+$clientInnField->setAttribute('id', 'clientInn');
+
+$clientKppField = $invoiceForm->get('clientKpp');
+$clientKppField->setAttribute('id', 'clientKpp');
+
+$clientAddressField = $invoiceForm->get('clientAddress');
+$clientAddressField->setAttribute('id', 'clientAddress');
+
+$submitBtn = $invoiceForm->get('submit');
+?>
+
+<!-- Modal add new invoice -->
+<div class="modal fade" id="invoiceModal" tabindex="-1" role="dialog" aria-labelledby="invoiceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceModalLabel">Добавление нового счета</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <?= $this->form()->openTag($invoiceForm); ?>
+                <?= $this->formHidden($csrfField); ?>
+
+                <div class="form-group">
+                    <label for="<?= $nameField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $nameField->getLabel(); ?></label>
+                    <?= $this->formInput($nameField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $contractIdField->getAttribute('id'); ?>"
+                           class="bmd-label-static"><?= $contractIdField->getLabel(); ?></label>
+                    <?= $this->formSelect($contractIdField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $sumField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $sumField->getLabel(); ?></label>
+                            <?= $this->formInput($sumField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $currencyField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $currencyField->getLabel(); ?></label>
+                            <?= $this->formSelect($currencyField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $ndsField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $ndsField->getLabel(); ?></label>
+                            <?= $this->formSelect($ndsField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="<?= $invoiceDateField->getAttribute('id'); ?>"
+                                   class="bmd-label-floating"><?= $invoiceDateField->getLabel(); ?></label>
+                            <?= $this->formInput($invoiceDateField); ?>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <fieldset>
+                    <legend>Данные плательщика</legend>
+                    <div class="form-group">
+                        <label for="<?= $clientFullNameField->getAttribute('id'); ?>"
+                               class="bmd-label-floating"><?= $clientFullNameField->getLabel(); ?></label>
+                        <?= $this->formInput($clientFullNameField); ?>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="<?= $clientAddressField->getAttribute('id'); ?>"
+                               class="bmd-label-floating"><?= $clientAddressField->getLabel(); ?></label>
+                        <?= $this->formInput($clientAddressField); ?>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="<?= $clientInnField->getAttribute('id'); ?>"
+                                       class="bmd-label-floating"><?= $clientInnField->getLabel(); ?></label>
+                                <?= $this->formInput($clientInnField); ?>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="<?= $clientKppField->getAttribute('id'); ?>"
+                                       class="bmd-label-floating"><?= $clientKppField->getLabel(); ?></label>
+                                <?= $this->formInput($clientKppField); ?>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="alert alert-warning error-msg" role="alert" style="display: none;"></div>
+
+                <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
+                        id="invoiceSaveBtn"
+                        data-save-url="<?= $this->url('invoices', ['action' => 'create']); ?>"
+                        name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
+
+                <?= $this->form()->closeTag(); ?>
+
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

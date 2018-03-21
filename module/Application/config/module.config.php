@@ -35,8 +35,8 @@ return [
         ],
         // required if enabled, see https://developers.google.com/recaptcha/docs/display
         'recaptcha'      => $localCfg['google_recaptcha'],
-        'new_user_form'         => [
-            'form_name'            => 'contragentForm',
+        'new_user_form'  => [
+            'form_name' => 'contragentForm',
         ],
     ],
     'doctrine'                  => [
@@ -89,7 +89,7 @@ return [
                     ],
                 ],
             ],
-            'trackers'   => [
+            'trackers'    => [
                 'type'    => Segment::class,
                 'options' => [
                     'route'       => '/trackers[/:id[/:action]]',
@@ -117,7 +117,7 @@ return [
                     ],
                 ],
             ],
-            'contracts'     => [
+            'contracts'   => [
                 'type'    => Segment::class,
                 'options' => [
                     'route'       => '/contracts[/:action[/:id]]',
@@ -131,6 +131,20 @@ return [
                     ],
                 ],
             ],
+            'invoices'    => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'       => '/invoices[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z]+',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults'    => [
+                        'controller' => Controller\InvoicesController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers'               => [
@@ -140,6 +154,7 @@ return [
             Controller\TrackersController::class  => Controller\Factory\TrackersControllerFactory::class,
             Controller\TariffsController::class   => Controller\Factory\TariffsControllerFactory::class,
             Controller\ContractsController::class => Controller\Factory\ContractsControllerFactory::class,
+            Controller\InvoicesController::class  => Controller\Factory\InvoicesControllerFactory::class,
         ],
     ],
     'service_manager'           => [
@@ -153,7 +168,9 @@ return [
             Form\UpdateUserForm::class                            => Form\Factory\UpdateUserFormFactory::class,
             Form\TariffForm::class                                => Form\Factory\TariffFormFactory::class,
             Form\ContractForm::class                              => InvokableFactory::class,
+            Form\InvoiceForm::class                               => Form\Factory\InvoiceFormFactory::class,
             Service\TariffService::class                          => Service\Factory\TariffServiceFactory::class,
+            Service\InvoiceService::class                         => Service\Factory\InvoiceServiceFactory::class,
             Service\ContractService::class                        => Service\Factory\ContractServiceFactory::class,
             Service\ProviderService::class                        => Service\Factory\ProviderServiceFactory::class,
             Service\TrackerService::class                         => Service\Factory\TrackerServiceFactory::class,
@@ -181,17 +198,17 @@ return [
         ],
     ],
 
-    'view_helpers'       => [
-        'factories'  => [
+    'view_helpers' => [
+        'factories' => [
             View\Helper\DateFormat::class => InvokableFactory::class,
         ],
-        'aliases'    => [
+        'aliases'   => [
             'dateFormat' => View\Helper\DateFormat::class,
         ],
     ],
 
-    'translator'      => [
-        'locale' => 'ru_RU',
+    'translator' => [
+        'locale'                    => 'ru_RU',
         'translation_file_patterns' => [
             [
                 'type'     => 'phpArray',

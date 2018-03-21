@@ -2,6 +2,7 @@
 
 namespace Application\Controller\Factory;
 
+use Application\Form\InvoiceForm;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Application\Controller\ProvidersController;
@@ -19,6 +20,8 @@ use Application\Form\TariffForm;
 use Application\Form\EditProviderForm;
 use Application\Form\UpdateUserForm;
 use Application\Service\ProviderService;
+use Application\Entity\Invoice as InvoiceEntity;
+use Application\Repository\InvoiceRepository;
 
 /**
  * Class ProvidersControllerFactory
@@ -49,6 +52,9 @@ class ProvidersControllerFactory implements FactoryInterface
 
         /** @var ContractRepository $contractRep */
         $contractRep = $entityManager->getRepository(ContractEntity::class);
+
+        /** @var InvoiceRepository $invoiceRep */
+        $invoiceRep = $entityManager->getRepository(InvoiceEntity::class);
 
         /** @var UserRepository $userRepository */
         $userRepository = $container->get('zfbuser_user_repository');
@@ -81,9 +87,12 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var EditProviderForm $editProviderForm */
         $editProviderForm = $container->get(EditProviderForm::class);
 
+        /** @var InvoiceForm $invoiceForm */
+        $invoiceForm = $container->get(InvoiceForm::class);
+
         /** @var ProviderService $providerService */
         $providerService = $container->get(ProviderService::class);
 
-        return new ProvidersController($providerService, $providerRep, $tariffRep, $contractRep, $userRepository, $newUserForm, $updateUserForm, $tariffForm, $editProviderForm);
+        return new ProvidersController($providerService, $providerRep, $tariffRep, $contractRep, $invoiceRep, $userRepository, $newUserForm, $updateUserForm, $tariffForm, $editProviderForm, $invoiceForm);
     }
 }

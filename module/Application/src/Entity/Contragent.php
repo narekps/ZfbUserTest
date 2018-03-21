@@ -66,37 +66,11 @@ abstract class Contragent implements ArraySerializableInterface, \JsonSerializab
     protected $dateCreated;
 
     /**
-     * Телефон
-     *
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=20, nullable=false)
-     */
-    protected $phone;
-
-    /**
-     * Контактное лицо
-     *
-     * @var string
-     *
-     * @ORM\Column(name="contact_person", type="string", length=100, nullable=false)
-     */
-    protected $contactPerson;
-
-    /**
-     * E-mail организации
-     *
-     * @var string
-     * @ORM\Column(name="email", type="string", unique=true, length=50, nullable=false)
-     */
-    protected $email;
-
-    /**
      * Contragent constructor.
      */
     public function __construct()
     {
-        $this->dateCreated = new \DateTime();
+        $this->setDateCreated(new \DateTime());
     }
 
     /**
@@ -220,66 +194,6 @@ abstract class Contragent implements ArraySerializableInterface, \JsonSerializab
     }
 
     /**
-     * @return string
-     */
-    public function getPhone(): string
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @param string $phone
-     *
-     * @return Contragent
-     */
-    public function setPhone(string $phone): Contragent
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContactPerson(): string
-    {
-        return $this->contactPerson;
-    }
-
-    /**
-     * @param string $contactPerson
-     *
-     * @return Contragent
-     */
-    public function setContactPerson(string $contactPerson): Contragent
-    {
-        $this->contactPerson = $contactPerson;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     *
-     * @return Contragent
-     */
-    public function setEmail(string $email): Contragent
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
      * Exchange internal values from provided array
      *
      * @param  array $data
@@ -300,27 +214,15 @@ abstract class Contragent implements ArraySerializableInterface, \JsonSerializab
             $this->setKpp((string)$data['kpp']);
         }
 
+        if (!empty($data['address'])) {
+            $this->setAddress((string)$data['address']);
+        }
+
         if (!empty($data['dateCreated'])) {
             if (!$data['dateCreated'] instanceof \DateTime) {
                 $data['dateCreated'] = new \DateTime($data['dateCreated']);
             }
             $this->setDateCreated($data['dateCreated']);
-        }
-
-        if (!empty($data['phone'])) {
-            $this->setPhone((string)$data['phone']);
-        }
-
-        if (!empty($data['address'])) {
-            $this->setAddress((string)$data['address']);
-        }
-
-        if (!empty($data['contactPerson'])) {
-            $this->setContactPerson((string)$data['contactPerson']);
-        }
-
-        if (!empty($data['email'])) {
-            $this->setEmail((string)$data['email']);
         }
     }
 
@@ -332,15 +234,12 @@ abstract class Contragent implements ArraySerializableInterface, \JsonSerializab
     public function getArrayCopy()
     {
         $data = [
-            'id'            => $this->getId(),
-            'fullName'      => $this->getFullName(),
-            'inn'           => $this->getInn(),
-            'kpp'           => $this->getKpp(),
-            'dateCreated'   => $this->getDateCreated()->format('Y-m-d'),
-            'phone'         => $this->getPhone(),
-            'address'       => $this->getAddress(),
-            'contactPerson' => $this->getContactPerson(),
-            'email'         => $this->getEmail(),
+            'id'          => $this->getId(),
+            'fullName'    => $this->getFullName(),
+            'inn'         => $this->getInn(),
+            'kpp'         => $this->getKpp(),
+            'address'     => $this->getAddress(),
+            'dateCreated' => $this->getDateCreated()->format('Y-m-d'),
         ];
 
         return $data;

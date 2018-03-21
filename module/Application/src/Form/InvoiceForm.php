@@ -11,11 +11,11 @@ use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\ContractRepository;
 
 /**
- * Class TariffForm
+ * Class InvoiceForm
  *
  * @package Application\Form
  */
-class TariffForm extends Form
+class InvoiceForm extends Form
 {
     /**
      * @var ContractRepository
@@ -23,13 +23,13 @@ class TariffForm extends Form
     private $contractRepository;
 
     /**
-     * TariffForm constructor.
+     * InvoiceForm constructor.
      *
      * @param \Application\Repository\ContractRepository $contractRepository
      */
     public function __construct(ContractRepository $contractRepository)
     {
-        parent::__construct('tariffForm', []);
+        parent::__construct('invoiceForm', []);
 
         $this->contractRepository = $contractRepository;
         $this->addElements()->addInputFilter();
@@ -39,7 +39,7 @@ class TariffForm extends Form
     /**
      * @param \Application\Entity\Provider $provider
      *
-     * @return \Application\Form\TariffForm
+     * @return \Application\Form\InvoiceForm
      */
     public function prepareForProvider(ProviderEntity $provider): self
     {
@@ -72,47 +72,10 @@ class TariffForm extends Form
     }
 
     /**
-     * @return \Application\Form\TariffForm
+     * @return \Application\Form\InvoiceForm
      */
     protected function addElements(): self
     {
-        $this->add([
-            'type'       => Element\Hidden::class,
-            'name'       => 'id',
-            'attributes' => [
-                'type' => 'hidden',
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'name',
-            'options'    => [
-                'label' => 'Название',
-            ],
-            'attributes' => [
-                'type'     => 'text',
-                'required' => true,
-                'pattern'  => '.{1,500}',
-                'class'    => 'form-control name',
-            ],
-        ]);
-
-        $this->add([
-            'type'       => Element\Textarea::class,
-            'name'       => 'description',
-            'options'    => [
-                'label' => 'Описание',
-            ],
-            'attributes' => [
-                'type'     => 'textarea',
-                'rows'     => 3,
-                'required' => true,
-                'pattern'  => '.{1,2000}',
-                'class'    => 'form-control description',
-            ],
-        ]);
-
         $this->add([
             'type'       => Element\Select::class,
             'name'       => 'contract_id',
@@ -128,16 +91,62 @@ class TariffForm extends Form
         ]);
 
         $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'cost',
+            'type'       => Element\Date::class,
+            'name'       => 'invoiceDate',
             'options'    => [
-                'label' => 'Стоимость',
+                'label' => 'Дата выставления счета',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'min'      => (new \DateTime())->format('Y-m-d'),
+                'class'    => 'form-control invoiceDate',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'name',
+            'options'    => [
+                'label' => 'Наименование услуги',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'pattern'  => '.{1,1024}',
+                'class'    => 'form-control name',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'sum',
+            'options'    => [
+                'label' => 'Сумма',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
                 'pattern'  => '[0-9]{1,12}',
-                'class'    => 'form-control cost',
+                'class'    => 'form-control sum',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Select::class,
+            'name'       => 'currency',
+            'options'    => [
+                'label'         => 'Валюта',
+                'value_options' => [
+                    'RUB' => 'RUB',
+                    'USD' => 'USD',
+                    'EUR' => 'EUR',
+                ],
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'class'    => 'form-control currency',
             ],
         ]);
 
@@ -161,46 +170,58 @@ class TariffForm extends Form
         ]);
 
         $this->add([
-            'type'       => Element\Date::class,
-            'name'       => 'saleEndDate',
+            'type'       => Element\Text::class,
+            'name'       => 'clientFullName',
             'options'    => [
-                'label' => 'Дата окончания продаж',
+                'label' => 'Полное юридическое наименование плательщика',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'min'      => (new \DateTime())->format('Y-m-d'),
-                'class'    => 'form-control saleEndDate',
+                'pattern'  => '.{2,1024}',
+                'class'    => 'form-control clientFullName',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Select::class,
-            'name'       => 'currency',
+            'type'       => Element\Number::class,
+            'name'       => 'clientInn',
             'options'    => [
-                'label'         => 'Валюта',
-                'value_options' => [
-                    'RUB' => 'RUB',
-                    'USD' => 'USD',
-                    'EUR' => 'EUR',
-                ],
+                'label' => 'ИНН плательщика',
             ],
             'attributes' => [
                 'type'     => 'text',
                 'required' => true,
-                'class'    => 'form-control currency',
+                'pattern'  => '[0-9]{10}|[0-9]{12}',
+                'class'    => 'form-control clientInn',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Checkbox::class,
-            'name'       => 'published',
+            'type'       => Element\Number::class,
+            'name'       => 'clientKpp',
             'options'    => [
-                'label' => 'Опубликовать',
+                'label' => 'КПП плательщика',
             ],
             'attributes' => [
-                'type'     => 'checkbox',
-                'class'    => 'form-control published',
+                'type'     => 'text',
+                'required' => true,
+                'pattern'  => '[0-9]{9}',
+                'class'    => 'form-control clientKpp',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => Element\Text::class,
+            'name'       => 'clientAddress',
+            'options'    => [
+                'label' => 'Юридический адрес плательщика',
+            ],
+            'attributes' => [
+                'type'     => 'text',
+                'required' => true,
+                'pattern'  => '.{1,300}',
+                'class'    => 'form-control clientAddress',
             ],
         ]);
 
@@ -224,12 +245,60 @@ class TariffForm extends Form
     }
 
     /**
-     * @return \Application\Form\TariffForm
+     * @return \Application\Form\InvoiceForm
      */
     protected function addInputFilter(): self
     {
         $inputFilter = new InputFilter();
         $this->setInputFilter($inputFilter);
+
+        $inputFilter->add([
+            'name'       => 'contract_id',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'invoiceDate',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name' => Validator\Date::class,
+                ],
+            ],
+        ]);
 
         $inputFilter->add([
             'name'       => 'name',
@@ -256,63 +325,14 @@ class TariffForm extends Form
                     'name'    => Validator\StringLength::class,
                     'options' => [
                         'min' => 1,
-                        'max' => 500,
+                        'max' => 1000,
                     ],
                 ],
             ],
         ]);
 
         $inputFilter->add([
-            'name'       => 'description',
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\NotEmpty::class,
-                ],
-                [
-                    'name'    => Validator\StringLength::class,
-                    'options' => [
-                        'min' => 1,
-                        'max' => 2000,
-                    ],
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'contract_id',
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\NotEmpty::class,
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'cost',
+            'name'       => 'sum',
             'required'   => true,
             'filters'    => [
                 [
@@ -342,6 +362,36 @@ class TariffForm extends Form
                         'inclusive' => false,
                     ],
                 ]
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'currency',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\InArray::class,
+                    'options' => [
+                        'haystack' => ['RUB', 'USD', 'EUR'],
+                    ],
+                ],
             ],
         ]);
 
@@ -385,7 +435,7 @@ class TariffForm extends Form
         ]);
 
         $inputFilter->add([
-            'name'       => 'saleEndDate',
+            'name'       => 'clientFullName',
             'required'   => true,
             'filters'    => [
                 [
@@ -406,44 +456,18 @@ class TariffForm extends Form
                     'name' => Validator\NotEmpty::class,
                 ],
                 [
-                    'name' => Validator\Date::class,
-                ],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name'       => 'currency',
-            'required'   => true,
-            'filters'    => [
-                [
-                    'name' => Filter\StripTags::class,
-                ],
-                [
-                    'name' => Filter\StripNewlines::class,
-                ],
-                [
-                    'name' => Filter\StringTrim::class,
-                ],
-                [
-                    'name' => Filter\ToNull::class,
-                ],
-            ],
-            'validators' => [
-                [
-                    'name' => Validator\NotEmpty::class,
-                ],
-                [
-                    'name'    => Validator\InArray::class,
+                    'name'    => Validator\StringLength::class,
                     'options' => [
-                        'haystack' => ['RUB', 'USD', 'EUR'],
+                        'min' => 2,
+                        'max' => 1024,
                     ],
                 ],
             ],
         ]);
 
         $inputFilter->add([
-            'name'       => 'published',
-            'required'   => false,
+            'name'       => 'clientInn',
+            'required'   => true,
             'filters'    => [
                 [
                     'name' => Filter\StripTags::class,
@@ -455,14 +479,80 @@ class TariffForm extends Form
                     'name' => Filter\StringTrim::class,
                 ],
                 [
-                    'name' => Filter\ToInt::class,
+                    'name' => Filter\ToNull::class,
                 ],
             ],
             'validators' => [
                 [
-                    'name'    => Validator\InArray::class,
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
                     'options' => [
-                        'haystack' => [0, 1],
+                        'min' => 10,
+                        'max' => 12,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'clientKpp',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 9,
+                        'max' => 9,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name'       => 'clientAddress',
+            'required'   => true,
+            'filters'    => [
+                [
+                    'name' => Filter\StripTags::class,
+                ],
+                [
+                    'name' => Filter\StripNewlines::class,
+                ],
+                [
+                    'name' => Filter\StringTrim::class,
+                ],
+                [
+                    'name' => Filter\ToNull::class,
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => Validator\NotEmpty::class,
+                ],
+                [
+                    'name'    => Validator\StringLength::class,
+                    'options' => [
+                        'min' => 1,
+                        'max' => 300,
                     ],
                 ],
             ],

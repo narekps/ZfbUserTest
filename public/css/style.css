@@ -294,6 +294,10 @@ body.modal-open {
     }
 }
 
+.card p {
+    margin: 0;
+}
+
 .card-body .row {
     margin-right: 0;
     margin-left: 0;
