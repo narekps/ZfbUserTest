@@ -128,15 +128,12 @@ class ProvidersController extends AbstractActionController
     }
 
     /**
+     * Список сервис-провайдеров
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $id = $this->params()->fromRoute('id');
-        if (!empty($id)) {
-            $this->redirect()->toRoute('providers');
-        }
-
         $search = $this->params()->fromQuery('search', '');
 
         $providers = $this->providerRepository->getList($search);
@@ -152,92 +149,10 @@ class ProvidersController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     * Карточка конкретного сервис-провайдера
+     *
+     * @return \Zend\View\Model\ViewModel
      */
-    public function getAction()
-    {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isGet()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
-        $id = intval($this->params()->fromRoute('id', 0));
-        $provider = $this->providerRepository->findOneBy(['id' => $id]);
-        if ($provider === null) {
-            return $this->notFoundAction();
-        }
-
-        $jsonModel = new JsonModel([
-            'success'    => true,
-            'contragent' => $provider,
-        ]);
-
-        return $jsonModel;
-    }
-
-    /**
-     * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
-     */
-    public function saveAction()
-    {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isPost()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
-        $id = intval($this->params()->fromRoute('id', 0));
-        /** @var ProviderEntity $provider */
-        $provider = $this->providerRepository->findOneBy(['id' => $id]);
-        if ($provider === null) {
-            return $this->notFoundAction();
-        }
-        $jsonModel = new JsonModel(['success' => false]);
-
-        $this->editProviderForm->setData($request->getPost());
-        if (!$this->editProviderForm->isValid()) {
-            $jsonModel->setVariable('formErrors', $this->editProviderForm->getMessages());
-
-            return $jsonModel;
-        }
-        $data = $this->editProviderForm->getData();
-
-        try {
-            $provider = $this->providerService->update($provider, $data);
-            $jsonModel->setVariable('provider', $provider);
-
-            $jsonModel->setVariable('success', true);
-        } catch (\Exception $ex) {
-            $jsonModel->setVariable('hasError', true);
-            $jsonModel->setVariable('message', $ex->getMessage());
-        }
-
-        return $jsonModel;
-    }
-
     public function infoAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
@@ -256,32 +171,33 @@ class ProvidersController extends AbstractActionController
         return $viewModel;
     }
 
-    public function tariffsAction()
+    /**
+     * Получение информации о провайдере
+     *
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     */
+    public function getAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
-        /** @var ProviderEntity $provider */
         $provider = $this->providerRepository->findOneBy(['id' => $id]);
         if ($provider === null) {
             return $this->notFoundAction();
         }
 
-        $status = $this->params()->fromQuery('status', '');
-        $tariffs = $this->tariffRepository->getList($status);
-
-        $this->tariffForm->prepareForProvider($provider);
-
-        $viewModel = new ViewModel([
-            'tariffForm'   => $this->tariffForm,
-            'provider'     => $provider,
-            'tariffs'      => $tariffs,
-            'activeTab'    => 'tariffs',
-            'activeStatus' => $status,
+        $jsonModel = new JsonModel([
+            'success'    => true,
+            'contragent' => $provider,
         ]);
 
-        return $viewModel;
+        return $jsonModel;
     }
 
-    public function usersAction()
+    /**
+     * Обновление провайдера
+     *
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     */
+    public function updateAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
         /** @var ProviderEntity $provider */
@@ -289,46 +205,25 @@ class ProvidersController extends AbstractActionController
         if ($provider === null) {
             return $this->notFoundAction();
         }
+        $jsonModel = new JsonModel(['success' => false]);
 
-        $this->newUserForm->get('provider_id')->setValue($provider->getId());
+        $this->editProviderForm->setData($this->params()->fromPost());
+        if (!$this->editProviderForm->isValid()) {
+            $jsonModel->setVariable('formErrors', $this->editProviderForm->getMessages());
 
-        $users = $this->userRepository->getProviderUsers($provider);
+            return $jsonModel;
+        }
+        $data = $this->editProviderForm->getData();
 
-        $viewModel = new ViewModel([
-            'provider'       => $provider,
-            'users'          => $users,
-            'newUserForm'    => $this->newUserForm,
-            'updateUserForm' => $this->updateUserForm,
-            'activeTab'      => 'users'
-        ]);
+        try {
+            $provider = $this->providerService->update($provider, $data);
+            $jsonModel->setVariable('provider', $provider);
 
-        return $viewModel;
-    }
-
-    public function invoicesAction()
-    {
-        $id = intval($this->params()->fromRoute('id', 0));
-
-        /** @var ProviderEntity $provider */
-        $provider = $this->providerRepository->findOneBy(['id' => $id]);
-        if ($provider === null) {
-            return $this->notFoundAction();
+            $jsonModel->setVariable('success', true);
+        } catch (\Exception $ex) {
+            $jsonModel->setVariable('message', $ex->getMessage());
         }
 
-        $this->invoiceForm->prepareForProvider($provider);
-
-        $status = $this->params()->fromQuery('status', '');
-
-        $invoices = $this->invoiceRepository->findAll();
-
-        $viewModel = new ViewModel([
-            'provider'     => $provider,
-            'invoices'     => $invoices,
-            'invoiceForm'  => $this->invoiceForm,
-            'activeTab'    => 'invoices',
-            'activeStatus' => $status,
-        ]);
-
-        return $viewModel;
+        return $jsonModel;
     }
 }

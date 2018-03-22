@@ -1,11 +1,14 @@
 <?php
 /**
- * @var \Application\Form\InvoiceForm $invoiceForm
- * @var \Application\Entity\Provider  $provider
+ * @var \Application\Entity\Tracker   $tracker
  * @var \Application\Entity\Invoice[] $invoices
  * @var string                        $activeTab
  * @var string                        $activeStatus
  */
+
+/** @var \Application\View\Helper\Navigation\Navbar $menu */
+$menu = $this->navigation('Zend\Navigation\Default')->Navbar();
+$menu->setActiveItemId('trackers');
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/invoices.js'));
@@ -15,13 +18,13 @@ $statuses = \Application\Entity\Invoice::getStatuses();
 
 <!--provider info-->
 <div class="contragent_info">
-    <?= $this->partial('application/providers/partial/header', [
-        'provider'  => $provider,
+    <?= $this->partial('application/trackers/partial/header', [
+        'tracker'   => $tracker,
         'activeTab' => $activeTab,
     ]); ?>
 
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
             <div class="btn-group">
                 <button class="btn dropdown-toggle" type="button" id="buttonMenu1" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -29,20 +32,15 @@ $statuses = \Application\Entity\Invoice::getStatuses();
                 </button>
                 <div class="dropdown-menu" aria-labelledby="buttonMenu1">
                     <a class="dropdown-item"
-                       href="<?= $this->url('providers', ['id' => $provider->getId(), 'action' => 'invoices']); ?>">Все</a>
+                       href="<?= $this->url('invoices/tracker', ['id' => $tracker->getId()]); ?>">Все</a>
                     <?php foreach ($statuses as $statusKey => $statusTitle): ?>
                         <a class="dropdown-item"
-                           href="<?= $this->url('providers', ['id' => $provider->getId(), 'action' => 'invoices'], ['query' => 'status=' . $statusKey]); ?>">
+                           href="<?= $this->url('invoices/tracker', ['id' => $tracker->getId()], ['query' => 'status=' . $statusKey]); ?>">
                             <?= $statusTitle ?>
                         </a>
                     <?php endforeach;; ?>
                 </div>
             </div>
-        </div>
-        <div class="col-4 text-right">
-            <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addInvoiceBtn">Выставить
-                счет
-            </button>
         </div>
     </div>
 
@@ -54,7 +52,7 @@ $statuses = \Application\Entity\Invoice::getStatuses();
         <div class="row invoices_accordion" id="accordion">
             <div class="col-12">
                 <?php foreach ($invoices as $invoice): ?>
-                    <?= $this->partial('application/providers/partial/invoiceRow', [
+                    <?= $this->partial('application/invoices/partial/row', [
                         'invoice' => $invoice,
                     ]); ?>
                 <?php endforeach; ?>
@@ -63,7 +61,3 @@ $statuses = \Application\Entity\Invoice::getStatuses();
     <?php endif; ?>
 </div>
 
-<!-- Modal add new invoice -->
-<?= $this->partial('application/providers/partial/invoiceModal', [
-    'invoiceForm' => $invoiceForm,
-]); ?>

@@ -26,6 +26,12 @@ $(function() {
         form.reset();
         $('.is-filled', form).removeClass('is-filled');
 
+        if (values.id) {
+            $(form).attr('data-editing', 1);
+        } else {
+            $(form).attr('data-editing', 0);
+        }
+
         for (var key in values) {
             if (!values.hasOwnProperty(key)) {
                 continue;
@@ -65,8 +71,15 @@ $(function() {
             return;
         }
 
-        var data = $('#tariffForm').serialize(),
-            url = $tariffSaveBtn.attr('data-save-url');
+        var data = $(form).serialize(), url;
+
+        if ($(form).attr('data-editing')) {
+            var id = $('input[name="id"]', form).val();
+            url = $tariffSaveBtn.attr('data-update-url');
+            url = url.replace(':id', id);
+        } else {
+            url = $tariffSaveBtn.attr('data-create-url');
+        }
 
         var jqxhr = $.post(url, data, successCallback).fail(failCallback).always(function (response) {
         });

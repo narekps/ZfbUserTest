@@ -2,16 +2,20 @@
 
 namespace Application\Controller;
 
+use Zend\View\Model\ViewModel;
 use ZfbUser\Controller\Plugin;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Service\InvoiceService;
 use Application\Form\InvoiceForm;
 use Application\Repository\InvoiceRepository;
-use Application\Entity\Invoice as InvoiceEntity;
 use Application\Entity\User as UserEntity;
+use Application\Entity\Provider as ProviderEntity;
+use Application\Repository\ProviderRepository;
+use Application\Entity\Tracker as TrackerEntity;
+use Application\Repository\TrackerRepository;
+use Application\Entity\Client as ClientEntity;
+use Application\Repository\ClientRepository;
 
 /**
  * Class InvoicesController
@@ -39,41 +43,151 @@ class InvoicesController extends AbstractActionController
     private $invoiceForm;
 
     /**
+     * @var ProviderRepository
+     */
+    private $providerRepository;
+
+    /**
+     * @var TrackerRepository
+     */
+    private $trackerRepository;
+
+    /**
+     * @var ClientRepository
+     */
+    private $clientRepository;
+
+    /**
      * InvoicesController constructor.
      *
-     * @param \Application\Service\InvoiceService       $invoiceService
-     * @param \Application\Repository\InvoiceRepository $invoiceRepository
-     * @param \Application\Form\InvoiceForm             $invoiceForm
+     * @param \Application\Service\InvoiceService        $invoiceService
+     * @param \Application\Repository\InvoiceRepository  $invoiceRepository
+     * @param \Application\Form\InvoiceForm              $invoiceForm
+     * @param \Application\Repository\ProviderRepository $providerRepository
+     * @param \Application\Repository\TrackerRepository  $trackerRepository
+     * @param \Application\Repository\ClientRepository   $clientRepository
      */
-    public function __construct(InvoiceService $invoiceService, InvoiceRepository $invoiceRepository, InvoiceForm $invoiceForm)
+    public function __construct(InvoiceService $invoiceService, InvoiceRepository $invoiceRepository, InvoiceForm $invoiceForm, ProviderRepository $providerRepository, TrackerRepository $trackerRepository, ClientRepository $clientRepository)
     {
         $this->invoiceService = $invoiceService;
         $this->invoiceRepository = $invoiceRepository;
         $this->invoiceForm = $invoiceForm;
+        $this->providerRepository = $providerRepository;
+        $this->trackerRepository = $trackerRepository;
+        $this->clientRepository = $clientRepository;
     }
 
     /**
-     * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     * Список счетов
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        $status = $this->params()->fromQuery('status', '');
+
+        $invoices = $this->invoiceRepository->getList();
+
+        $viewModel = new ViewModel([
+            'invoices'    => $invoices,
+            'activeStatus' => $status,
+        ]);
+
+        return $viewModel;
+    }
+
+    public function providerAction()
+    {
+        $id = intval($this->params()->fromRoute('id', 0));
+
+        /** @var ProviderEntity|null $provider */
+        $provider = $this->providerRepository->findOneBy(['id' => $id]);
+        if ($provider === null) {
+            return $this->notFoundAction();
+        }
+
+        $this->invoiceForm->prepareForProvider($provider);
+
+        $status = $this->params()->fromQuery('status', '');
+
+        $invoices = $this->invoiceRepository->getProviderInvoices($provider, $status);
+
+        $viewModel = new ViewModel([
+            'provider'     => $provider,
+            'invoices'     => $invoices,
+            'invoiceForm'  => $this->invoiceForm,
+            'activeTab'    => 'invoices',
+            'activeStatus' => $status,
+        ]);
+
+        return $viewModel;
+    }
+
+    public function trackerAction()
+    {
+        $id = intval($this->params()->fromRoute('id', 0));
+
+        /** @var TrackerEntity $tracker */
+        $tracker = $this->trackerRepository->findOneBy(['id' => $id]);
+        if ($tracker === null) {
+            return $this->notFoundAction();
+        }
+
+        $status = $this->params()->fromQuery('status', '');
+
+        $invoices = $this->invoiceRepository->getTrackerInvoices($tracker, $status);
+
+        $viewModel = new ViewModel([
+            'tracker'      => $tracker,
+            'invoices'     => $invoices,
+            'activeTab'    => 'invoices',
+            'activeStatus' => $status,
+        ]);
+
+        return $viewModel;
+    }
+
+    public function clientAction()
+    {
+        $id = intval($this->params()->fromRoute('id', 0));
+
+        /** @var ClientEntity $client */
+        $client = $this->clientRepository->findOneBy(['id' => $id]);
+        if ($client === null) {
+            return $this->notFoundAction();
+        }
+
+        $status = $this->params()->fromQuery('status', '');
+
+        $invoices = $this->invoiceRepository->findAll();
+
+        $viewModel = new ViewModel([
+            'client'       => $client,
+            'invoices'     => $invoices,
+            'activeTab'    => 'invoices',
+            'activeStatus' => $status,
+        ]);
+
+        return $viewModel;
+    }
+
+    /**
+     * Скачивание счета
+     */
+    public function downloadAction()
+    {
+        $id = intval($this->params()->fromRoute('id', 0));
+
+        die(__METHOD__);
+    }
+
+    /**
+     * Выставление счета провайдером
+     *
+     * @return \Zend\View\Model\JsonModel
      */
     public function createAction()
     {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isPost()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
         $jsonModel = new JsonModel(['success' => false]);
 
         /** @var UserEntity $user */
@@ -87,8 +201,7 @@ class InvoicesController extends AbstractActionController
         $provider = $user->getProvider();
         $this->invoiceForm->prepareForProvider($provider);
 
-        $post = $request->getPost();
-        $this->invoiceForm->setData($post);
+        $this->invoiceForm->setData($this->params()->fromPost());
         if (!$this->invoiceForm->isValid()) {
             $jsonModel->setVariable('formErrors', $this->invoiceForm->getMessages());
 
@@ -102,7 +215,6 @@ class InvoicesController extends AbstractActionController
             $jsonModel->setVariable('invoice', $invoice);
             $jsonModel->setVariable('success', true);
         } catch (\Exception $ex) {
-            $jsonModel->setVariable('hasError', true);
             $jsonModel->setVariable('message', $ex->getMessage());
         }
 

@@ -5,7 +5,7 @@
 ?>
 <tr>
     <td>
-        <a href="<?=$this->url('trackers', ['id' => $tracker->getId(), 'action' => 'info']); ?>" class="color-blue">
+        <a href="<?=$this->url('trackers/info', ['id' => $tracker->getId()]); ?>" class="color-blue">
             <?= $tracker->getFullName(); ?>
         </a>
     </td>
@@ -16,7 +16,7 @@
     <td><?= $tracker->getDateCreated()->format('d.m.Y'); ?></td>
     <td>
         <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm contragentEditBtn"
-                data-get-url="<?=$this->url('trackers', ['id' => $tracker->getId(), 'action' => 'get']); ?>"
+                data-get-url="<?=$this->url('trackers/get', ['id' => $tracker->getId()]); ?>"
         >
             <i class="material-icons">mode_edit</i>
         </button>

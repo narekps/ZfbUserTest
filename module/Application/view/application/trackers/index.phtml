@@ -6,6 +6,10 @@
  * @var string                            $search значение поискового поля
  */
 
+/** @var \Application\View\Helper\Navigation\Navbar $menu */
+$menu = $this->navigation('Zend\Navigation\Default')->Navbar();
+$menu->setActiveItemId('trackers');
+
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
 ?>
@@ -66,6 +70,6 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
 ]); ?>
 
 <!-- Modal edit tracker -->
-<?= $this->partial('application/trackers/partial/editTrackerModal', [
+<?= $this->partial('application/trackers/partial/editModal', [
         'editTrackerForm' => $editTrackerForm,
 ]); ?>

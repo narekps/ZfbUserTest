@@ -1,11 +1,14 @@
 <?php
 /**
- * @var \Application\Form\TariffForm $tariffForm
- * @var \Application\Entity\Provider $provider
+ * @var \Application\Entity\Client   $client
  * @var \Application\Entity\Tariff[] $tariffs
  * @var string                       $activeTab
  * @var string                       $activeStatus
  */
+
+/** @var \Application\View\Helper\Navigation\Navbar $menu */
+$menu = $this->navigation('Zend\Navigation\Default')->Navbar();
+$menu->setActiveItemId('clients');
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/tariffs.js'));
@@ -13,15 +16,15 @@ $this->inlineScript()->appendFile($this->basePath('js/tariffs.js'));
 $statuses = \Application\Entity\Tariff::getStatuses();
 ?>
 
-<!--provider info-->
+<!--client info-->
 <div class="contragent_info">
-    <?= $this->partial('application/providers/partial/header', [
-        'provider'  => $provider,
+    <?= $this->partial('application/clients/partial/header', [
+        'client'    => $client,
         'activeTab' => $activeTab,
     ]); ?>
 
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
             <div class="btn-group">
                 <button class="btn dropdown-toggle" type="button" id="buttonMenu1" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -29,18 +32,15 @@ $statuses = \Application\Entity\Tariff::getStatuses();
                 </button>
                 <div class="dropdown-menu" aria-labelledby="buttonMenu1">
                     <a class="dropdown-item"
-                       href="<?= $this->url('providers', ['id' => $provider->getId(), 'action' => 'tariffs']); ?>">Все</a>
+                       href="<?= $this->url('tariffs/client', ['id' => $client->getId()]); ?>">Все</a>
                     <?php foreach ($statuses as $statusKey => $statusTitle): ?>
                         <a class="dropdown-item"
-                           href="<?= $this->url('providers', ['id' => $provider->getId(), 'action' => 'tariffs'], ['query' => 'status=' . $statusKey]); ?>">
+                           href="<?= $this->url('tariffs/client', ['id' => $client->getId()], ['query' => 'status=' . $statusKey]); ?>">
                             <?= $statusTitle ?>
                         </a>
                     <?php endforeach;; ?>
                 </div>
             </div>
-        </div>
-        <div class="col-4 text-right">
-            <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addTariffBtn">Добавить тариф</button>
         </div>
     </div>
 
@@ -52,7 +52,7 @@ $statuses = \Application\Entity\Tariff::getStatuses();
         <div class="row tariffs_accordion" id="accordion">
             <div class="col-12">
                 <?php foreach ($tariffs as $tariff): ?>
-                    <?= $this->partial('application/providers/partial/tariffRow', [
+                    <?= $this->partial('application/tariffs/partial/row', [
                         'tariff' => $tariff,
                     ]); ?>
                 <?php endforeach; ?>
@@ -60,8 +60,3 @@ $statuses = \Application\Entity\Tariff::getStatuses();
         </div>
     <?php endif; ?>
 </div>
-
-<!-- Modal add new tariff -->
-<?= $this->partial('application/providers/partial/tariffModal', [
-    'tariffForm' => $tariffForm,
-]); ?>

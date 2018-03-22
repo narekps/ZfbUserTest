@@ -2,13 +2,14 @@
 
 namespace Application\View\Helper\Navigation;
 
+use Zend\Navigation\AbstractContainer;
 use Zend\Navigation\Page\AbstractPage;
 use Zend\View\Helper\Navigation\Menu;
 
 /**
  * Class Navbar
  *
- * @package MDBootstrap\View\Helper\Navigation
+ * @package Application\View\Helper\Navigation
  */
 class Navbar extends Menu
 {
@@ -20,6 +21,11 @@ class Navbar extends Menu
     protected $classToAItem = 'nav-link';
 
     /**
+     * @var string
+     */
+    protected $activeItemId;
+
+    /**
      * @param string $class
      *
      * @return \Application\View\Helper\Navigation\Navbar
@@ -29,6 +35,53 @@ class Navbar extends Menu
         $this->classToAItem = $class;
 
         return $this;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return \Application\View\Helper\Navigation\Navbar
+     */
+    public function setActiveItemId(string $id): self
+    {
+        $this->activeItemId = $id;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function renderNormalMenu(
+        AbstractContainer $container,
+        $ulClass,
+        $indent,
+        $minDepth,
+        $maxDepth,
+        $onlyActive,
+        $escapeLabels,
+        $addClassToListItem,
+        $liActiveClass
+    )
+    {
+        $pages = $container->getPages();
+        /** @var AbstractPage $page */
+        foreach ($pages as $page) {
+            if ($page->getId() === $this->activeItemId) {
+                $page->setActive(true);
+                break;
+            }
+        }
+
+        return parent::renderNormalMenu($container,
+            $ulClass,
+            $indent,
+            $minDepth,
+            $maxDepth,
+            $onlyActive,
+            $escapeLabels,
+            $addClassToListItem,
+            $liActiveClass);
     }
 
     /**

@@ -15,18 +15,39 @@ return [
     'navigation' => [
         'default' => [
             [
+                'id'    => 'providers',
                 'label' => 'Провайдеры',
                 'route' => 'providers',
                 'class' => 'nav-item', // applied to <li> element
             ],
             [
+                'id'    => 'trackers',
                 'label' => 'Контролирующие организации',
                 'route' => 'trackers',
                 'class' => 'nav-item',
             ],
             [
+                'id'    => 'invoices',
+                'label' => 'Счета',
+                'route' => 'invoices',
+                'class' => 'nav-item',
+            ],
+            [
+                'id'    => 'Тарифы',
+                'label' => 'Тарифы',
+                'route' => 'tariffs',
+                'class' => 'nav-item',
+            ],
+            [
+                'id'    => 'zfbuser',
                 'label' => 'Пользователи',
                 'route' => 'zfbuser',
+                'class' => 'nav-item',
+            ],
+            [
+                'id'    => 'reports',
+                'label' => 'Отчетная информация',
+                'route' => 'reports',
                 'class' => 'nav-item',
             ],
         ],

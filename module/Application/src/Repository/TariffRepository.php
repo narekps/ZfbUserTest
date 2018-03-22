@@ -4,6 +4,7 @@ namespace Application\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Application\Entity\Tariff as TariffEntity;
+use Application\Entity\Provider as ProviderEntity;
 
 /**
  * Class TariffRepository
@@ -14,13 +15,15 @@ class TariffRepository extends EntityRepository
 {
 
     /**
-     * @param string $status Статус тарифа, пустая строка - все статусы
+     * @param \Application\Entity\Provider $provider
+     * @param string                       $status Статус тарифа, пустая строка - все статусы
      *
      * @return \Application\Entity\Tariff[]
      */
-    public function getList(string $status)
+    public function getList(ProviderEntity $provider, string $status): array
     {
         $qb = $this->createQueryBuilder('t')->select('t');
+        $qb->andWhere('t.provider = :provider')->setParameter('provider', $provider);
         if (!empty($status)) {
             $qb->andWhere('t.status = :status')->setParameter('status', $status);
         }

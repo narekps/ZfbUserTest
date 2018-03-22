@@ -35,7 +35,7 @@ $trackingProvidersField->setAttribute('id', 'trackingProviders_edit');
 $submitBtn = $editTrackerForm->get('submit');
 ?>
 
-<!-- Modal add new provider -->
+<!-- Modal edit tracker -->
 <div class="modal fade" id="contragentEditModal" tabindex="-1" role="dialog" aria-labelledby="contragentEditModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -123,7 +123,7 @@ $submitBtn = $editTrackerForm->get('submit');
 
                 <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
                         id="contragentEditSaveBtn"
-                        data-save-url="<?=$this->url('trackers', ['id' => ':id', 'action' => 'save']); ?>"
+                        data-save-url="<?=$this->url('trackers/update', ['id' => ':id']); ?>"
                         name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
 
                 <?= $this->form()->closeTag(); ?>

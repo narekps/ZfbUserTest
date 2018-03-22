@@ -83,15 +83,12 @@ class TrackersController extends AbstractActionController
     }
 
     /**
+     * Список контролирующих организаций
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $id = $this->params()->fromRoute('id');
-        if (!empty($id)) {
-            $this->redirect()->toRoute('trackers');
-        }
-
         $search = $this->params()->fromQuery('search', '');
 
         $trackers = $this->trackerRepository->getList($search);
@@ -107,89 +104,10 @@ class TrackersController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     * Карточка конкретной организации
+     *
+     * @return \Zend\View\Model\ViewModel
      */
-    public function getAction()
-    {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isGet()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
-        $id = intval($this->params()->fromRoute('id', 0));
-        $tracker = $this->trackerRepository->findOneBy(['id' => $id]);
-        if ($tracker === null) {
-            return $this->notFoundAction();
-        }
-
-        $jsonModel = new JsonModel([
-            'success'    => true,
-            'contragent' => $tracker,
-        ]);
-
-        return $jsonModel;
-    }
-
-    public function saveAction()
-    {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isPost()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
-        $id = intval($this->params()->fromRoute('id', 0));
-        /** @var TrackerEntity $tracker */
-        $tracker = $this->trackerRepository->findOneBy(['id' => $id]);
-        if ($tracker === null) {
-            return $this->notFoundAction();
-        }
-        $jsonModel = new JsonModel(['success' => false]);
-
-        $this->editTrackerForm->setData($request->getPost());
-        if (!$this->editTrackerForm->isValid()) {
-            $jsonModel->setVariable('formErrors', $this->editTrackerForm->getMessages());
-
-            return $jsonModel;
-        }
-        $data = $this->editTrackerForm->getData();
-
-        try {
-            $tracker = $this->trackerService->update($tracker, $data);
-            $jsonModel->setVariable('tracker', $tracker);
-
-            $jsonModel->setVariable('success', true);
-        } catch (\Exception $ex) {
-            $jsonModel->setVariable('hasError', true);
-            $jsonModel->setVariable('message', $ex->getMessage());
-        }
-
-        return $jsonModel;
-    }
-
     public function infoAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
@@ -206,27 +124,60 @@ class TrackersController extends AbstractActionController
         return $viewModel;
     }
 
-    public function usersAction()
+    /**
+     * Получение информации об организации
+     *
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     */
+    public function getAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
-        /** @var TrackerEntity $tracker */
         $tracker = $this->trackerRepository->findOneBy(['id' => $id]);
         if ($tracker === null) {
             return $this->notFoundAction();
         }
 
-        $this->newUserForm->get('tracker_id')->setValue($tracker->getId());
-
-        $users = $this->userRepository->getTrackerUsers($tracker);
-
-        $viewModel = new ViewModel([
-            'tracker'        => $tracker,
-            'users'          => $users,
-            'newUserForm'    => $this->newUserForm,
-            'updateUserForm' => $this->updateUserForm,
-            'activeTab'      => 'users'
+        $jsonModel = new JsonModel([
+            'success'    => true,
+            'contragent' => $tracker,
         ]);
 
-        return $viewModel;
+        return $jsonModel;
+    }
+
+    /**
+     * Обновление организации
+     *
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     */
+    public function updateAction()
+    {
+        $id = intval($this->params()->fromRoute('id', 0));
+
+        /** @var TrackerEntity $tracker */
+        $tracker = $this->trackerRepository->findOneBy(['id' => $id]);
+        if ($tracker === null) {
+            return $this->notFoundAction();
+        }
+        $jsonModel = new JsonModel(['success' => false]);
+
+        $this->editTrackerForm->setData($this->params()->fromPost());
+        if (!$this->editTrackerForm->isValid()) {
+            $jsonModel->setVariable('formErrors', $this->editTrackerForm->getMessages());
+
+            return $jsonModel;
+        }
+        $data = $this->editTrackerForm->getData();
+
+        try {
+            $tracker = $this->trackerService->update($tracker, $data);
+            $jsonModel->setVariable('tracker', $tracker);
+
+            $jsonModel->setVariable('success', true);
+        } catch (\Exception $ex) {
+            $jsonModel->setVariable('message', $ex->getMessage());
+        }
+
+        return $jsonModel;
     }
 }

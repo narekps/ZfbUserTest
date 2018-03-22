@@ -1,16 +1,18 @@
 <?php
 /**
- * @var \Application\Entity\Provider[]     $providers
- * @var \Application\Form\NewProviderForm  $newProviderForm
- * @var \Application\Form\EditProviderForm $editProviderForm
+ * @var \Application\Entity\Client[]     $clients
  * @var string                             $search значение поискового поля
  */
+
+/** @var \Application\View\Helper\Navigation\Navbar $menu */
+$menu = $this->navigation('Zend\Navigation\Default')->Navbar();
+$menu->setActiveItemId('clients');
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
 ?>
 <div class="row mb-3">
-    <div class="col-md-5">
+    <div class="col-4">
         <form class="form" action="?" method="get">
             <div class="input-group search-input-group">
                 <div class="input-group-prepend">
@@ -23,16 +25,9 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
             <input type="submit" style="display:none"/>
         </form>
     </div>
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-4 text-right">
-        <button type="button" class="btn btn-raised btn-primary btn-blue" id="addContragentBtn">
-            Добавить
-        </button>
-    </div>
 </div>
 
-<?php if(empty($providers)): ?>
+<?php if(empty($clients)): ?>
     <div class="alert alert-dark" role="alert">
         Нет данных для отображения
     </div>
@@ -40,32 +35,20 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     <table class="table table-hover table-contragents">
         <thead>
         <tr>
-            <th>Наименование провайдера</th>
+            <th>Наименование клиента</th>
             <th>ИНН</th>
             <th>КПП</th>
-            <th>Телефон</th>
-            <th>Контактное лицо</th>
             <th>Дата регистрации</th>
-            <th></th>
         </tr>
         </thead>
         <tbody>
         <tbody>
-        <?php foreach ($providers as $provider): ?>
-            <?= $this->partial('application/providers/partial/row', [
-                'provider' => $provider,
+        <?php foreach ($clients as $client): ?>
+            <?= $this->partial('application/clients/partial/row', [
+                'client' => $client,
             ]); ?>
         <?php endforeach; ?>
         </tbody>
     </table>
 <?php endif; ?>
 
-<!-- Modal add new provider and user -->
-<?= $this->partial('application/providers/partial/modal', [
-        'newProviderForm' => $newProviderForm,
-]); ?>
-
-<!-- Modal edit provider -->
-<?= $this->partial('application/providers/partial/editModal', [
-        'editProviderForm' => $editProviderForm,
-]); ?>

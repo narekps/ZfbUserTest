@@ -51,7 +51,7 @@ if ($tariff->isArchived()) {
                                 class="btn btn-raised btn-default btn-edit btn-sm tariffEditBtn <?= $tariff->isProcessing() ? 'disabled' : ''; ?>"
                             <?= (!$tariff->isEditable() ? 'style="pointer-events: none;"' : ''); ?>
                                 data-id="<?= $tariff->getId(); ?>"
-                                data-get-url="<?= $this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'get']); ?>">
+                                data-get-url="<?= $this->url('tariffs/get', ['id' => $tariff->getId()]); ?>">
                         <i class="material-icons">mode_edit</i>
                         Редактировать
                     </button>
@@ -71,7 +71,7 @@ if ($tariff->isArchived()) {
                             <?= ($tariff->isProcessing() ? 'style="pointer-events: none;"' : ''); ?>
 
                                 data-name="<?= $this->escapeHtml($tariff->getName()); ?>"
-                                data-archive-url="<?= $this->url('tariffs', ['id' => $tariff->getId(), 'action' => 'archive']); ?>">
+                                data-archive-url="<?= $this->url('tariffs/archive', ['id' => $tariff->getId()]); ?>">
                             <i class="material-icons">remove_circle_outline</i>
                             Архивировать
                         </button>

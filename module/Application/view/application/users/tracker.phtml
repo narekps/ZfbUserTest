@@ -1,0 +1,62 @@
+<?php
+/**
+ * @var \Application\Entity\Tracker $tracker
+ * @var \Application\Entity\User    $users
+ * @var \Zend\Form\Form             $newUserForm
+ * @var \Zend\Form\Form             $updateUserForm
+ * @var string                      $activeTab
+ */
+
+/** @var \Application\View\Helper\Navigation\Navbar $menu */
+$menu = $this->navigation('Zend\Navigation\Default')->Navbar();
+$menu->setActiveItemId('trackers');
+
+$this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
+$this->inlineScript()->appendFile($this->basePath('js/users.js'));
+?>
+
+    <!--provider info-->
+    <div class="contragent_info">
+        <?= $this->partial('application/trackers/partial/header', [
+            'tracker'   => $tracker,
+            'activeTab' => $activeTab,
+        ]); ?>
+
+        <div class="row">
+            <div class="col-12 text-right">
+                <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addUserBtn">Добавить пользователя</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <?php if(empty($users)): ?>
+                    <div class="alert alert-dark" role="alert">
+                        Нет данных для отображения
+                    </div>
+                <?php else: ?>
+
+                    <div class="row user-cards">
+                        <?php foreach ($users as $user): ?>
+                            <?= $this->partial('application/users/partial/row', [
+                                'user' => $user,
+                            ]); ?>
+                        <?php endforeach; ?>
+                    </div>
+
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal add new user -->
+<?= $this->partial('application/users/partial/modal', [
+    'newUserForm' => $newUserForm,
+]); ?>
+
+
+    <!-- Modal edit user -->
+<?= $this->partial('application/users/partial/editModal', [
+    'updateUserForm' => $updateUserForm,
+]); ?>
+

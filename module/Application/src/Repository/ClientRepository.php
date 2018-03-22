@@ -28,4 +28,25 @@ class ClientRepository extends EntityRepository
 
         return $client;
     }
+
+    /**
+     * @param string $search
+     *
+     * @return \Application\Entity\Client[]
+     */
+    public function getList(string $search)
+    {
+        $qb = $this->createQueryBuilder('c')->select('c');
+        if (!empty($search)) {
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like('c.fullName', "'%{$search}%'"),
+                $qb->expr()->like('c.inn', "'%{$search}%'")
+            ));
+        }
+
+        /** @var ClientEntity[] $clients */
+        $providers = $qb->getQuery()->getResult();
+
+        return $providers;
+    }
 }

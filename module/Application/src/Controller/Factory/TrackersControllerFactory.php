@@ -57,6 +57,9 @@ class TrackersControllerFactory implements FactoryInterface
             }
         }
 
+        //TODO: fix it!
+        $request->getQuery()->set('type', 'tracker');
+
         /** @var NewTrackerForm $newUserForm */
         $newUserForm = $container->get('zfbuser_new_user_form');
 

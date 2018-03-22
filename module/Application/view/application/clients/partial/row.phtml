@@ -1,0 +1,15 @@
+<?php
+/**
+ * @var \Application\Entity\Client $client
+ */
+?>
+<tr>
+    <td>
+        <a href="<?=$this->url('clients/info', ['id' => $client->getId()]); ?>" class="color-blue">
+            <?= $client->getFullName(); ?>
+        </a>
+    </td>
+    <td><?= $client->getInn(); ?></td>
+    <td><?= $client->getKpp(); ?></td>
+    <td><?= $client->getDateCreated()->format('d.m.Y'); ?></td>
+</tr>

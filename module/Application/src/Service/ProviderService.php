@@ -51,6 +51,5 @@ class ProviderService
         }
 
         return $provider;
-
     }
 }

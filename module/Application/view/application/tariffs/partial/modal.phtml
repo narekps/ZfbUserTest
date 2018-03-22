@@ -126,7 +126,8 @@ $submitBtn = $tariffForm->get('submit');
 
                 <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
                         id="tariffSaveBtn"
-                        data-save-url="<?= $this->url('tariffs', ['id' => 0, 'action' => 'save']); ?>"
+                        data-create-url="<?= $this->url('tariffs/create'); ?>"
+                        data-update-url="<?= $this->url('tariffs/update', ['id' => ':id']); ?>"
                         name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
 
                 <?= $this->form()->closeTag(); ?>

@@ -1,0 +1,39 @@
+<?php
+/**
+ * @var \Application\Entity\Client $client
+ * @var string                     $activeTab
+ */
+
+$tabs = [
+    'info'     => 'Информиция',
+    'tariffs'  => 'Тарифы',
+    'invoices' => 'Счета',
+];
+?>
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="title"><?= $client->getFullName(); ?><br>
+            <small>зарегистрирован <?= $this->dateFormat($client->getDateCreated()); ?></small>
+        </h1>
+    </div>
+</div>
+
+<!--Tabs-->
+<div class="row">
+    <hr style="height: 4px; width: 100%; background: rgb(224, 226, 229); border: none; margin: 0; ">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link <?= ($activeTab === 'info') ? 'active' : ''; ?>"
+               href="<?= $this->url('clients/info', ['id' => $client->getId()]); ?>">Информация</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link <?= ($activeTab === 'tariffs') ? 'active' : ''; ?>"
+               href="<?= $this->url('tariffs/client', ['id' => $client->getId()]); ?>">Тарифы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link <?= ($activeTab === 'invoices') ? 'active' : ''; ?>"
+               href="<?= $this->url('invoices/client', ['id' => $client->getId()]); ?>">Счета</a>
+        </li>
+    </ul>
+</div>

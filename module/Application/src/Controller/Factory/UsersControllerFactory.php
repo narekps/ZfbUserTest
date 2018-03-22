@@ -2,34 +2,32 @@
 
 namespace Application\Controller\Factory;
 
-use Application\Form\InvoiceForm;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Controller\InvoicesController;
+use Application\Controller\UsersController;
 use Doctrine\ORM\EntityManagerInterface;
-use Application\Service\InvoiceService;
-use Application\Repository\InvoiceRepository;
-use Application\Entity\Invoice as InvoiceEntity;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\ProviderRepository;
 use Application\Entity\Tracker as TrackerEntity;
 use Application\Repository\TrackerRepository;
-use Application\Entity\Client as ClientEntity;
-use Application\Repository\ClientRepository;
+use Application\Repository\UserRepository;
+use Application\Form\NewUserForm;
+use Application\Form\UpdateUserForm;
+
 
 /**
- * Class InvoicesControllerFactory
+ * Class UsersControllerFactory
  *
  * @package Application\Controller\Factory
  */
-class InvoicesControllerFactory implements FactoryInterface
+class UsersControllerFactory implements FactoryInterface
 {
     /**
      * @param \Interop\Container\ContainerInterface $container
      * @param string                                $requestedName
      * @param array|null                            $options
      *
-     * @return \Application\Controller\InvoicesController|object
+     * @return \Application\Controller\UsersController|object
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -38,11 +36,8 @@ class InvoicesControllerFactory implements FactoryInterface
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
-        /** @var InvoiceService $invoiceService */
-        $invoiceService = $container->get(InvoiceService::class);
-
-        /** @var InvoiceRepository $invoiceRepository */
-        $invoiceRepository = $entityManager->getRepository(InvoiceEntity::class);
+        /** @var UserRepository $userRepository */
+        $userRepository = $container->get('zfbuser_user_repository');
 
         /** @var ProviderRepository $providerRepository */
         $providerRepository = $entityManager->getRepository(ProviderEntity::class);
@@ -50,11 +45,17 @@ class InvoicesControllerFactory implements FactoryInterface
         /** @var TrackerRepository $trackerRepository */
         $trackerRepository = $entityManager->getRepository(TrackerEntity::class);
 
-        /** @var ClientRepository $clientRepository */
-        $clientRepository = $entityManager->getRepository(ClientEntity::class);
+        //TODO: fix it!
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $container->get('Request');
+        $request->getQuery()->set('type', 'user');
 
-        $invoiceForm = $container->get(InvoiceForm::class);
+        /** @var NewUserForm $newUserForm */
+        $newUserForm = $container->get('zfbuser_new_user_form');
 
-        return new InvoicesController($invoiceService, $invoiceRepository, $invoiceForm, $providerRepository, $trackerRepository, $clientRepository);
+        /** @var UpdateUserForm $updateUserForm */
+        $updateUserForm = $container->get('zfbuser_update_user_form');
+
+        return new UsersController($userRepository, $providerRepository, $trackerRepository, $newUserForm, $updateUserForm);
     }
 }

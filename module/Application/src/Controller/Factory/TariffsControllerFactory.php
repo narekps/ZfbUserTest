@@ -10,6 +10,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Application\Service\TariffService;
 use Application\Repository\TariffRepository;
 use Application\Entity\Tariff as TariffEntity;
+use Application\Entity\Provider as ProviderEntity;
+use Application\Repository\ProviderRepository;
+use Application\Entity\Client as ClientEntity;
+use Application\Repository\ClientRepository;
 
 /**
  * Class TariffsControllerFactory
@@ -38,8 +42,14 @@ class TariffsControllerFactory implements FactoryInterface
         /** @var TariffRepository $tariffRepository */
         $tariffRepository = $entityManager->getRepository(TariffEntity::class);
 
+        /** @var ProviderRepository $providerRepository */
+        $providerRepository = $entityManager->getRepository(ProviderEntity::class);
+
+        /** @var ClientRepository $clientRepository */
+        $clientRepository = $entityManager->getRepository(ClientEntity::class);
+
         $tariffForm = $container->get(TariffForm::class);
 
-        return new TariffsController($tariffService, $tariffRepository, $tariffForm);
+        return new TariffsController($tariffService, $tariffRepository, $tariffForm, $providerRepository, $clientRepository);
     }
 }

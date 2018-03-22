@@ -2,9 +2,8 @@
 
 namespace Application\Controller;
 
+use Zend\View\Model\ViewModel;
 use ZfbUser\Controller\Plugin;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Service\TariffService;
@@ -12,6 +11,10 @@ use Application\Form\TariffForm;
 use Application\Repository\TariffRepository;
 use Application\Entity\Tariff as TariffEntity;
 use Application\Entity\User as UserEntity;
+use Application\Entity\Provider as ProviderEntity;
+use Application\Repository\ProviderRepository;
+use Application\Entity\Client as ClientEntity;
+use Application\Repository\ClientRepository;
 
 /**
  * Class TariffsController
@@ -39,41 +42,122 @@ class TariffsController extends AbstractActionController
     private $tariffForm;
 
     /**
+     * @var ProviderRepository
+     */
+    private $providerRepository;
+
+    /**
+     * @var ClientRepository
+     */
+    private $clientRepository;
+
+    /**
      * TariffsController constructor.
      *
-     * @param \Application\Service\TariffService       $tariffService
-     * @param \Application\Repository\TariffRepository $tariffRepository
-     * @param \Application\Form\TariffForm             $tariffForm
+     * @param \Application\Service\TariffService         $tariffService
+     * @param \Application\Repository\TariffRepository   $tariffRepository
+     * @param \Application\Form\TariffForm               $tariffForm
+     * @param \Application\Repository\ProviderRepository $providerRepository
+     * @param \Application\Repository\ClientRepository   $clientRepository
      */
-    public function __construct(TariffService $tariffService, TariffRepository $tariffRepository, TariffForm $tariffForm)
+    public function __construct(TariffService $tariffService, TariffRepository $tariffRepository, TariffForm $tariffForm, ProviderRepository $providerRepository, ClientRepository $clientRepository)
     {
         $this->tariffService = $tariffService;
         $this->tariffRepository = $tariffRepository;
         $this->tariffForm = $tariffForm;
+        $this->providerRepository = $providerRepository;
+        $this->clientRepository = $clientRepository;
     }
 
     /**
+     * Список тарифов
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        /**
+         * TODO: Для конкретоной роли сделать редирект на соответствующий экшен
+         */
+
+        $status = $this->params()->fromQuery('status', '');
+        $tariffs = $this->tariffRepository->getList($status);
+
+        $viewModel = new ViewModel([
+            'tariffs'    => $tariffs,
+            'tariffForm' => $this->tariffForm,
+        ]);
+
+        $viewModel->setTemplate('application/tariffs/provider');
+
+        return $viewModel;
+    }
+
+    /**
+     * Список тарифов провайдера
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function providerAction()
+    {
+        $id = intval($this->params()->fromRoute('id', 0));
+        /** @var ProviderEntity $provider */
+        $provider = $this->providerRepository->findOneBy(['id' => $id]);
+        if ($provider === null) {
+            return $this->notFoundAction();
+        }
+
+        $status = $this->params()->fromQuery('status', '');
+        $tariffs = $this->tariffRepository->getList($provider, $status);
+
+        $this->tariffForm->prepareForProvider($provider);
+
+        $viewModel = new ViewModel([
+            'tariffForm'   => $this->tariffForm,
+            'provider'     => $provider,
+            'tariffs'      => $tariffs,
+            'activeTab'    => 'tariffs',
+            'activeStatus' => $status,
+        ]);
+
+        return $viewModel;
+    }
+
+    /**
+     * Список тарифов для клиента
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function clientAction()
+    {
+        $id = intval($this->params()->fromRoute('id', 0));
+
+        /** @var ClientEntity $client */
+        $client = $this->clientRepository->findOneBy(['id' => $id]);
+        if ($client === null) {
+            return $this->notFoundAction();
+        }
+
+        $status = $this->params()->fromQuery('status', '');
+        $tariffs = $this->tariffRepository->getList($status);
+
+        $viewModel = new ViewModel([
+            'client'       => $client,
+            'tariffs'      => $tariffs,
+            'activeTab'    => 'tariffs',
+            'activeStatus' => $status,
+        ]);
+
+        return $viewModel;
+    }
+
+    /**
+     * Получение информации о тарифе тарифа
+     *
      * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
      */
     public function getAction()
     {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isGet()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
         $id = intval($this->params()->fromRoute('id', 0));
         $tariff = $this->tariffRepository->findOneBy(['id' => $id]);
         if ($tariff === null) {
@@ -89,27 +173,12 @@ class TariffsController extends AbstractActionController
     }
 
     /**
+     * Создание нового тарифа
+     *
      * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
      */
-    public function saveAction()
+    public function createAction()
     {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isPost()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
         $jsonModel = new JsonModel(['success' => false]);
 
         /** @var UserEntity $user */
@@ -123,8 +192,7 @@ class TariffsController extends AbstractActionController
         $provider = $user->getProvider();
         $this->tariffForm->prepareForProvider($provider);
 
-        $post = $request->getPost();
-        $this->tariffForm->setData($post);
+        $this->tariffForm->setData($this->params()->fromPost());
         if (!$this->tariffForm->isValid()) {
             $jsonModel->setVariable('formErrors', $this->tariffForm->getMessages());
 
@@ -132,31 +200,12 @@ class TariffsController extends AbstractActionController
         }
         $data = $this->tariffForm->getData();
 
-        $tariff = null;
-        $id = intval($this->params()->fromRoute('id', 0));
-        if ($id == 0) {
-            $id = intval($data['id']);
-        }
-        if ($id > 0) {
-            /** @var TariffEntity $tariff */
-            $tariff = $this->tariffRepository->findOneBy(['id' => $id]);
-
-            if ($tariff === null) {
-                return $this->notFoundAction();
-            }
-        } else {
-            $tariff = new TariffEntity();
-            $tariff->setStatus(TariffEntity::STATUS_NEW);
-            $tariff->setProvider($provider);
-        }
-
         try {
-            $tariff = $this->tariffService->save($tariff, $data);
+            $tariff = $this->tariffService->create($provider, $data);
 
             $jsonModel->setVariable('tariff', $tariff);
             $jsonModel->setVariable('success', true);
         } catch (\Exception $ex) {
-            $jsonModel->setVariable('hasError', true);
             $jsonModel->setVariable('message', $ex->getMessage());
         }
 
@@ -164,27 +213,60 @@ class TariffsController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     * Обновление существующего тарифа
+     *
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     */
+    public function updateAction()
+    {
+        $jsonModel = new JsonModel(['success' => false]);
+
+        /** @var UserEntity $user */
+        $user = $this->zfbAuthentication()->getIdentity();
+        if (!$user->getProvider()) {
+            $jsonModel->setVariable('message', 'Не указан сервис-провайдер');
+
+            return $jsonModel;
+        }
+
+        $provider = $user->getProvider();
+        $this->tariffForm->prepareForProvider($provider);
+
+        $this->tariffForm->setData($this->params()->fromPost());
+        if (!$this->tariffForm->isValid()) {
+            $jsonModel->setVariable('formErrors', $this->tariffForm->getMessages());
+
+            return $jsonModel;
+        }
+        $data = $this->tariffForm->getData();
+
+        $id = intval($this->params()->fromRoute('id', 0));
+
+        /** @var TariffEntity $tariff */
+        $tariff = $this->tariffRepository->findOneBy(['id' => $id]);
+        if ($tariff === null) {
+            return $this->notFoundAction();
+        }
+
+        try {
+            $tariff = $this->tariffService->update($tariff, $data);
+
+            $jsonModel->setVariable('tariff', $tariff);
+            $jsonModel->setVariable('success', true);
+        } catch (\Exception $ex) {
+            $jsonModel->setVariable('message', $ex->getMessage());
+        }
+
+        return $jsonModel;
+    }
+
+    /**
+     * Архивирование тарифа
+     *
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
      */
     public function archiveAction()
     {
-        /** @var Request $request */
-        $request = $this->getRequest();
-
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!$request->isPost()) {
-            $response->setStatusCode(Response::STATUS_CODE_405);
-
-            return $response;
-        }
-
-        if (!$this->zfbAuthentication()->hasIdentity()) {
-            $response->setStatusCode(Response::STATUS_CODE_403);
-
-            return $response;
-        }
-
         $jsonModel = new JsonModel(['success' => false]);
 
         /** @var UserEntity $user */
@@ -207,7 +289,42 @@ class TariffsController extends AbstractActionController
             $jsonModel->setVariable('tariff', $tariff);
             $jsonModel->setVariable('success', true);
         } catch (\Exception $ex) {
-            $jsonModel->setVariable('hasError', true);
+            $jsonModel->setVariable('message', $ex->getMessage());
+        }
+
+        return $jsonModel;
+    }
+
+    /**
+     * Покупка тарифа клиентом
+     *
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     */
+    public function payAction()
+    {
+        $jsonModel = new JsonModel(['success' => false]);
+
+        /** @var UserEntity $user */
+        $user = $this->zfbAuthentication()->getIdentity();
+        if (!$user->getClient()) {
+            $jsonModel->setVariable('message', 'Не указан клиент.');
+
+            return $jsonModel;
+        }
+
+        $id = intval($this->params()->fromRoute('id', 0));
+        $tariff = $this->tariffRepository->getById($id);
+        if ($tariff === null) {
+            return $this->notFoundAction();
+        }
+
+        try {
+            //TODO: fix it!
+            //$tariff = $this->tariffService->pay($tariff);
+
+            $jsonModel->setVariable('tariff', $tariff);
+            $jsonModel->setVariable('success', true);
+        } catch (\Exception $ex) {
             $jsonModel->setVariable('message', $ex->getMessage());
         }
 

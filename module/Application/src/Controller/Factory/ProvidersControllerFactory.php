@@ -75,6 +75,9 @@ class ProvidersControllerFactory implements FactoryInterface
             }
         }
 
+        //TODO: fix it!
+        $request->getQuery()->set('type', 'provider');
+
         /** @var NewProviderForm $newUserForm */
         $newUserForm = $container->get('zfbuser_new_user_form');
 

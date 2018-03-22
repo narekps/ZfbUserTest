@@ -334,3 +334,10 @@ a:hover, a.color-blue:hover {
 .checkbox label input[type=checkbox]:checked+.checkbox-decorator .check:before, label.checkbox-inline input[type=checkbox]:checked+.checkbox-decorator .check:before {
     color: #0085FF;
 }
+
+#invoiceForm input[name="sum"] {
+    height: calc(2.4375rem + 2px);
+}
+#tariffForm input[name="cost"], #tariffForm input[name="saleEndDate"] {
+    height: calc(2.4375rem + 2px);
+}

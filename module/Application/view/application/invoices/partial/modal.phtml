@@ -140,7 +140,7 @@ $submitBtn = $invoiceForm->get('submit');
 
                 <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
                         id="invoiceSaveBtn"
-                        data-save-url="<?= $this->url('invoices', ['action' => 'create']); ?>"
+                        data-save-url="<?= $this->url('invoices/create'); ?>"
                         name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
 
                 <?= $this->form()->closeTag(); ?>

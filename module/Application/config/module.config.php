@@ -55,7 +55,7 @@ return [
     ],
     'router'                    => [
         'routes' => [
-            'home'        => [
+            'home'      => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/',
@@ -65,83 +65,425 @@ return [
                     ],
                 ],
             ],
-            'application' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/application[/:action]',
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
-            'providers'   => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'       => '/providers[/:id[/:action]]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z]+',
-                        'id'     => '[0-9]+',
-                    ],
+            'providers' => [
+                'type'          => Segment::class,
+                'options'       => [
+                    'verb'        => 'GET',
+                    'route'       => '/providers',
                     'defaults'    => [
                         'controller' => Controller\ProvidersController::class,
                         'action'     => 'index',
                     ],
                 ],
-            ],
-            'trackers'    => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'       => '/trackers[/:id[/:action]]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z]+',
-                        'id'     => '[0-9]+',
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'info'   => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/info/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\ProvidersController::class,
+                                'action'     => 'info',
+                            ],
+                        ],
                     ],
+                    'get'    => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/get/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\ProvidersController::class,
+                                'action'     => 'get',
+                            ],
+                        ],
+                    ],
+                    'update' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'POST',
+                            'route'       => '/update/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\ProvidersController::class,
+                                'action'     => 'update',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'trackers'  => [
+                'type'          => Segment::class,
+                'options'       => [
+                    'verb'        => 'GET',
+                    'route'       => '/trackers',
                     'defaults'    => [
                         'controller' => Controller\TrackersController::class,
                         'action'     => 'index',
                     ],
                 ],
-            ],
-            'tariffs'     => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'       => '/tariffs[/:action[/:id]]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z]+',
-                        'id'     => '[0-9]+',
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'info'   => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/info/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TrackersController::class,
+                                'action'     => 'info',
+                            ],
+                        ],
                     ],
+                    'get'    => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/get/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TrackersController::class,
+                                'action'     => 'get',
+                            ],
+                        ],
+                    ],
+                    'update' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'POST',
+                            'route'       => '/update/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TrackersController::class,
+                                'action'     => 'update',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'invoices'  => [
+                'type'          => Segment::class,
+                'options'       => [
+                    'verb'        => 'GET',
+                    'route'       => '/invoices',
+                    'defaults'    => [
+                        'controller' => Controller\InvoicesController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'provider' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/provider/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\InvoicesController::class,
+                                'action'     => 'provider',
+                            ],
+                        ],
+                    ],
+                    'tracker' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/tracker/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\InvoicesController::class,
+                                'action'     => 'tracker',
+                            ],
+                        ],
+                    ],
+                    'client' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/client/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\InvoicesController::class,
+                                'action'     => 'client',
+                            ],
+                        ],
+                    ],
+                    'download' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/download/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\InvoicesController::class,
+                                'action'     => 'download',
+                            ],
+                        ],
+                    ],
+                    'create'   => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'verb'     => 'POST',
+                            'route'    => '/create',
+                            'defaults' => [
+                                'controller' => Controller\InvoicesController::class,
+                                'action'     => 'create',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'tariffs'   => [
+                'type'          => Segment::class,
+                'options'       => [
+                    'verb'        => 'GET',
+                    'route'       => '/tariffs',
                     'defaults'    => [
                         'controller' => Controller\TariffsController::class,
                         'action'     => 'index',
                     ],
                 ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'provider'     => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/provider/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TariffsController::class,
+                                'action'     => 'provider',
+                            ],
+                        ],
+                    ],
+                    'client'     => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/client/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TariffsController::class,
+                                'action'     => 'client',
+                            ],
+                        ],
+                    ],
+                    'get'     => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/get/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TariffsController::class,
+                                'action'     => 'get',
+                            ],
+                        ],
+                    ],
+                    'create'  => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'verb'     => 'POST',
+                            'route'    => '/create',
+                            'defaults' => [
+                                'controller' => Controller\TariffsController::class,
+                                'action'     => 'create',
+                            ],
+                        ],
+                    ],
+                    'update'  => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'POST',
+                            'route'       => '/update/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TariffsController::class,
+                                'action'     => 'update',
+                            ],
+                        ],
+                    ],
+                    'archive' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'POST',
+                            'route'       => '/archive/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TariffsController::class,
+                                'action'     => 'archive',
+                            ],
+                        ],
+                    ],
+                    'pay'     => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'POST',
+                            'route'       => '/pay/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\TariffsController::class,
+                                'action'     => 'pay',
+                            ],
+                        ],
+                    ],
+                ],
             ],
-            'contracts'   => [
+            'reports'   => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/contracts[/:action[/:id]]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z]+',
-                        'id'     => '[0-9]+',
-                    ],
+                    'verb'        => 'GET',
+                    'route'       => '/reports',
                     'defaults'    => [
-                        'controller' => Controller\ContractsController::class,
+                        'controller' => Controller\ReportsController::class,
                         'action'     => 'index',
                     ],
                 ],
             ],
-            'invoices'    => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'       => '/invoices[/:action[/:id]]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z]+',
-                        'id'     => '[0-9]+',
-                    ],
-                    'defaults'    => [
-                        'controller' => Controller\InvoicesController::class,
+            'contracts' => [
+                'type'          => Segment::class,
+                'options'       => [
+                    'verb'     => 'GET',
+                    'route'    => '/contracts',
+                    'defaults' => [
+                        'controller' => Controller\ContractsController::class,
                         'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'create' => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'verb'     => 'POST',
+                            'route'    => '/create',
+                            'defaults' => [
+                                'controller' => Controller\ContractsController::class,
+                                'action'     => 'create',
+                            ],
+                        ],
+                    ],
+                    'update' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'POST',
+                            'route'       => '/update/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\ContractsController::class,
+                                'action'     => 'update',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'clients' => [
+                'type'          => Segment::class,
+                'options'       => [
+                    'verb'        => 'GET',
+                    'route'       => '/clients',
+                    'defaults'    => [
+                        'controller' => Controller\ClientsController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'info'   => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/info/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\ClientsController::class,
+                                'action'     => 'info',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'users'  => [
+                'type'          => Segment::class,
+                'options'       => [
+                    'verb'        => 'GET',
+                    'route'       => '/users',
+                    'defaults'    => [
+                        'controller' => Controller\UsersController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'provider' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/provider/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\UsersController::class,
+                                'action'     => 'provider',
+                            ],
+                        ],
+                    ],
+                    'tracker' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/tracker/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\UsersController::class,
+                                'action'     => 'tracker',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -150,11 +492,14 @@ return [
     'controllers'               => [
         'factories' => [
             Controller\IndexController::class     => InvokableFactory::class,
+            Controller\ReportsController::class   => InvokableFactory::class,
             Controller\ProvidersController::class => Controller\Factory\ProvidersControllerFactory::class,
             Controller\TrackersController::class  => Controller\Factory\TrackersControllerFactory::class,
+            Controller\ClientsController::class   => Controller\Factory\ClientsControllerFactory::class,
             Controller\TariffsController::class   => Controller\Factory\TariffsControllerFactory::class,
             Controller\ContractsController::class => Controller\Factory\ContractsControllerFactory::class,
             Controller\InvoicesController::class  => Controller\Factory\InvoicesControllerFactory::class,
+            Controller\UsersController::class     => Controller\Factory\UsersControllerFactory::class,
         ],
     ],
     'service_manager'           => [
@@ -199,13 +544,13 @@ return [
     ],
 
     'view_helpers' => [
-        'strategies' => array(
+        'strategies' => [
             'ViewJsonStrategy',
-        ),
-        'factories' => [
-            View\Helper\DateFormat::class => InvokableFactory::class,
         ],
-        'aliases'   => [
+        'factories'  => [
+            View\Helper\DateFormat::class  => InvokableFactory::class,
+        ],
+        'aliases'    => [
             'dateFormat' => View\Helper\DateFormat::class,
         ],
     ],
