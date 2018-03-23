@@ -52,7 +52,7 @@ return [
             \ZfcRbac\Guard\RouteGuard::class => [
                 // route => roles
 
-                'home' => ['guest', 'user'],
+                'home' => ['user'],
 
                 'providers'        => ['admin'],
                 'providers/info'   => ['admin', 'provider_admin', 'provider_user'],
@@ -199,6 +199,7 @@ return [
                         'providers.list',
                         'trackers.list',
                         'invoices.list',
+                        'tariffs.list',
                         'users.add',
                         'users.update',
                     ],

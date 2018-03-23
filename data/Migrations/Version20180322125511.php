@@ -32,13 +32,26 @@ class Version20180322125511 extends AbstractMigration
         $bctypt->setCost(14);
         $password = $bctypt->create(self::PASSWORD);
 
-        $sql = "INSERT INTO zfb_users (identity, credential, identity_confirmed, surname, name, role) VALUES ('" . self::LOGIN . "', '{$password}', 1, 'Администратор', 'Админ', '" . self::ROLE . "');";
+        $sql = "INSERT INTO zfb_users (
+                              identity,
+                              credential,
+                              identity_confirmed,
+                              surname,
+                              name,
+                              role) VALUES (
+                              '" . self::LOGIN . "',
+                              '{$password}',
+                              true,
+                              'Администратор',
+                              'Админ',
+                              '" . self::ROLE . "'
+                              );";
         $this->addSql($sql);
     }
 
     public function down(Schema $schema)
     {
-        $identity = 'admin@mail.ru';
+        $identity = self::LOGIN;
         $sql = "DELETE FROM zfb_users WHERE identity='{$identity}'";
         $this->addSql($sql);
     }

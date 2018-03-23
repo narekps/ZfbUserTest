@@ -148,7 +148,7 @@ class NewTrackerForm extends Form
             'type'       => Element\Text::class,
             'name'       => 'fullName',
             'options'    => [
-                'label' => 'Наименование сервис-провайдера',
+                'label' => 'Наименование организации',
             ],
             'attributes' => [
                 'type'     => 'text',

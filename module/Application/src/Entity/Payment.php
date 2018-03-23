@@ -20,7 +20,7 @@ class Payment implements ArraySerializableInterface, \JsonSerializable
      * @var int
      *
      * @ORM\Id @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
