@@ -444,38 +444,19 @@ class Tariff implements ArraySerializableInterface, \JsonSerializable
      */
     public function exchangeArray(array $data)
     {
-        if (!empty($data['name'])) {
-            $this->setName($data['name']);
-        }
+        $this->setName($data['name']);
+        $this->setDescription($data['description']);
+        $this->setCost(floatval($data['cost']));
+        $this->setNds($data['nds']);
 
-        if (!empty($data['description'])) {
-            $this->setDescription($data['description']);
+        if (!$data['saleEndDate'] instanceof \DateTime) {
+            $data['saleEndDate'] = new \DateTime($data['saleEndDate']);
         }
+        $this->setSaleEndDate($data['saleEndDate']);
 
-        if (!empty($data['cost'])) {
-            $this->setCost(floatval($data['cost']));
-        }
+        $this->setCurrency($data['currency']);
 
-        if (!empty($data['nds'])) {
-            $this->setNds($data['nds']);
-        }
-
-        if (!empty($data['saleEndDate'])) {
-            if (!$data['saleEndDate'] instanceof \DateTime) {
-                $data['saleEndDate'] = new \DateTime($data['saleEndDate']);
-            }
-            $this->setSaleEndDate($data['saleEndDate']);
-        }
-
-        if (!empty($data['currency'])) {
-            $this->setCurrency($data['currency']);
-        }
-
-        if (!empty($data['status'])) {
-            $this->setStatus($data['status']);
-        }
-
-        if (!empty($data['published'])) {
+        if (isset($data['published'])) {
             $this->setPublished((bool)$data['published']);
         }
     }
@@ -498,7 +479,7 @@ class Tariff implements ArraySerializableInterface, \JsonSerializable
             'status'        => $this->getStatus(),
             'published'     => $this->isPublished() ? 1 : 0,
             'publishedDate' => $this->getPublishedDate() ? $this->getPublishedDate()->format('Y-m-d') : null,
-            'archivedDate'  => $this->getArchivedDate() ? $this->getArchivedDate()->format('Y-m-d'): null,
+            'archivedDate'  => $this->getArchivedDate() ? $this->getArchivedDate()->format('Y-m-d') : null,
             'contract_id'   => $this->getContract()->getId(),
             'provider_id'   => $this->getProvider()->getId(),
         ];

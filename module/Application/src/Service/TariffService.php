@@ -90,6 +90,10 @@ class TariffService
                 $data['status'] = TariffEntity::STATUS_NEW;
             }
 
+            if (!isset($data['published'])) {
+                $data['published'] = 0;
+            }
+
             $tariff->exchangeArray($data);
 
             $data['contract_id'] = intval($data['contract_id']);
