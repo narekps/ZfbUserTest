@@ -77,6 +77,8 @@ class AddUserEventListener
         $provider->exchangeArray($formData);
         $user->setProvider($provider);
 
+        $user->setRole('provider_admin');
+
         $contract = new ContractEntity();
         $contract->exchangeArray($formData);
         $contract->setProvider($provider);
@@ -111,6 +113,8 @@ class AddUserEventListener
 
         $user->setTracker($tracker);
 
+        $user->setRole('tracker_admin');
+
         $this->entityManager->persist($tracker);
 
         return $tracker;
@@ -124,7 +128,6 @@ class AddUserEventListener
      */
     protected function createUser(UserEntity $user, array $formData)
     {
-
         if (!empty($formData['provider_id'])) {
             /** @var ProviderRepository $providerRep */
             $providerRep = $this->entityManager->getRepository(ProviderEntity::class);
@@ -133,6 +136,8 @@ class AddUserEventListener
             if ($provider) {
                 $user->setProvider($provider);
             }
+
+            $user->setRole('provider_user');
         }
 
         if (!empty($formData['tracker_id'])) {
@@ -143,6 +148,8 @@ class AddUserEventListener
             if ($tracker) {
                 $user->setTracker($tracker);
             }
+
+            $user->setRole('tracker_user');
         }
 
         return $user;

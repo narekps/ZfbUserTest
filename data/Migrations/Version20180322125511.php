@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Migrations;
 
@@ -9,8 +9,13 @@ use Zend\Crypt\Password\Bcrypt;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180302145903 extends AbstractMigration
+class Version20180322125511 extends AbstractMigration
 {
+
+    const LOGIN = 'admin@mail.ru';
+    const PASSWORD = '123456';
+    const ROLE = 'admin';
+
     public function isTransactional()
     {
         return true;
@@ -25,9 +30,9 @@ class Version20180302145903 extends AbstractMigration
     {
         $bctypt = new Bcrypt();
         $bctypt->setCost(14);
-        $password = $bctypt->create('123456');
+        $password = $bctypt->create(self::PASSWORD);
 
-        $sql = "INSERT INTO zfb_users (identity, credential, identity_confirmed, surname, name) VALUES ('admin@mail.ru', '{$password}', 1, 'Админов', 'Админ');";
+        $sql = "INSERT INTO zfb_users (identity, credential, identity_confirmed, surname, name, role) VALUES ('" . self::LOGIN . "', '{$password}', 1, 'Администратор', 'Админ', '" . self::ROLE . "');";
         $this->addSql($sql);
     }
 

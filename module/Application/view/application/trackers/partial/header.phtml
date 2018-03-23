@@ -5,15 +5,19 @@
  */
 ?>
 
-<a href="<?= $this->url('trackers'); ?>" class="back_link">
-    <i class="material-icons">arrow_back</i>
-    К списку
-</a>
+<?php if($this->isGranted('trackers.list')): ?>
+    <a href="<?= $this->url('trackers'); ?>" class="back_link">
+        <i class="material-icons">arrow_back</i>
+        К списку
+    </a>
+<?php endif; ?>
 
 <div class="row">
     <div class="col-md-12">
         <h1 class="title"><?= $tracker->getFullName(); ?><br/>
-            <small>зарегистрирован <?= $this->dateFormat($tracker->getDateCreated()); ?></small>
+            <?php if($this->hasRole(['admin'])): ?>
+                <small>зарегистрирован <?= $this->dateFormat($tracker->getDateCreated()); ?></small>
+            <?php endif; ?>
         </h1>
     </div>
 </div>
@@ -26,13 +30,17 @@
             <a class="nav-link <?= ($activeTab === 'info') ? 'active' : ''; ?>"
                href="<?= $this->url('trackers/info', ['id' => $tracker->getId()]); ?>">Информация</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($activeTab === 'invoices') ? 'active' : ''; ?>"
-               href="<?= $this->url('invoices/tracker', ['id' => $tracker->getId()]); ?>">Счета</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($activeTab === 'users') ? 'active' : ''; ?>"
-               href="<?= $this->url('users/tracker', ['id' => $tracker->getId()]); ?>">Пользователи</a>
-        </li>
+        <?php if($this->isGranted('invoices.list')): ?>
+            <li class="nav-item">
+                <a class="nav-link <?= ($activeTab === 'invoices') ? 'active' : ''; ?>"
+                   href="<?= $this->url('invoices/tracker', ['id' => $tracker->getId()]); ?>">Счета</a>
+            </li>
+        <?php endif; ?>
+        <?php if($this->isGranted('users.list')): ?>
+            <li class="nav-item">
+                <a class="nav-link <?= ($activeTab === 'users') ? 'active' : ''; ?>"
+                   href="<?= $this->url('users/tracker', ['id' => $tracker->getId()]); ?>">Пользователи</a>
+            </li>
+        <?php endif; ?>
     </ul>
 </div>

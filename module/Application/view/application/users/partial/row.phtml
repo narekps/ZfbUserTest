@@ -13,26 +13,28 @@
                     <p class="card-text email"><?=$user->getIdentity(); ?></p>
                 </div>
                 <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                    <div class="dropdown">
-                        <button type="button" class="btn bmd-btn-icon dropdown-toggle" id="userDropdownMenuButton_<?=$user->getId(); ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="material-icons">more_vert</i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="userDropdownMenuButton_<?=$user->getId(); ?>" style="min-width: 200px;">
-                            <a class="dropdown-item userEditBtn" href="#"
-                               data-get-url="<?=$this->url('zfbuser/api/get', ['id' => $user->getId()]); ?>"
-                            >
-                                <i class="material-icons">mode_edit</i>
-                                <span class="ml-1">Редактировать</span>
-                            </a>
-                            <a class="dropdown-item color-red userDeleteBtn" href="#"
-                               data-delete-url="<?=$this->url('zfbuser/api/delete', ['id' => $user->getId()]); ?>"
-                               data-name="<?=$user->getDisplayName(); ?>"
-                            >
-                                <i class="material-icons">delete</i>
-                                <span class="ml-1">Удалить</span>
-                            </a>
+                    <?php if($this->isGranted('users.update')): ?>
+                        <div class="dropdown">
+                            <button type="button" class="btn bmd-btn-icon dropdown-toggle" id="userDropdownMenuButton_<?=$user->getId(); ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="userDropdownMenuButton_<?=$user->getId(); ?>" style="min-width: 200px;">
+                                <a class="dropdown-item userEditBtn" href="#"
+                                   data-get-url="<?=$this->url('zfbuser/api/get', ['id' => $user->getId()]); ?>"
+                                >
+                                    <i class="material-icons">mode_edit</i>
+                                    <span class="ml-1">Редактировать</span>
+                                </a>
+                                <a class="dropdown-item color-red userDeleteBtn" href="#"
+                                   data-delete-url="<?=$this->url('zfbuser/api/delete', ['id' => $user->getId()]); ?>"
+                                   data-name="<?=$user->getDisplayName(); ?>"
+                                >
+                                    <i class="material-icons">delete</i>
+                                    <span class="ml-1">Удалить</span>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

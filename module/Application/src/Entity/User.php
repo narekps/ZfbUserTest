@@ -4,12 +4,13 @@ namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ZfbUser\Entity\User as ZfbUser;
+use ZfcRbac\Identity\IdentityInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  * @ORM\Table(name="zfb_users")
  */
-class User extends ZfbUser
+class User extends ZfbUser implements IdentityInterface
 {
     /**
      * @var \Application\Entity\Tracker|null
@@ -61,6 +62,15 @@ class User extends ZfbUser
      * @ORM\Column(name="patronymic", type="string", length=50, nullable=true)
      */
     protected $patronymic;
+
+    /**
+     * Роль
+     *
+     * @var string
+     *
+     * @ORM\Column(name="role", type="string", length=50, nullable=false)
+     */
+    protected $role;
 
     /**
      * @return string
@@ -197,6 +207,26 @@ class User extends ZfbUser
     }
 
     /**
+     * @return string
+     */
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string $role
+     *
+     * @return User
+     */
+    public function setRole(string $role): User
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
      * @return \Application\Entity\Contragent|null
      */
     public function getContragent(): ?Contragent
@@ -258,5 +288,21 @@ class User extends ZfbUser
         ]);
 
         return $data;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoles()
+    {
+        return [$this->getRole()];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->getRole() === 'admin';
     }
 }

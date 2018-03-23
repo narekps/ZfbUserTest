@@ -34,7 +34,8 @@
         "zendframework/zend-serializer": "^2.8",
         "zendframework/zend-eventmanager": "^3.2",
         "doctrine/migrations": "^1.6",
-        "zendframework/zend-navigation": "^2.8"
+        "zendframework/zend-navigation": "^2.8",
+        "zf-commons/zfc-rbac": "^2.6"
     },
     "autoload": {
         "psr-4": {

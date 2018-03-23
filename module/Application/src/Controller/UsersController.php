@@ -11,6 +11,7 @@ use Application\Repository\ProviderRepository;
 use Application\Entity\Tracker as TrackerEntity;
 use Application\Repository\TrackerRepository;
 use Application\Repository\UserRepository;
+use Application\Entity\User as UserEntity;
 
 /**
  * Class UsersController
@@ -66,19 +67,21 @@ class UsersController extends AbstractActionController
     }
 
     /**
-     * Список пользователей
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $users = $this->userRepository->findAll();
+        /** @var UserEntity $user */
+        $user = $this->zfbAuthentication()->getIdentity();
+        if ($user->getProvider()) {
+            return $this->redirect()->toRoute('users/provider', ['id' => $user->getProvider()->getId()]);
+        }
 
-        $viewModel = new ViewModel([
-            'users' => $users,
-        ]);
+        if ($user->getTracker()) {
+            return $this->redirect()->toRoute('users/tracker', ['id' => $user->getTracker()->getId()]);
+        }
 
-        return $viewModel;
+        return $this->notFoundAction();
     }
 
     public function providerAction()

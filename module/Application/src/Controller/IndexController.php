@@ -10,12 +10,41 @@ namespace Application\Controller;
 use Zend\Http\Header\SetCookie;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use ZfcRbac\Mvc\Controller\Plugin\IsGranted;
+use ZfbUser\Controller\Plugin;
+use Application\Entity\User as UserEntity;
 
+/**
+ * Class IndexController
+ *
+ * @method bool isGranted(string $permission, mixed $context = null)
+ * @method Plugin\ZfbAuthentication zfbAuthentication()
+ *
+ * @package Application\Controller
+ */
 class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-        return new ViewModel();
+        /** @var UserEntity $user */
+        $user = $this->zfbAuthentication()->getIdentity();
+        if ($user->getProvider()) {
+            return $this->redirect()->toRoute('tariffs');
+        }
+
+        if ($user->getTracker()) {
+            return $this->redirect()->toRoute('reports');
+        }
+
+        if ($user->getClient()) {
+            return $this->redirect()->toRoute('tariffs');
+        }
+
+        if ($user->isAdmin()) {
+            return $this->redirect()->toRoute('providers');
+        }
+
+        return $this->notFoundAction();
     }
 
     /**

@@ -13,14 +13,13 @@ use Application\Entity\Provider as ProviderEntity;
  */
 class TariffRepository extends EntityRepository
 {
-
     /**
      * @param \Application\Entity\Provider $provider
-     * @param string                       $status Статус тарифа, пустая строка - все статусы
+     * @param string                       $status
      *
-     * @return \Application\Entity\Tariff[]
+     * @return array
      */
-    public function getList(ProviderEntity $provider, string $status): array
+    public function getProviderTariffs(ProviderEntity $provider, string $status = ''): array
     {
         $qb = $this->createQueryBuilder('t')->select('t');
         $qb->andWhere('t.provider = :provider')->setParameter('provider', $provider);

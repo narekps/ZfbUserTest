@@ -9,7 +9,7 @@
 
 /** @var \Application\View\Helper\Navigation\Navbar $menu */
 $menu = $this->navigation('Zend\Navigation\Default')->Navbar();
-$menu->setActiveItemId('trackers');
+$menu->setActiveItemId('users');
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/users.js'));
@@ -24,7 +24,9 @@ $this->inlineScript()->appendFile($this->basePath('js/users.js'));
 
         <div class="row">
             <div class="col-12 text-right">
-                <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addUserBtn">Добавить пользователя</button>
+                <?php if($this->isGranted('users.add')): ?>
+                    <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addUserBtn">Добавить пользователя</button>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -49,14 +51,15 @@ $this->inlineScript()->appendFile($this->basePath('js/users.js'));
         </div>
     </div>
 
+<?php if($this->isGranted('users.add')): ?>
     <!-- Modal add new user -->
-<?= $this->partial('application/users/partial/modal', [
-    'newUserForm' => $newUserForm,
-]); ?>
+    <?= $this->partial('application/users/partial/modal', [
+        'newUserForm' => $newUserForm,
+    ]); ?>
 
 
     <!-- Modal edit user -->
-<?= $this->partial('application/users/partial/editModal', [
-    'updateUserForm' => $updateUserForm,
-]); ?>
-
+    <?= $this->partial('application/users/partial/editModal', [
+        'updateUserForm' => $updateUserForm,
+    ]); ?>
+<?php endif; ?>

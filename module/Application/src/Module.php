@@ -12,6 +12,9 @@ use Zend\Validator\AbstractValidator;
 use Application\EventListener\UserService\AddUserEventListener;
 use ZfbUser\Service\UserService;
 use Application\View\Helper\Navigation as NavigationHelper;
+use ZfcRbac\View\Strategy;
+use Application\EventListener\Navigation\RbacListener;
+use Zend\View\Helper\Navigation\AbstractHelper;
 
 /**
  * Class Module
@@ -46,6 +49,17 @@ class Module
         AbstractValidator::setDefaultTranslator($e->getApplication()->getServiceManager()->get('MvcTranslator'));
 
         $app = $e->getApplication();
+        $sm = $app->getServiceManager();
+        $em = $app->getEventManager();
+        $sem = $em->getSharedManager();
+        $rbacListener = $sm->get(RbacListener::class);
+        $sem->attach(AbstractHelper::class, 'isAllowed', [$rbacListener, 'accept']);
+
+        $redirectStrategyListener = $sm->get(Strategy\RedirectStrategy::class);
+        $redirectStrategyListener->attach($app->getEventManager());
+
+        $unauthorizedStrategyListener = $sm->get(Strategy\UnauthorizedStrategy::class);
+        $unauthorizedStrategyListener->attach($app->getEventManager());
 
         $this->initNavigationHelpers($app->getServiceManager());
 

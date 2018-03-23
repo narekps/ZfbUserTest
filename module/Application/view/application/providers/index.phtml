@@ -26,9 +26,11 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     <div class="col-md-3">
     </div>
     <div class="col-md-4 text-right">
-        <button type="button" class="btn btn-raised btn-primary btn-blue" id="addContragentBtn">
-            Добавить
-        </button>
+        <?php if($this->hasRole(['admin'])): ?>
+            <button type="button" class="btn btn-raised btn-primary btn-blue" id="addContragentBtn">
+                Добавить
+            </button>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -60,12 +62,14 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     </table>
 <?php endif; ?>
 
-<!-- Modal add new provider and user -->
-<?= $this->partial('application/providers/partial/modal', [
+<?php if($this->hasRole(['admin'])): ?>
+    <!-- Modal add new provider and user -->
+    <?= $this->partial('application/providers/partial/modal', [
         'newProviderForm' => $newProviderForm,
-]); ?>
+    ]); ?>
 
-<!-- Modal edit provider -->
-<?= $this->partial('application/providers/partial/editModal', [
+    <!-- Modal edit provider -->
+    <?= $this->partial('application/providers/partial/editModal', [
         'editProviderForm' => $editProviderForm,
-]); ?>
+    ]); ?>
+<?php endif; ?>

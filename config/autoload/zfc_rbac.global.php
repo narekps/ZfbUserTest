@@ -1,0 +1,259 @@
+<?php
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the MIT license.
+ */
+
+/**
+ * Copy-paste this file to your config/autoload folder (don't forget to remove the .dist extension!)
+ */
+
+return [
+    'zfc_rbac' => [
+        /**
+         * Key that is used to fetch the identity provider
+         *
+         * Please note that when an identity is found, it MUST implements the ZfcRbac\Identity\IdentityProviderInterface
+         * interface, otherwise it will throw an exception.
+         */
+        // 'identity_provider' => 'ZfcRbac\Identity\AuthenticationIdentityProvider',
+
+        /**
+         * Set the guest role
+         *
+         * This role is used by the authorization service when the authentication service returns no identity
+         */
+        'guest_role'            => 'guest',
+
+        /**
+         * Set the guards
+         *
+         * You must comply with the various options of guards. The format must be of the following format:
+         *
+         *      'guards' => [
+         *          'ZfcRbac\Guard\RouteGuard' => [
+         *              // options
+         *          ]
+         *      ]
+         */
+        'guards'                => [
+            \ZfcRbac\Guard\RouteGuard::class => [
+                // route => roles
+
+                'home' => ['guest', 'user'],
+
+                'providers'        => ['admin'],
+                'providers/info'   => ['admin', 'provider_admin', 'provider_user'],
+                'providers/get'    => ['admin'],
+                'providers/update' => ['admin'],
+
+                'trackers'        => ['admin'],
+                'trackers/info'   => ['admin', 'tracker_admin', 'tracker_user'],
+                'trackers/get'    => ['admin'],
+                'trackers/update' => ['admin'],
+
+                'invoices'          => ['admin', 'provider_admin', 'provider_user', 'tracker_admin', 'tracker_user', 'client_user'],
+                'invoices/provider' => ['admin', 'provider_admin', 'provider_user'],
+                'invoices/tracker'  => ['admin', 'tracker_admin', 'tracker_user'],
+                'invoices/client'   => ['admin', 'client_user'],
+                'invoices/download' => ['admin', 'provider_admin', 'provider_user', 'tracker_admin', 'tracker_user', 'client_user'],
+                'invoices/create'   => ['provider_admin', 'provider_user'],
+
+                'tariffs'          => ['admin', 'provider_admin', 'provider_user', 'client_user'],
+                'tariffs/provider' => ['admin', 'provider_admin', 'provider_user'],
+                'tariffs/client'   => ['client_user'],
+                'tariffs/get'      => ['admin', 'provider_admin', 'provider_user'],
+                'tariffs/create'   => ['provider_admin', 'provider_user'],
+                'tariffs/update'   => ['provider_admin', 'provider_user'],
+                'tariffs/archive'  => ['provider_admin', 'provider_user'],
+                'tariffs/pay'      => ['client_user'],
+
+                'reports' => ['admin', 'tracker_admin', 'tracker_user'],
+
+                'contracts'        => [],
+                'contracts/create' => ['admin'],
+                'contracts/update' => ['admin'],
+
+                'clients'      => ['admin'],
+                'clients/info' => ['admin', 'client_user'],
+
+                'users'                      => ['admin', 'provider_admin', 'tracker_admin'],
+                'users/provider'             => ['admin', 'provider_admin'],
+                'users/tracker'              => ['admin', 'tracker_admin'],
+
+                // ZfbUser routes
+                'zfbuser/authentication'     => ['guest'],
+                'zfbuser/authenticate'       => ['guest'],
+                'zfbuser/logout'             => ['user'],
+                'zfbuser/registration'       => ['guest'],
+                'zfbuser/confirmation'       => ['guest'],
+                'zfbuser/recover-password'   => ['guest'],
+                'zfbuser/change-password'    => ['user'],
+                'zfbuser/set-password'       => ['guest'],
+                'zfbuser/new-user'           => ['admin', 'provider_admin', 'tracker_admin'],
+                'zfbuser/update-user'        => ['admin', 'provider_admin', 'tracker_admin'],
+                'zfbuser/api/get'            => ['user'],
+                'zfbuser/api/delete'         => ['admin', 'provider_admin', 'tracker_admin'],
+                'zfbuser/api/authentication' => ['guest'],
+                'zfbuser/api/logout'         => ['user'],
+                'zfbuser/api/new-user'       => ['admin', 'provider_admin', 'tracker_admin'],
+                'zfbuser/api/update-user'    => ['admin', 'provider_admin', 'tracker_admin'],
+            ],
+        ],
+
+        /**
+         * As soon as one rule for either route or controller is specified, a guard will be automatically
+         * created and will start to hook into the MVC loop.
+         *
+         * If the protection policy is set to DENY, then any route/controller will be denied by
+         * default UNLESS it is explicitly added as a rule. On the other hand, if it is set to ALLOW, then
+         * not specified route/controller will be implicitly approved.
+         *
+         * DENY is the most secure way, but it is more work for the developer
+         */
+        'protection_policy'     => \ZfcRbac\Guard\GuardInterface::POLICY_DENY,
+
+        /**
+         * Configuration for role provider
+         *
+         * It must be an array that contains configuration for the role provider. The provider config
+         * must follow the following format:
+         *
+         *      'ZfcRbac\Role\InMemoryRoleProvider' => [
+         *          'role1' => [
+         *              'children'    => ['children1', 'children2'], // OPTIONAL
+         *              'permissions' => ['edit', 'read'] // OPTIONAL
+         *          ]
+         *      ]
+         *
+         * Supported options depend of the role provider, so please refer to the official documentation
+         */
+        'role_provider'         => [
+            'ZfcRbac\Role\InMemoryRoleProvider' => [
+                'guest'          => [
+                    'permissions' => [
+                    ],
+                ],
+                'user'           => [
+                    'permissions' => [
+                    ],
+                ],
+                'provider_user'  => [
+                    'children'    => 'user',
+                    'permissions' => [
+                        'invoices.list',
+                        'tariffs.list',
+                        'tariffs.manage',
+                    ],
+                ],
+                'provider_admin' => [
+                    'children'    => 'provider_user',
+                    'permissions' => [
+                        'invoices.list',
+                        'tariffs.list',
+                        'users.list',
+                        'users.add',
+                        'users.update',
+                        'tariffs.manage',
+                    ],
+                ],
+                'tracker_user'   => [
+                    'children'    => 'user',
+                    'permissions' => [
+                        'invoices.list',
+                        'reports.view',
+                    ],
+                ],
+                'tracker_admin'  => [
+                    'children'    => 'tracker_user',
+                    'permissions' => [
+                        'invoices.list',
+                        'users.list',
+                        'users.add',
+                        'users.update',
+                    ],
+                ],
+                'client_user'    => [
+                    'children'    => 'user',
+                    'permissions' => [
+                        'invoices.list',
+                        'tariffs.list',
+                        'tariffs.pay',
+                    ],
+                ],
+                'admin'          => [
+                    'children'    => 'user',
+                    'permissions' => [
+                        'providers.list',
+                        'trackers.list',
+                        'invoices.list',
+                        'users.add',
+                        'users.update',
+                    ],
+                ],
+            ],
+        ],
+
+        /**
+         * Configure the unauthorized strategy. It is used to render a template whenever a user is unauthorized
+         */
+        'unauthorized_strategy' => [
+            /**
+             * Set the template name to render
+             */
+            'template' => 'error/403',
+        ],
+
+        /**
+         * Configure the redirect strategy. It is used to redirect the user to another route when a user is
+         * unauthorized
+         */
+        'redirect_strategy'     => [
+            /**
+             * Enable redirection when the user is connected
+             */
+            'redirect_when_connected'        => false,
+
+            /**
+             * Set the route to redirect when user is connected (of course, it must exist!)
+             */
+            // 'redirect_to_route_connected' => 'home',
+
+            /**
+             * Set the route to redirect when user is disconnected (of course, it must exist!)
+             */
+            'redirect_to_route_disconnected' => 'zfbuser/authentication',
+
+            /**
+             * If a user is unauthorized and redirected to another route (login, for instance), should we
+             * append the previous URI (the one that was unauthorized) in the query params?
+             */
+            'append_previous_uri'            => true,
+
+            /**
+             * If append_previous_uri option is set to true, this option set the query key to use when
+             * the previous uri is appended
+             */
+            'previous_uri_query_key'         => 'redirectTo',
+        ],
+
+        /**
+         * Various plugin managers for guards and role providers. Each of them must follow a common
+         * plugin manager config format, and can be used to create your custom objects
+         */
+        // 'guard_manager'               => [],
+        // 'role_provider_manager'       => []
+    ],
+];

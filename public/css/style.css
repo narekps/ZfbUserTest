@@ -36,6 +36,10 @@ body.modal-open {
     float: left;
     padding-right: 5px;
 }
+.dropdown .btn .material-icons {
+    float: none;
+    padding-right: 0;
+}
 
 .btn-raised.btn-primary.btn-blue:disabled {
     opacity: .5;

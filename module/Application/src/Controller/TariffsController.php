@@ -70,27 +70,21 @@ class TariffsController extends AbstractActionController
     }
 
     /**
-     * Список тарифов
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        /**
-         * TODO: Для конкретоной роли сделать редирект на соответствующий экшен
-         */
+        /** @var UserEntity $user */
+        $user = $this->zfbAuthentication()->getIdentity();
+        if ($user->getProvider()) {
+            return $this->redirect()->toRoute('tariffs/provider', ['id' => $user->getProvider()->getId()]);
+        }
 
-        $status = $this->params()->fromQuery('status', '');
-        $tariffs = $this->tariffRepository->getList($status);
+        if ($user->getClient()) {
+            return $this->redirect()->toRoute('tariffs/client', ['id' => $user->getClient()->getId()]);
+        }
 
-        $viewModel = new ViewModel([
-            'tariffs'    => $tariffs,
-            'tariffForm' => $this->tariffForm,
-        ]);
-
-        $viewModel->setTemplate('application/tariffs/provider');
-
-        return $viewModel;
+        return $this->notFoundAction();
     }
 
     /**
@@ -101,6 +95,7 @@ class TariffsController extends AbstractActionController
     public function providerAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
+
         /** @var ProviderEntity $provider */
         $provider = $this->providerRepository->findOneBy(['id' => $id]);
         if ($provider === null) {
@@ -108,7 +103,7 @@ class TariffsController extends AbstractActionController
         }
 
         $status = $this->params()->fromQuery('status', '');
-        $tariffs = $this->tariffRepository->getList($provider, $status);
+        $tariffs = $this->tariffRepository->getProviderTariffs($provider, $status);
 
         $this->tariffForm->prepareForProvider($provider);
 
@@ -138,8 +133,10 @@ class TariffsController extends AbstractActionController
             return $this->notFoundAction();
         }
 
+        $provider = $client->getProvider();
+
         $status = $this->params()->fromQuery('status', '');
-        $tariffs = $this->tariffRepository->getList($status);
+        $tariffs = $this->tariffRepository->getProviderTariffs($provider, $status);
 
         $viewModel = new ViewModel([
             'client'       => $client,

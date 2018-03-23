@@ -78,14 +78,29 @@ class InvoicesController extends AbstractActionController
     }
 
     /**
-     * Список счетов
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $status = $this->params()->fromQuery('status', '');
+        /** @var UserEntity $user */
+        $user = $this->zfbAuthentication()->getIdentity();
+        if ($user->getProvider()) {
+            return $this->redirect()->toRoute('invoices/provider', ['id' => $user->getProvider()->getId()]);
+        }
 
+        if ($user->getTracker()) {
+            return $this->redirect()->toRoute('invoices/tracker', ['id' => $user->getTracker()->getId()]);
+        }
+
+        if ($user->getClient()) {
+            return $this->redirect()->toRoute('invoices/client', ['id' => $user->getClient()    ->getId()]);
+        }
+
+        if (!$user->isAdmin()) {
+            return $this->notFoundAction();
+        }
+
+        $status = $this->params()->fromQuery('status', '');
         $invoices = $this->invoiceRepository->getList();
 
         $viewModel = new ViewModel([

@@ -30,9 +30,11 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     <div class="col-md-3">
     </div>
     <div class="col-md-4 text-right">
-        <button type="button" class="btn btn-raised btn-primary btn-blue" id="addContragentBtn">
-            Добавить
-        </button>
+        <?php if($this->hasRole(['admin'])): ?>
+            <button type="button" class="btn btn-raised btn-primary btn-blue" id="addContragentBtn">
+                Добавить
+            </button>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -64,12 +66,15 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     </table>
 <?php endif; ?>
 
-<!-- Modal add new tracker and user -->
-<?= $this->partial('application/trackers/partial/modal', [
+<?php if($this->hasRole(['admin'])): ?>
+    <!-- Modal add new tracker and user -->
+    <?= $this->partial('application/trackers/partial/modal', [
         'newTrackerForm' => $newTrackerForm,
-]); ?>
+    ]); ?>
 
-<!-- Modal edit tracker -->
-<?= $this->partial('application/trackers/partial/editModal', [
+    <!-- Modal edit tracker -->
+    <?= $this->partial('application/trackers/partial/editModal', [
         'editTrackerForm' => $editTrackerForm,
-]); ?>
+    ]); ?>
+<?php endif; ?>
+

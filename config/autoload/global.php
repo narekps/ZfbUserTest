@@ -12,43 +12,49 @@
  */
 
 return [
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             [
-                'id'    => 'providers',
-                'label' => 'Провайдеры',
-                'route' => 'providers',
-                'class' => 'nav-item', // applied to <li> element
+                'id'         => 'providers',
+                'label'      => 'Провайдеры',
+                'route'      => 'providers',
+                'class'      => 'nav-item', // applied to <li> element
+                'permission' => 'providers.list',
             ],
             [
-                'id'    => 'trackers',
-                'label' => 'Контролирующие организации',
-                'route' => 'trackers',
-                'class' => 'nav-item',
+                'id'         => 'trackers',
+                'label'      => 'Контролирующие организации',
+                'route'      => 'trackers',
+                'class'      => 'nav-item',
+                'permission' => 'trackers.list',
             ],
             [
-                'id'    => 'invoices',
-                'label' => 'Счета',
-                'route' => 'invoices',
-                'class' => 'nav-item',
+                'id'         => 'invoices',
+                'label'      => 'Счета',
+                'route'      => 'invoices',
+                'class'      => 'nav-item',
+                'permission' => 'invoices.list',
             ],
             [
-                'id'    => 'Тарифы',
-                'label' => 'Тарифы',
-                'route' => 'tariffs',
-                'class' => 'nav-item',
+                'id'         => 'tariffs',
+                'label'      => 'Тарифы',
+                'route'      => 'tariffs',
+                'class'      => 'nav-item',
+                'permission' => 'tariffs.list',
             ],
             [
-                'id'    => 'zfbuser',
-                'label' => 'Пользователи',
-                'route' => 'zfbuser',
-                'class' => 'nav-item',
+                'id'         => 'users',
+                'label'      => 'Пользователи',
+                'route'      => 'users',
+                'class'      => 'nav-item',
+                'permission' => 'users.list',
             ],
             [
-                'id'    => 'reports',
-                'label' => 'Отчетная информация',
-                'route' => 'reports',
-                'class' => 'nav-item',
+                'id'         => 'reports',
+                'label'      => 'Отчетная информация',
+                'route'      => 'reports',
+                'class'      => 'nav-item',
+                'permission' => 'reports.view',
             ],
         ],
     ],

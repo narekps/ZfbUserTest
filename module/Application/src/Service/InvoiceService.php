@@ -68,6 +68,7 @@ class InvoiceService
                 $client->setInn($data['clientInn']);
                 $client->setKpp($data['clientKpp']);
                 $client->setAddress($data['clientAddress']);
+                $client->setProvider($provider);
                 $this->entityManager->persist($client);
             }
 

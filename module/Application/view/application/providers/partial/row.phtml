@@ -15,10 +15,13 @@
     <td><?= $provider->getContactPerson(); ?></td>
     <td><?= $provider->getDateCreated()->format('d.m.Y'); ?></td>
     <td>
-        <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm contragentEditBtn"
-                data-get-url="<?=$this->url('providers/get', ['id' => $provider->getId()]); ?>"
-        >
-            <i class="material-icons">mode_edit</i>
-        </button>
+
+        <?php if($this->hasRole(['admin'])): ?>
+            <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm contragentEditBtn"
+                    data-get-url="<?=$this->url('providers/get', ['id' => $provider->getId()]); ?>"
+            >
+                <i class="material-icons">mode_edit</i>
+            </button>
+        <?php endif; ?>
     </td>
 </tr>

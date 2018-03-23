@@ -26,6 +26,8 @@ return [
             // required, see \ZfbUser\Entity\TokenInterface
             'token_entity_class' => Entity\Token::class,
 
+            'authentication_callback_route'   => 'home',
+
             // required, соль для хеширования паролей
             'crypt_salt'         => 'SDAFHUKI*^&%$WE$%^Y&UGBFVCSWQE#T',
         ],
@@ -505,6 +507,8 @@ return [
     'service_manager'           => [
         'factories' => [
             EventListener\UserService\AddUserEventListener::class => EventListener\UserService\Factory\AddUserEventListenerFactory::class,
+            EventListener\Navigation\RbacListener::class          => EventListener\Navigation\Factory\RbacListenerFactory::class,
+
             Form\NewProviderForm::class                           => Form\Factory\NewProviderFormFactory::class,
             Form\EditProviderForm::class                          => Form\Factory\EditProviderFormFactory::class,
             Form\NewTrackerForm::class                            => Form\Factory\NewTrackerFormFactory::class,
@@ -536,6 +540,7 @@ return [
             'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
+            'error/403'               => __DIR__ . '/../view/error/403.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ],
         'template_path_stack'      => [

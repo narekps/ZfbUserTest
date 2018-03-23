@@ -9,7 +9,7 @@
 
 /** @var \Application\View\Helper\Navigation\Navbar $menu */
 $menu = $this->navigation('Zend\Navigation\Default')->Navbar();
-$menu->setActiveItemId('providers');
+$menu->setActiveItemId('tariffs');
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/tariffs.js'));
@@ -44,7 +44,9 @@ $statuses = \Application\Entity\Tariff::getStatuses();
             </div>
         </div>
         <div class="col-4 text-right">
-            <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addTariffBtn">Добавить тариф</button>
+            <?php if($this->hasRole(['provider_admin', 'provider_user'])): ?>
+                <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addTariffBtn">Добавить тариф</button>
+            <?php endif; ?>
         </div>
     </div>
 

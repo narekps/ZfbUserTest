@@ -28,8 +28,10 @@ $(function() {
 
         if (values.id) {
             $(form).attr('data-editing', 1);
+            $('#newTariffModalLabel').text($tariffModal.attr('data-update-title'));
         } else {
             $(form).attr('data-editing', 0);
+            $('#newTariffModalLabel').text($tariffModal.attr('data-create-title'));
         }
 
         for (var key in values) {
@@ -73,7 +75,7 @@ $(function() {
 
         var data = $(form).serialize(), url;
 
-        if ($(form).attr('data-editing')) {
+        if ($(form).attr('data-editing') > 0) {
             var id = $('input[name="id"]', form).val();
             url = $tariffSaveBtn.attr('data-update-url');
             url = url.replace(':id', id);

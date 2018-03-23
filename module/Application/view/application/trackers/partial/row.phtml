@@ -15,10 +15,12 @@
     <td><?= $tracker->getContactPerson(); ?></td>
     <td><?= $tracker->getDateCreated()->format('d.m.Y'); ?></td>
     <td>
-        <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm contragentEditBtn"
-                data-get-url="<?=$this->url('trackers/get', ['id' => $tracker->getId()]); ?>"
-        >
-            <i class="material-icons">mode_edit</i>
-        </button>
+        <?php if($this->hasRole(['admin'])): ?>
+            <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm contragentEditBtn"
+                    data-get-url="<?=$this->url('trackers/get', ['id' => $tracker->getId()]); ?>"
+            >
+                <i class="material-icons">mode_edit</i>
+            </button>
+        <?php endif; ?>
     </td>
 </tr>

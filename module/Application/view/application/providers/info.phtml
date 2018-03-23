@@ -25,10 +25,12 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
         <div class="col-md-4 col-sm-6 col-6">
             <p class="label">ИНН</p>
             <p class="label">КПП</p>
+            <p class="label">Юридический адрес</p>
         </div>
         <div class="col-md-8 col-sm-6 col-6">
             <p class="value"><?= $provider->getInn(); ?></p>
             <p class="value"><?= $provider->getKpp(); ?></p>
+            <p class="value"><?= $provider->getAddress(); ?></p>
         </div>
     </div>
 

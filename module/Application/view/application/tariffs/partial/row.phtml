@@ -43,10 +43,12 @@ if ($tariff->isArchived()) {
             <?php else: ?>
                 <div class="btn-group" role="group">
 
-                    <?php if (!$tariff->isEditable()): ?>
-                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                          title="Можно редактировать новые, действующие и отклоненные тарифы">
-                    <?php endif; ?>
+                    <?php if($this->isGranted('tariffs.manage')): ?>
+
+                        <?php if (!$tariff->isEditable()): ?>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                            title="Можно редактировать новые, действующие и отклоненные тарифы">
+                        <?php endif; ?>
                         <button type="button"
                                 class="btn btn-raised btn-default btn-edit btn-sm tariffEditBtn <?= $tariff->isProcessing() ? 'disabled' : ''; ?>"
                             <?= (!$tariff->isEditable() ? 'style="pointer-events: none;"' : ''); ?>
@@ -55,16 +57,16 @@ if ($tariff->isArchived()) {
                         <i class="material-icons">mode_edit</i>
                         Редактировать
                     </button>
-                    <?php if (!$tariff->isEditable()): ?>
-                        </span>
-                    <?php endif; ?>
+                        <?php if (!$tariff->isEditable()): ?>
+                            </span>
+                        <?php endif; ?>
 
 
 
-                    <?php if ($tariff->isProcessing()): ?>
-                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                          title="Тариф в обработке - архивировать нельзя">
-                    <?php endif; ?>
+                        <?php if ($tariff->isProcessing()): ?>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                            title="Тариф в обработке - архивировать нельзя">
+                        <?php endif; ?>
                         <button type="button"
                                 class="btn btn-raised btn-default btn-edit btn-sm tariffArchiveBtn <?= $tariff->isProcessing() ? 'disabled' : ''; ?>"
 
@@ -75,12 +77,24 @@ if ($tariff->isArchived()) {
                             <i class="material-icons">remove_circle_outline</i>
                             Архивировать
                         </button>
-                    <?php if ($tariff->isProcessing()): ?>
-                        </span>
+                        <?php if ($tariff->isProcessing()): ?>
+                            </span>
+                        <?php endif; ?>
+
+                    <?php endif; ?>
+
+                    <?php if($this->isGranted('tariffs.pay')): ?>
+                        <button type="button"
+                                class="btn btn-raised btn-default btn-edit btn-sm tariffPayBtn"
+                                data-id="<?= $tariff->getId(); ?>"
+                                data-get-url="<?= $this->url('tariffs/get', ['id' => $tariff->getId()]); ?>"
+                                data-pay-url="<?= $this->url('tariffs/pay', ['id' => $tariff->getId()]); ?>">
+                            <i class="material-icons">add_shopping_cart</i>
+                            Купить
+                        </button>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>
     </div>
 </div>
-

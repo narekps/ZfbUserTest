@@ -5,15 +5,20 @@
  */
 ?>
 
-<a href="<?= $this->url('providers'); ?>" class="back_link">
-    <i class="material-icons">arrow_back</i>
-    К списку
-</a>
+
+<?php if($this->isGranted('providers.list')): ?>
+    <a href="<?= $this->url('providers'); ?>" class="back_link">
+        <i class="material-icons">arrow_back</i>
+        К списку
+    </a>
+<?php endif; ?>
 
 <div class="row">
     <div class="col-md-12">
         <h1 class="title"><?= $provider->getFullName(); ?><br>
-            <small>зарегистрирован <?= $this->dateFormat($provider->getDateCreated()); ?></small>
+            <?php if($this->hasRole(['admin'])): ?>
+                <small>зарегистрирован <?= $this->dateFormat($provider->getDateCreated()); ?></small>
+            <?php endif; ?>
         </h1>
     </div>
 </div>
@@ -26,17 +31,23 @@
             <a class="nav-link <?= ($activeTab === 'info') ? 'active' : ''; ?>"
                href="<?= $this->url('providers/info', ['id' => $provider->getId()]); ?>">Информация</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($activeTab === 'tariffs') ? 'active' : ''; ?>"
-               href="<?= $this->url('tariffs/provider', ['id' => $provider->getId()]); ?>">Тарифы</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($activeTab === 'invoices') ? 'active' : ''; ?>"
-               href="<?= $this->url('invoices/provider', ['id' => $provider->getId()]); ?>">Счета</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($activeTab === 'users') ? 'active' : ''; ?>"
-               href="<?= $this->url('users/provider', ['id' => $provider->getId()]); ?>">Пользователи</a>
-        </li>
+        <?php if($this->isGranted('tariffs.list')): ?>
+            <li class="nav-item">
+                <a class="nav-link <?= ($activeTab === 'tariffs') ? 'active' : ''; ?>"
+                   href="<?= $this->url('tariffs/provider', ['id' => $provider->getId()]); ?>">Тарифы</a>
+            </li>
+        <?php endif; ?>
+        <?php if($this->isGranted('invoices.list')): ?>
+            <li class="nav-item">
+                <a class="nav-link <?= ($activeTab === 'invoices') ? 'active' : ''; ?>"
+                   href="<?= $this->url('invoices/provider', ['id' => $provider->getId()]); ?>">Счета</a>
+            </li>
+        <?php endif; ?>
+        <?php if($this->isGranted('users.list')): ?>
+            <li class="nav-item">
+                <a class="nav-link <?= ($activeTab === 'users') ? 'active' : ''; ?>"
+                   href="<?= $this->url('users/provider', ['id' => $provider->getId()]); ?>">Пользователи</a>
+            </li>
+        <?php endif; ?>
     </ul>
 </div>

@@ -30,5 +30,6 @@ return [
     'DoctrineModule',
     'DoctrineORMModule',
     'ZfbUser',
+    'ZfcRbac',
     'Application',
 ];
