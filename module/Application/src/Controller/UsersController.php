@@ -67,23 +67,28 @@ class UsersController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return mixed|\Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
         /** @var UserEntity $user */
         $user = $this->zfbAuthentication()->getIdentity();
         if ($user->getProvider()) {
-            return $this->redirect()->toRoute('users/provider', ['id' => $user->getProvider()->getId()]);
+            return $this->forward()->dispatch(self::class, ['action' => 'provider', 'id' => $user->getProvider()->getId()]);
         }
 
         if ($user->getTracker()) {
-            return $this->redirect()->toRoute('users/tracker', ['id' => $user->getTracker()->getId()]);
+            return $this->forward()->dispatch(self::class, ['action' => 'tracker', 'id' => $user->getTracker()->getId()]);
         }
 
         return $this->notFoundAction();
     }
 
+    /**
+     * Список пользователей сервис-провайдера
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function providerAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));
@@ -109,6 +114,11 @@ class UsersController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * Список пользователей управляющей организации
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function trackerAction()
     {
         $id = intval($this->params()->fromRoute('id', 0));

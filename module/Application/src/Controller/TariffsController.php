@@ -77,11 +77,11 @@ class TariffsController extends AbstractActionController
         /** @var UserEntity $user */
         $user = $this->zfbAuthentication()->getIdentity();
         if ($user->getProvider()) {
-            return $this->redirect()->toRoute('tariffs/provider', ['id' => $user->getProvider()->getId()]);
+            return $this->forward()->dispatch(self::class, ['action' => 'provider', 'id' => $user->getProvider()->getId()]);
         }
 
         if ($user->getClient()) {
-            return $this->redirect()->toRoute('tariffs/client', ['id' => $user->getClient()->getId()]);
+            return $this->forward()->dispatch(self::class, ['action' => 'client', 'id' => $user->getClient()->getId()]);
         }
 
         return $this->notFoundAction();
@@ -149,7 +149,7 @@ class TariffsController extends AbstractActionController
     }
 
     /**
-     * Получение информации о тарифе тарифа
+     * Получение информации о тарифе
      *
      * @return \Zend\Http\PhpEnvironment\Response|\Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
      */
@@ -258,7 +258,7 @@ class TariffsController extends AbstractActionController
     }
 
     /**
-     * Архивирование тарифа
+     * Архивирование тарифа серсив-провайдером
      *
      * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
      */

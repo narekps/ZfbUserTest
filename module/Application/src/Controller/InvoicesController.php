@@ -85,15 +85,18 @@ class InvoicesController extends AbstractActionController
         /** @var UserEntity $user */
         $user = $this->zfbAuthentication()->getIdentity();
         if ($user->getProvider()) {
-            return $this->redirect()->toRoute('invoices/provider', ['id' => $user->getProvider()->getId()]);
+            //return $this->redirect()->toRoute('invoices/provider', ['id' => $user->getProvider()->getId()]);
+            return $this->forward()->dispatch(self::class, ['action' => 'provider', 'id' => $user->getProvider()->getId()]);
         }
 
         if ($user->getTracker()) {
-            return $this->redirect()->toRoute('invoices/tracker', ['id' => $user->getTracker()->getId()]);
+            //return $this->redirect()->toRoute('invoices/tracker', ['id' => $user->getTracker()->getId()]);
+            return $this->forward()->dispatch(self::class, ['action' => 'tracker', 'id' => $user->getTracker()->getId()]);
         }
 
         if ($user->getClient()) {
-            return $this->redirect()->toRoute('invoices/client', ['id' => $user->getClient()    ->getId()]);
+            //return $this->redirect()->toRoute('invoices/client', ['id' => $user->getClient()    ->getId()]);
+            return $this->forward()->dispatch(self::class, ['action' => 'client', 'id' => $user->getClient()->getId()]);
         }
 
         if (!$user->isAdmin()) {

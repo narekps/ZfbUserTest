@@ -65,15 +65,15 @@ return [
                 'trackers/update' => ['admin'],
 
                 'invoices'          => ['admin', 'provider_admin', 'provider_user', 'tracker_admin', 'tracker_user', 'client_user'],
-                'invoices/provider' => ['admin', 'provider_admin', 'provider_user'],
-                'invoices/tracker'  => ['admin', 'tracker_admin', 'tracker_user'],
-                'invoices/client'   => ['admin', 'client_user'],
+                'invoices/provider' => ['admin'/*, 'provider_admin', 'provider_user'*/],
+                'invoices/tracker'  => ['admin'/*, 'tracker_admin', 'tracker_user'*/],
+                'invoices/client'   => ['admin'/*, 'client_user'*/],
                 'invoices/download' => ['admin', 'provider_admin', 'provider_user', 'tracker_admin', 'tracker_user', 'client_user'],
                 'invoices/create'   => ['provider_admin', 'provider_user'],
 
                 'tariffs'          => ['admin', 'provider_admin', 'provider_user', 'client_user'],
-                'tariffs/provider' => ['admin', 'provider_admin', 'provider_user'],
-                'tariffs/client'   => ['client_user'],
+                'tariffs/provider' => ['admin'/*, 'provider_admin', 'provider_user'*/],
+                'tariffs/client'   => [/*'client_user'*/],
                 'tariffs/get'      => ['admin', 'provider_admin', 'provider_user'],
                 'tariffs/create'   => ['provider_admin', 'provider_user'],
                 'tariffs/update'   => ['provider_admin', 'provider_user'],
@@ -89,9 +89,9 @@ return [
                 'clients'      => ['admin'],
                 'clients/info' => ['admin', 'client_user'],
 
-                'users'                      => ['admin', 'provider_admin', 'tracker_admin'],
-                'users/provider'             => ['admin', 'provider_admin'],
-                'users/tracker'              => ['admin', 'tracker_admin'],
+                'users'                      => [/*'admin', */'provider_admin', 'tracker_admin'],
+                'users/provider'             => ['admin'/*, 'provider_admin'*/],
+                'users/tracker'              => ['admin'/*, 'tracker_admin'*/],
 
                 // ZfbUser routes
                 'zfbuser/authentication'     => ['guest'],
@@ -199,7 +199,7 @@ return [
                         'providers.list',
                         'trackers.list',
                         'invoices.list',
-                        'tariffs.list',
+                        //'tariffs.list',
                         'users.add',
                         'users.update',
                     ],
