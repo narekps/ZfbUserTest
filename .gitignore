@@ -9,3 +9,4 @@ data/DoctrineORMModule
 !data/DoctrineORMModule/.gitkeep
 module/ZfbUser
 .idea
+/composer.phar
