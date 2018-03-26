@@ -2,16 +2,14 @@
 
 namespace Api\Controller;
 
-use Zend\Http\Header\SetCookie;
+use Api\Service\FromProviderService;
+use Firebase\JWT\JWT;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use ZfcRbac\Mvc\Controller\Plugin\IsGranted;
+use Zend\Stdlib\Parameters;
 use ZfbUser\Controller\Plugin;
-use Application\Entity\User as UserEntity;
 use Application\Repository\ProviderRepository;
-use Application\Repository\ClientRepository;
-use Application\Entity\Client as ClientEntity;
-use Application\Entity\Provider as ProviderEntity;
+use ZfbUser\Controller\AuthenticationController;
+use Zend\Session;
 
 /**
  * Class FromProviderController
@@ -23,6 +21,10 @@ use Application\Entity\Provider as ProviderEntity;
  */
 class FromProviderController extends AbstractActionController
 {
+    /**
+     * @var FromProviderService
+     */
+    private $fromProviderService;
 
     /**
      * @var ProviderRepository
@@ -30,34 +32,59 @@ class FromProviderController extends AbstractActionController
     private $providerRepository;
 
     /**
-     * @var ClientRepository
-     */
-    private $clientRepository;
-
-    /**
      * FromProviderController constructor.
      *
+     * @param \Api\Service\FromProviderService           $fromProviderService
      * @param \Application\Repository\ProviderRepository $providerRepository
-     * @param \Application\Repository\ClientRepository   $clientRepository
      */
-    public function __construct(ProviderRepository $providerRepository, ClientRepository $clientRepository)
+    public function __construct(FromProviderService $fromProviderService, ProviderRepository $providerRepository)
     {
+        $this->fromProviderService = $fromProviderService;
         $this->providerRepository = $providerRepository;
-        $this->clientRepository = $clientRepository;
     }
 
     public function indexAction()
     {
+        /*$key = 'd140869e65a3d7911c90116a875f6982d21cfeffe0533f56ca04bc10599a8962467e421c3679fea10f8d9cda27424144630a';
+        $token = [
+            'client_info' => [
+                'foo' => 'bar',
+                //'inn' => '1234567890',
+                //'kpp' => '123456789',
+                //'full_name' => 'ООО Яблоко',
+                //'address' => 'Россия г. Москва',
+            ],
+        ];
+        $jwt = JWT::encode($token, $key, 'HS256');
+        echo $jwt;
+        die;*/
+
         $identifier = $this->params()->fromRoute('identifier', null);
         $jwt = $this->params()->fromRoute('jwt', null);
-
         if (empty($identifier) || empty($jwt)) {
             return $this->notFoundAction();
         }
 
         $provider = $this->providerRepository->getByIdentifier($identifier);
+        if (!$provider) {
+            return $this->notFoundAction();
+        }
 
-        echo json_encode($provider);
-        die;
+        try {
+            list($identity, $credential) = $this->fromProviderService->process($provider, $jwt);
+            /** @var \Zend\Http\PhpEnvironment\Request $request */
+            $request = $this->getRequest();
+            $request->setPost(new Parameters([
+                'identity'   => $identity,
+                'credential' => $credential,
+            ]));
+
+            $session = new Session\Container('api');
+            $session->offsetSet('from_provider_identifier', $provider->getIdentifier());
+
+            return $this->forward()->dispatch(AuthenticationController::class, ['action' => 'authenticate']);
+        } catch (\Exception $ex) {
+            return $this->notFoundAction();
+        }
     }
 }

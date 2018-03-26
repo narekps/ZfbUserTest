@@ -15,6 +15,7 @@ use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\ProviderRepository;
 use Application\Entity\Client as ClientEntity;
 use Application\Repository\ClientRepository;
+use Zend\Session;
 
 /**
  * Class TariffsController
@@ -133,7 +134,16 @@ class TariffsController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        $provider = $client->getProvider();
+        $container = new Session\Container('api');
+        $fromProviderIdentifier = $container->offsetGet('from_provider_identifier');
+        if (!$fromProviderIdentifier) {
+            return $this->notFoundAction();
+        }
+
+        $provider = $this->providerRepository->getByIdentifier($fromProviderIdentifier);
+        if ($provider === null) {
+            return $this->notFoundAction();
+        }
 
         $status = $this->params()->fromQuery('status', '');
         $tariffs = $this->tariffRepository->getProviderTariffs($provider, $status);

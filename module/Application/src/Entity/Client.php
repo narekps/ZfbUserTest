@@ -13,31 +13,5 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Client extends Contragent
 {
-    /**
-     * @var Provider
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Provider")
-     * @ORM\JoinColumn(name="provider_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    protected $provider;
 
-    /**
-     * @return \Application\Entity\Provider
-     */
-    public function getProvider(): Provider
-    {
-        return $this->provider;
-    }
-
-    /**
-     * @param \Application\Entity\Provider $provider
-     *
-     * @return Client
-     */
-    public function setProvider(Provider $provider): Client
-    {
-        $this->provider = $provider;
-
-        return $this;
-    }
 }

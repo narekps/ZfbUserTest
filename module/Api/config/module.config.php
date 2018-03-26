@@ -2,17 +2,15 @@
 
 namespace Api;
 
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
-    'router'                    => [
+    'router'          => [
         'routes' => [
-            'api'      => [
-                'type'    => Literal::class,
-                'options' => [
+            'api' => [
+                'type'          => Literal::class,
+                'options'       => [
                     'route'    => '/api',
                     'defaults' => [
                         'controller' => \Application\Controller\IndexController::class,
@@ -21,12 +19,12 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'from-provider'   => [
+                    'from-provider' => [
                         'type'    => Segment::class,
                         'options' => [
-                            'verb'        => 'GET',
-                            'route'       => '/from-provider/:identifier/:jwt',
-                            'defaults'    => [
+                            'verb'     => 'GET',
+                            'route'    => '/from-provider/:identifier/:jwt',
+                            'defaults' => [
                                 'controller' => Controller\FromProviderController::class,
                                 'action'     => 'index',
                             ],
@@ -36,17 +34,18 @@ return [
             ],
         ],
     ],
-    'controllers'               => [
+    'controllers'     => [
         'factories' => [
-            Controller\FromProviderController::class     => Controller\Factory\FromProviderControllerFactory::class,
+            Controller\FromProviderController::class => Controller\Factory\FromProviderControllerFactory::class,
         ],
     ],
-    'service_manager'           => [
+    'service_manager' => [
         'factories' => [
+            Service\FromProviderService::class => Service\Factory\FromProviderServiceFactory::class,
         ],
     ],
-    'view_manager'              => [
-        'template_path_stack'      => [
+    'view_manager'    => [
+        'template_path_stack' => [
             __DIR__ . '/../view',
         ],
     ],

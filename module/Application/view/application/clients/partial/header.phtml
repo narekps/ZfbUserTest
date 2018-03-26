@@ -29,11 +29,11 @@ $tabs = [
         </li>
         <li class="nav-item">
             <a class="nav-link <?= ($activeTab === 'tariffs') ? 'active' : ''; ?>"
-               href="<?= $this->url('tariffs/client', ['id' => $client->getId()]); ?>">Тарифы</a>
+               href="<?= $this->url('tariffs'); ?>">Тарифы</a>
         </li>
         <li class="nav-item">
             <a class="nav-link <?= ($activeTab === 'invoices') ? 'active' : ''; ?>"
-               href="<?= $this->url('invoices/client', ['id' => $client->getId()]); ?>">Счета</a>
+               href="<?= $this->url('invoices'); ?>">Счета</a>
         </li>
     </ul>
 </div>

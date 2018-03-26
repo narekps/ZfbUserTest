@@ -9,5 +9,8 @@
 
 
 
+без
+http://zfbuser.local/api/from-provider/b50be7d6-6999-4009-8117-1627e22a67d9/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbGllbnRfaW5mbyI6eyJmb28iOiJiYXIifX0._iBRAeYJ-dErC74XCDAwJ2haKj96cfm5hApzRcOfTBQ
 
-/api/from-provider/:token
+c
+http://zfbuser.local/api/from-provider/b50be7d6-6999-4009-8117-1627e22a67d9/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbGllbnRfaW5mbyI6eyJmb28iOiJiYXIiLCJpbm4iOiIxMjM0NTY3ODkwIiwia3BwIjoiMTIzNDU2Nzg5IiwiZnVsbF9uYW1lIjoiXHUwNDFlXHUwNDFlXHUwNDFlIFx1MDQyZlx1MDQzMVx1MDQzYlx1MDQzZVx1MDQzYVx1MDQzZSJ9fQ.nU4UagDBhMwHfjKChUJv5YE13B9DWiYCzkou1NwLJlo

@@ -12,4 +12,8 @@
  */
 
 return [
+    'fake_user'        => [
+        'identity'   => '',
+        'credential' => '',
+    ],
 ];

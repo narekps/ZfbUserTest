@@ -7,14 +7,13 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 use Api\Controller\FromProviderController;
 use Doctrine\ORM\EntityManagerInterface;
 use Application\Repository\ProviderRepository;
-use Application\Repository\ClientRepository;
-use Application\Entity\Client as ClientEntity;
 use Application\Entity\Provider as ProviderEntity;
+use Api\Service\FromProviderService;
 
 /**
  * Class FromProviderControllerFactory
  *
- * @package Application\Controller\Factory
+ * @package Api\Controller\Factory
  */
 class FromProviderControllerFactory implements FactoryInterface
 {
@@ -23,7 +22,7 @@ class FromProviderControllerFactory implements FactoryInterface
      * @param string                                $requestedName
      * @param array|null                            $options
      *
-     * @return \Application\Controller\ClientsController|object
+     * @return \Api\Controller\FromProviderController|object
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -32,12 +31,12 @@ class FromProviderControllerFactory implements FactoryInterface
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
-        /** @var ClientRepository $clientRep */
-        $clientRep = $entityManager->getRepository(ClientEntity::class);
+        /** @var FromProviderService $fromProviderService */
+        $fromProviderService = $container->get(FromProviderService::class);
 
         /** @var ProviderRepository $providerRep */
         $providerRep = $entityManager->getRepository(ProviderEntity::class);
 
-        return new FromProviderController($providerRep, $clientRep);
+        return new FromProviderController($fromProviderService, $providerRep);
     }
 }

@@ -18,10 +18,12 @@ $statuses = \Application\Entity\Tariff::getStatuses();
 
 <!--client info-->
 <div class="contragent_info">
-    <?= $this->partial('application/clients/partial/header', [
+    <?php
+    /*echo $this->partial('application/clients/partial/header', [
         'client'    => $client,
         'activeTab' => $activeTab,
-    ]); ?>
+    ]);*/
+    ?>
 
     <div class="row">
         <div class="col-12">

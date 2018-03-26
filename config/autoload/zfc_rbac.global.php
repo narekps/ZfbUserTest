@@ -190,7 +190,7 @@ return [
                 'client_user'    => [
                     'children'    => 'user',
                     'permissions' => [
-                        'invoices.list',
+                        //'invoices.list',
                         'tariffs.list',
                         'tariffs.pay',
                     ],
