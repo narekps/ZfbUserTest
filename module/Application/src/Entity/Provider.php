@@ -39,6 +39,24 @@ class Provider extends Contragent
     protected $contactPerson;
 
     /**
+     * Идентификатор
+     *
+     * @var string
+     *
+     * @ORM\Column(name="identifier", type="guid", nullable=false)
+     */
+    protected $identifier;
+
+    /**
+     * Приватный ключ
+     *
+     * @var string
+     *
+     * @ORM\Column(name="private_key", type="string", length=100, nullable=false, options={"fixed": true})
+     */
+    protected $privateKey;
+
+    /**
      * @return string
      */
     public function getPhone(): string
@@ -94,6 +112,46 @@ class Provider extends Contragent
     public function setContactPerson(string $contactPerson): Contragent
     {
         $this->contactPerson = $contactPerson;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return Provider
+     */
+    public function setIdentifier(string $identifier): Provider
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivateKey(): string
+    {
+        return $this->privateKey;
+    }
+
+    /**
+     * @param string $privateKey
+     *
+     * @return Provider
+     */
+    public function setPrivateKey(string $privateKey): Provider
+    {
+        $this->privateKey = $privateKey;
 
         return $this;
     }

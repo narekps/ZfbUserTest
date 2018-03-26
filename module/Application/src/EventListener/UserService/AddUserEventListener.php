@@ -11,6 +11,7 @@ use Application\Entity\Contract as ContractEntity;
 use ZfbUser\EventProvider\EventResult;
 use Application\Repository\ProviderRepository;
 use Application\Repository\TrackerRepository;
+use Application\Helper\UUID;
 
 /**
  * Class AddUserEventListener
@@ -75,8 +76,13 @@ class AddUserEventListener
     {
         $provider = new ProviderEntity();
         $provider->exchangeArray($formData);
-        $user->setProvider($provider);
 
+        $length = 50;
+        $privateKey = bin2hex(random_bytes($length));
+        $provider->setPrivateKey($privateKey);
+        $provider->setIdentifier(UUID::generate());
+
+        $user->setProvider($provider);
         $user->setRole('provider_admin');
 
         $contract = new ContractEntity();

@@ -36,4 +36,5 @@ return [
     'ZfbUser',
     'ZfcRbac',
     'Application',
+    'Api',
 ];

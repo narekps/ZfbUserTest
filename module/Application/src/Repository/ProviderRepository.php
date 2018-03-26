@@ -4,6 +4,7 @@ namespace Application\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Application\Entity\Provider as ProviderEntity;
+use Doctrine\DBAL\Exception\DriverException;
 
 /**
  * Class ProviderRepository
@@ -48,5 +49,23 @@ class ProviderRepository extends EntityRepository
         $providers = $qb->getQuery()->getResult();
 
         return $providers;
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return \Application\Entity\Provider|null
+     */
+    public function getByIdentifier(string $identifier): ?ProviderEntity
+    {
+        /** @var ProviderEntity|null $provider */
+        $provider = null;
+
+        try {
+            $provider = $this->findOneBy(['identifier' => $identifier]);
+        } catch (DriverException $ex) {
+        }
+
+        return $provider;
     }
 }

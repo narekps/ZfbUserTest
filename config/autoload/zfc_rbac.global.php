@@ -54,6 +54,8 @@ return [
 
                 'home' => ['user'],
 
+                'api*' => ['guest'],
+
                 'providers'        => ['admin'],
                 'providers/info'   => ['admin', 'provider_admin', 'provider_user'],
                 'providers/get'    => ['admin'],

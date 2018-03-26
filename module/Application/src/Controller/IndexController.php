@@ -28,6 +28,10 @@ class IndexController extends AbstractActionController
     {
         /** @var UserEntity $user */
         $user = $this->zfbAuthentication()->getIdentity();
+        if (!$user) {
+            return $this->notFoundAction();
+        }
+
         if ($user->getProvider()) {
             return $this->redirect()->toRoute('tariffs');
         }
