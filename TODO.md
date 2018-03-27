@@ -7,6 +7,8 @@
 адрес (одной строкой)
 
 
+1. Update doctrine/doctrine-orm-module
+2. 
 
 
 без

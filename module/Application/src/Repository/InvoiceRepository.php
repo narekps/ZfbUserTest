@@ -23,7 +23,8 @@ class InvoiceRepository extends EntityRepository
      */
     public function getList(array $queryParams = []): array
     {
-        $qb = $this->createQueryBuilder('i')->select('i');
+        $qb = $this->createQueryBuilder('i')->select('i, p');
+        $qb->leftJoin('i.payments', 'p');
 
         $this->applyQueryParams($qb, $queryParams);
 
@@ -41,7 +42,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function getProviderInvoices(ProviderEntity $provider, array $queryParams = []): array
     {
-        $qb = $this->createQueryBuilder('i')->select('i');
+        $qb = $this->createQueryBuilder('i')->select('i, p');
         $qb->leftJoin('i.payments', 'p');
 
         $qb->andWhere('i.provider = :provider')->setParameter('provider', $provider);
@@ -67,7 +68,7 @@ class InvoiceRepository extends EntityRepository
         foreach ($tracker->getTrackingProviders() as $provider) {
             $providersIds[] = $provider->getId();
         }
-        $qb = $this->createQueryBuilder('i')->select('i');
+        $qb = $this->createQueryBuilder('i')->select('i, p');
         $qb->leftJoin('i.payments', 'p');
         $qb->andWhere($qb->expr()->in('i.provider', $providersIds));
         if (!empty($status)) {

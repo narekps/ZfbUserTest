@@ -6,6 +6,11 @@ $(function() {
         $errorMsg = $('.error-msg', $invoiceModal);
 
     $('#invoiceDate').bootstrapMaterialDatePicker({
+        cancelText: 'Отмена',
+        okText: 'ОК',
+        clearText: 'Очистить',
+        nowText: 'Сегодня',
+        weekStart: 1,
         time: false,
         switchOnClick: true,
         lang: 'ru',
@@ -116,19 +121,27 @@ $(function() {
 
 $(function() {
     $('#filterInvoiceDateTo').bootstrapMaterialDatePicker({
+        cancelText: 'Отмена',
+        okText: 'ОК',
+        clearText: 'Очистить',
+        nowText: 'Сегодня',
+        weekStart: 1,
         time: false,
         switchOnClick: true,
-        lang: 'ru',
-        weekStart: 0
+        lang: 'ru'
     }).on('change', function (e, date) {
         $('#filterInvoiceDateFrom').bootstrapMaterialDatePicker('setMaxDate', date);
     });
 
     $('#filterInvoiceDateFrom').bootstrapMaterialDatePicker({
+        cancelText: 'Отмена',
+        okText: 'ОК',
+        clearText: 'Очистить',
+        nowText: 'Сегодня',
+        weekStart: 1,
         time: false,
         switchOnClick: true,
-        lang: 'ru',
-        weekStart: 0
+        lang: 'ru'
     }).on('change', function (e, date) {
         $('#filterInvoiceDateTo').bootstrapMaterialDatePicker('setMinDate', date);
     });

@@ -10,6 +10,11 @@ $(function() {
         $editErrorMsg = $('.error-msg', $contragentModal);
 
     $('input[name="etpContractDate"]').bootstrapMaterialDatePicker({
+        cancelText: 'Отмена',
+        okText: 'ОК',
+        clearText: 'Очистить',
+        nowText: 'Сегодня',
+        weekStart: 1,
         time: false,
         switchOnClick: true,
         lang: 'ru',
