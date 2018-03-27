@@ -85,17 +85,14 @@ class InvoicesController extends AbstractActionController
         /** @var UserEntity $user */
         $user = $this->zfbAuthentication()->getIdentity();
         if ($user->getProvider()) {
-            //return $this->redirect()->toRoute('invoices/provider', ['id' => $user->getProvider()->getId()]);
             return $this->forward()->dispatch(self::class, ['action' => 'provider', 'id' => $user->getProvider()->getId()]);
         }
 
         if ($user->getTracker()) {
-            //return $this->redirect()->toRoute('invoices/tracker', ['id' => $user->getTracker()->getId()]);
             return $this->forward()->dispatch(self::class, ['action' => 'tracker', 'id' => $user->getTracker()->getId()]);
         }
 
         if ($user->getClient()) {
-            //return $this->redirect()->toRoute('invoices/client', ['id' => $user->getClient()    ->getId()]);
             return $this->forward()->dispatch(self::class, ['action' => 'client', 'id' => $user->getClient()->getId()]);
         }
 
@@ -103,12 +100,12 @@ class InvoicesController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        $status = $this->params()->fromQuery('status', '');
-        $invoices = $this->invoiceRepository->getList();
+        $queryParams = $this->params()->fromQuery();
+        $invoices = $this->invoiceRepository->getList($queryParams);
 
         $viewModel = new ViewModel([
             'invoices'    => $invoices,
-            'activeStatus' => $status,
+            'queryParams' => $queryParams,
         ]);
 
         return $viewModel;
@@ -126,16 +123,15 @@ class InvoicesController extends AbstractActionController
 
         $this->invoiceForm->prepareForProvider($provider);
 
-        $status = $this->params()->fromQuery('status', '');
-
-        $invoices = $this->invoiceRepository->getProviderInvoices($provider, $status);
+        $queryParams = $this->params()->fromQuery();
+        $invoices = $this->invoiceRepository->getProviderInvoices($provider, $queryParams);
 
         $viewModel = new ViewModel([
             'provider'     => $provider,
             'invoices'     => $invoices,
             'invoiceForm'  => $this->invoiceForm,
             'activeTab'    => 'invoices',
-            'activeStatus' => $status,
+            'queryParams'  => $queryParams,
         ]);
 
         return $viewModel;

@@ -5,6 +5,7 @@
  * @var \Application\Entity\Tariff[] $tariffs
  * @var string                       $activeTab
  * @var string                       $activeStatus
+ * @var string                       $activeCostOrder
  */
 
 /** @var \Application\View\Helper\Navigation\Navbar $menu */
@@ -15,6 +16,7 @@ $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/tariffs.js'));
 
 $statuses = \Application\Entity\Tariff::getStatuses();
+$orders = ['asc' => 'По возрастания', 'desc' => 'По убыванию'];
 ?>
 
 <!--provider info-->
@@ -27,25 +29,41 @@ $statuses = \Application\Entity\Tariff::getStatuses();
     <div class="row">
         <div class="col-8">
             <div class="btn-group">
-                <button class="btn dropdown-toggle" type="button" id="buttonMenu1" data-toggle="dropdown"
+                <button class="btn dropdown-toggle" type="button" id="statusMenu" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                     <?= isset($statuses[$activeStatus]) ? $statuses[$activeStatus] : 'Все тарифы'; ?>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="buttonMenu1">
+                <div class="dropdown-menu" aria-labelledby="statusMenu">
                     <a class="dropdown-item"
-                       href="<?= $this->url('tariffs/provider', ['id' => $provider->getId()]); ?>">Все</a>
+                       href="<?= $this->url('tariffs', [], ['query' => 'order=' . $activeCostOrder]); ?>">Все</a>
                     <?php foreach ($statuses as $statusKey => $statusTitle): ?>
                         <a class="dropdown-item"
-                           href="<?= $this->url('tariffs/provider', ['id' => $provider->getId()], ['query' => 'status=' . $statusKey]); ?>">
-                            <?= $statusTitle ?>
+                           href="<?= $this->url('tariffs', [], ['query' => 'status=' . $statusKey . '&order=' . $activeCostOrder]); ?>">
+                            <?= $statusTitle; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn dropdown-toggle" type="button" id="costMenu" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    <?= isset($orders[$activeCostOrder]) ? $orders[$activeCostOrder] : 'По сумме'; ?>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="costMenu">
+                    <?php foreach ($orders as $orderKey => $orderTitle): ?>
+                        <a class="dropdown-item"
+                           href="<?= $this->url('tariffs', [], ['query' => 'order=' . $orderKey . '&status=' . $activeStatus]); ?>">
+                            <?= $orderTitle; ?>
                         </a>
                     <?php endforeach;; ?>
                 </div>
             </div>
         </div>
         <div class="col-4 text-right">
-            <?php if($this->hasRole(['provider_admin', 'provider_user'])): ?>
-                <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addTariffBtn">Добавить тариф</button>
+            <?php if ($this->hasRole(['provider_admin', 'provider_user'])): ?>
+                <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addTariffBtn">Добавить
+                    тариф
+                </button>
             <?php endif; ?>
         </div>
     </div>

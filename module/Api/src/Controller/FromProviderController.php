@@ -72,6 +72,7 @@ class FromProviderController extends AbstractActionController
 
         try {
             list($identity, $credential) = $this->fromProviderService->process($provider, $jwt);
+
             /** @var \Zend\Http\PhpEnvironment\Request $request */
             $request = $this->getRequest();
             $request->setPost(new Parameters([

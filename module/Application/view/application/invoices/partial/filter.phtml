@@ -1,0 +1,135 @@
+<?php
+/**
+ * @var array $queryParams
+ *
+ */
+
+$statuses = \Application\Entity\Invoice::getStatuses();
+$activeStatus = $queryParams['status'] ?? '';
+?>
+
+<div class="row">
+    <div class="col-8">
+        <div class="btn-group">
+            <button class="btn dropdown-toggle" type="button" id="buttonMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                <?= isset($statuses[$activeStatus]) ? $statuses[$activeStatus] : 'Все счета'; ?>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="buttonMenu1">
+                <a class="dropdown-item"
+                   href="<?= $this->url('invoices'); ?>">Все</a>
+                <?php foreach ($statuses as $statusKey => $statusTitle): ?>
+                    <a class="dropdown-item"
+                       href="<?= $this->url('invoices', [], ['query' => 'status=' . $statusKey]); ?>">
+                        <?= $statusTitle ?>
+                    </a>
+                <?php endforeach;; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 text-right">
+        <?php if ($this->hasRole(['provider_admin', 'provider_user'])): ?>
+            <button type="button" class="btn btn-raised btn-primary btn-blue pull-right mr-3 mt-1" id="addInvoiceBtn">
+                Выставить счет
+            </button>
+        <?php endif; ?>
+
+        <button type="button" class="btn bmd-btn-icon bmd-btn-icon-lg search-btn" data-toggle="collapse"
+                data-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+            <i class="material-icons search-open">search</i>
+            <i class="material-icons search-close">close</i>
+        </button>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="collapse" id="filtersCollapse">
+            <div class="card card-body">
+                <form action="?" method="get">
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="filterClient" class="bmd-label-floating">Название организации или
+                                    ИНН</label>
+                                <input type="text" class="form-control" id="filterClient" name="client"
+                                       value="<?= $queryParams['client'] ?? ''; ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label for="filterName" class="bmd-label-floating">Тариф/Услуга</label>
+                                <input type="text" class="form-control" id="filterName" name="name"
+                                       value="<?= $queryParams['name'] ?? ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group ml-2">
+                                <label for="filterInvoiceDateFrom" class="bmd-label-static">Дата выставления
+                                    счета</label>
+                                <input type="text" class="form-control" id="filterInvoiceDateFrom"
+                                       name="invoice_date_from" placeholder="от"
+                                       value="<?= $queryParams['invoice_date_from'] ?? ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group ml-2">
+                                <input type="text" class="form-control" id="filterInvoiceDateTo" name="invoice_date_to"
+                                       placeholder="до" value="<?= $queryParams['invoice_date_to'] ?? ''; ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="filterSum" class="bmd-label-floating">Сумма счета</label>
+                                <input type="text" pattern="[0-9]{1,12}" class="form-control" id="filterSum" name="sum"
+                                       value="<?= $queryParams['sum'] ?? ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group ml-2">
+                                <label for="filterSumPayment" class="bmd-label-floating">Сумма оплаты</label>
+                                <input type="text" pattern="[0-9]{1,12}" class="form-control" id="filterSumPayment"
+                                       name="sum_payment" value="<?= $queryParams['sum_payment'] ?? ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group ml-2">
+                                <label for="filterNumber" class="bmd-label-floating">Номер счета</label>
+                                <input type="number" pattern="[0-9]{1,14}" class="form-control" id="filterNumber" name="number"
+                                       value="<?= $queryParams['number'] ?? ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group ml-2">
+                                <label for="filterStatus" class="bmd-label-floating">Статус оплаты</label>
+                                <select class="form-control" id="filterStatus" name="status">
+                                    <option value="">Все</option>
+                                    <?php foreach ($statuses as $statusKey => $statusTitle): ?>
+                                        <option value="<?= $statusKey; ?>"
+                                            <?= ($queryParams['status'] ?? '') == $statusKey ? 'selected' : ''; ?> ><?= $statusTitle ?></option>
+                                    <?php endforeach;; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-raised btn-primary btn-blue pull-right"
+                                    id="filterSubmitBtn">
+                                Применить
+                            </button>
+                            <button type="reset" class="btn btn-link" id="filterResetBtn">Сбросить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

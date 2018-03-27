@@ -53,6 +53,7 @@ return [
                 // route => roles
 
                 'home' => ['user'],
+                'doctrine_orm_module_yuml' => ['admin'],
 
                 'api*' => ['guest'],
 

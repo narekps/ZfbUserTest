@@ -73,10 +73,7 @@ class FromProviderService
                 $identity = $this->fakeUserConfig['identity'];
                 $credential = $this->fakeUserConfig['credential'];
             } else {
-                $client = $this->clientRepository->findOneBy([
-                    'inn' => $data['client_info']['inn'],
-                    'kpp' => $data['client_info']['kpp'],
-                ]);
+                $client = $this->clientRepository->getByInnKpp($data['client_info']['inn'], $data['client_info']['kpp']);
                 $identity = 'fake_' . $data['client_info']['inn'] . '_' . $data['client_info']['kpp'];
                 $credential = $this->fakeUserConfig['credential'];
                 if ($client === null) {

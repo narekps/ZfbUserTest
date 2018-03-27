@@ -36,6 +36,7 @@ class InvoiceService
      *
      * @param \Doctrine\ORM\EntityManagerInterface       $entityManager
      * @param \Application\Repository\ContractRepository $contractRepository
+     * @param \Application\Repository\ClientRepository   $clientRepository
      */
     public function __construct(EntityManagerInterface $entityManager, ContractRepository $contractRepository, ClientRepository $clientRepository)
     {
@@ -68,7 +69,6 @@ class InvoiceService
                 $client->setInn($data['clientInn']);
                 $client->setKpp($data['clientKpp']);
                 $client->setAddress($data['clientAddress']);
-                $client->setProvider($provider);
                 $this->entityManager->persist($client);
             }
 

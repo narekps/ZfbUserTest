@@ -113,3 +113,27 @@ $(function() {
         form.classList.add('was-validated');
     }
 });
+
+$(function() {
+    $('#filterInvoiceDateTo').bootstrapMaterialDatePicker({
+        time: false,
+        switchOnClick: true,
+        lang: 'ru',
+        weekStart: 0
+    }).on('change', function (e, date) {
+        $('#filterInvoiceDateFrom').bootstrapMaterialDatePicker('setMaxDate', date);
+    });
+
+    $('#filterInvoiceDateFrom').bootstrapMaterialDatePicker({
+        time: false,
+        switchOnClick: true,
+        lang: 'ru',
+        weekStart: 0
+    }).on('change', function (e, date) {
+        $('#filterInvoiceDateTo').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+
+    $('#filterResetBtn').on('click', function () {
+        location.href = $(this).parents('form').eq(0).attr('action');
+    });
+});

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \Application\Entity\Invoice[] $invoices
- * @var string                        $activeStatus
+ * @var array                         $queryParams
  */
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
@@ -12,26 +12,9 @@ $statuses = \Application\Entity\Invoice::getStatuses();
 
 <!--provider info-->
 <div class="contragent_info">
-    <div class="row">
-        <div class="col-12">
-            <div class="btn-group">
-                <button class="btn dropdown-toggle" type="button" id="buttonMenu1" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    <?= isset($statuses[$activeStatus]) ? $statuses[$activeStatus] : 'Все счета'; ?>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="buttonMenu1">
-                    <a class="dropdown-item"
-                       href="<?= $this->url('invoices'); ?>">Все</a>
-                    <?php foreach ($statuses as $statusKey => $statusTitle): ?>
-                        <a class="dropdown-item"
-                           href="<?= $this->url('invoices', [], ['query' => 'status=' . $statusKey]); ?>">
-                            <?= $statusTitle ?>
-                        </a>
-                    <?php endforeach;; ?>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?= $this->partial('application/invoices/partial/filter', [
+        'queryParams' => $queryParams,
+    ]); ?>
 
     <?php if (empty($invoices)): ?>
         <div class="alert alert-dark" role="alert">

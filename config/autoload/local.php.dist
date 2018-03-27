@@ -12,8 +12,12 @@
  */
 
 return [
+    'admin_user' => [
+        'identity'   => 'admin@etpgpb.ru',
+        'credential' => '123456',
+    ],
     'fake_user'        => [
-        'identity'   => '',
-        'credential' => '',
+        'identity'   => 'fake',
+        'credential' => 'SDFGHJYUTRGR%^YT$%^e54fEER',
     ],
 ];

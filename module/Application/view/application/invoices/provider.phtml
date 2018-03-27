@@ -4,7 +4,7 @@
  * @var \Application\Entity\Provider  $provider
  * @var \Application\Entity\Invoice[] $invoices
  * @var string                        $activeTab
- * @var string                        $activeStatus
+ * @var array                         $queryParams
  */
 
 /** @var \Application\View\Helper\Navigation\Navbar $menu */
@@ -13,8 +13,6 @@ $menu->setActiveItemId('invoices');
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
 $this->inlineScript()->appendFile($this->basePath('js/invoices.js'));
-
-$statuses = \Application\Entity\Invoice::getStatuses();
 ?>
 
 <!--provider info-->
@@ -24,33 +22,9 @@ $statuses = \Application\Entity\Invoice::getStatuses();
         'activeTab' => $activeTab,
     ]); ?>
 
-    <div class="row">
-        <div class="col-8">
-            <div class="btn-group">
-                <button class="btn dropdown-toggle" type="button" id="buttonMenu1" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    <?= isset($statuses[$activeStatus]) ? $statuses[$activeStatus] : 'Все счета'; ?>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="buttonMenu1">
-                    <a class="dropdown-item"
-                       href="<?= $this->url('invoices/provider', ['id' => $provider->getId()]); ?>">Все</a>
-                    <?php foreach ($statuses as $statusKey => $statusTitle): ?>
-                        <a class="dropdown-item"
-                           href="<?= $this->url('invoices/provider', ['id' => $provider->getId()], ['query' => 'status=' . $statusKey]); ?>">
-                            <?= $statusTitle ?>
-                        </a>
-                    <?php endforeach;; ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-4 text-right">
-            <?php if($this->hasRole(['provider_admin', 'provider_user'])): ?>
-                <button type="button" class="btn btn-raised btn-primary btn-blue pull-right" id="addInvoiceBtn">
-                    Выставить счет
-                </button>
-            <?php endif; ?>
-        </div>
-    </div>
+    <?= $this->partial('application/invoices/partial/filter', [
+        'queryParams' => $queryParams,
+    ]); ?>
 
     <?php if (empty($invoices)): ?>
         <div class="alert alert-dark" role="alert">

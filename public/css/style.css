@@ -30,7 +30,7 @@ body.modal-open {
     font-weight: normal;
     line-height: 24px;
 }
-.btn .material-icons {
+.btn:not(.bmd-btn-icon) .material-icons {
     font-size: 24px;
     line-height: 24px;
     float: left;
@@ -219,4 +219,30 @@ a:hover, a.color-blue:hover {
 }
 #tariffForm input[name="cost"], #tariffForm input[name="saleEndDate"] {
     height: calc(2.4375rem + 2px);
+}
+#filterSum, #filterSumPayment, #filterNumber {
+    height: calc(2.4375rem + 2px);
+}
+
+.btn.bmd-btn-icon.bmd-btn-icon-lg {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+}
+.btn.bmd-btn-icon.bmd-btn-icon-lg .material-icons {
+    font-size: 2rem;
+    line-height: 1rem;
+}
+
+.search-btn[aria-expanded="true"] .search-open {
+    display: none;
+}
+.search-btn[aria-expanded="true"] .search-close {
+    display: inline;
+}
+.search-btn[aria-expanded="false"] .search-open {
+    display: inline;
+}
+.search-btn[aria-expanded="false"] .search-close {
+    display: none;
 }

@@ -16,15 +16,22 @@ class TariffRepository extends EntityRepository
     /**
      * @param \Application\Entity\Provider $provider
      * @param string                       $status
+     * @param null|string                  $order
      *
      * @return array
      */
-    public function getProviderTariffs(ProviderEntity $provider, string $status = ''): array
+    public function getProviderTariffs(ProviderEntity $provider, string $status = '', ?string $order = null): array
     {
         $qb = $this->createQueryBuilder('t')->select('t');
         $qb->andWhere('t.provider = :provider')->setParameter('provider', $provider);
         if (!empty($status)) {
             $qb->andWhere('t.status = :status')->setParameter('status', $status);
+        }
+
+        if ($order !== null && in_array($order, ['asc', 'desc'])) {
+            $qb->orderBy('t.cost', $order);
+        } else {
+            $qb->orderBy('t.id', 'DESC');
         }
 
         /** @var TariffEntity[] $tariffs */

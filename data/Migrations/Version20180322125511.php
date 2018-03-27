@@ -3,6 +3,7 @@
 namespace Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\DBAL\Migrations\Version;
 use Doctrine\DBAL\Schema\Schema;
 use Zend\Crypt\Password\Bcrypt;
 
@@ -11,6 +12,17 @@ use Zend\Crypt\Password\Bcrypt;
  */
 class Version20180322125511 extends AbstractMigration
 {
+    /**
+     * @var array
+     */
+    private $cfg;
+
+    public function __construct(Version $version)
+    {
+        parent::__construct($version);
+
+        $this->cfg = include __DIR__ . '/../../config/autoload/local.php';
+    }
 
     public function isTransactional()
     {
@@ -24,9 +36,9 @@ class Version20180322125511 extends AbstractMigration
     {
         $bctypt = new Bcrypt();
         $bctypt->setCost(14);
-        $password = $bctypt->create('123456');
+        $password = $bctypt->create($this->cfg['admin_user']['credential']);
         $this->connection->insert('zfb_users', [
-            'identity'           => 'admin@mail.ru',
+            'identity'           => $this->cfg['admin_user']['identity'],
             'credential'         => $password,
             'identity_confirmed' => true,
             'surname'            => '',
@@ -35,7 +47,7 @@ class Version20180322125511 extends AbstractMigration
         ]);
 
         $this->connection->insert('clients', [
-            'full_name'    => 'fake',
+            'full_name'    => $this->cfg['fake_user']['identity'],
             'inn'          => '0000000000',
             'kpp'          => '000000000',
             'address'      => '',
@@ -45,10 +57,10 @@ class Version20180322125511 extends AbstractMigration
         $fakeClientId = $this->connection->lastInsertId();
 
         // Пароль для фейкового пользователя
-        $fakePassword = $bctypt->create('SDFGHJYUTRGR%^YT$%^e54fEER');
+        $fakePassword = $bctypt->create($this->cfg['fake_user']['credential']);
         $this->connection->insert('zfb_users', [
             'client_id'          => $fakeClientId,
-            'identity'           => 'fake',
+            'identity'           => $this->cfg['fake_user']['identity'],
             'credential'         => $fakePassword,
             'identity_confirmed' => true,
             'surname'            => '',
@@ -64,8 +76,8 @@ class Version20180322125511 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->connection->delete('zfb_users', ['identity' => 'admin@mail.ru']);
-        $this->connection->delete('zfb_users', ['identity' => 'fake']);
-        $this->connection->delete('clients', ['full_name' => 'fake']);
+        $this->connection->delete('zfb_users', ['identity' => $this->cfg['admin_user']['identity']]);
+        $this->connection->delete('zfb_users', ['identity' => $this->cfg['fake_user']['identity']]);
+        $this->connection->delete('clients', ['full_name' => $this->cfg['fake_user']['identity']]);
     }
 }

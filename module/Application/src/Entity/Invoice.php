@@ -226,7 +226,7 @@ class Invoice implements ArraySerializableInterface,\JsonSerializable
     public function getNumber()
     {
         $id = $this->getId();
-        $code = $this->getType() === self::TYPE_TARIFF ? 'ГБ' : 'ГБС';
+        $code = $this->getType() === self::TYPE_TARIFF ? 'БЛ' : 'БЛС';
         $year = date('y');
 
         return "{$id}/{$code}/{$year}";
