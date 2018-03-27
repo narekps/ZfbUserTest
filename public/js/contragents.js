@@ -1,13 +1,17 @@
 $(function() {
     var $contragentModal = $('#contragentModal'),
         $contragentEditModal = $('#contragentEditModal'),
+        $configModal = $('#configModal'),
         newForm = document.getElementById('contragentForm'),
         editForm = document.getElementById('contragentEditForm'),
+        configForm = document.getElementById('providerConfigForm'),
         $addContragentBtn = $('#addContragentBtn'),
         $contragentSaveBtn = $('#contragentSaveBtn'),
         $contragentEditSaveBtn = $('#contragentEditSaveBtn'),
+        $configSaveBtn = $('#configSaveBtn'),
         $errorMsg = $('.error-msg', $contragentModal),
-        $editErrorMsg = $('.error-msg', $contragentModal);
+        $editErrorMsg = $('.error-msg', $contragentModal),
+        $configErrorMsg = $('.error-msg', $configModal);
 
     $('input[name="etpContractDate"]').bootstrapMaterialDatePicker({
         cancelText: 'Отмена',
@@ -84,6 +88,44 @@ $(function() {
             if (data.success === true) {
                 resetForm(editForm, data.contragent);
                 $contragentEditModal.modal('show');
+            }
+        }).fail(function (response) {
+            if (response.status === 403) {
+                location.href = '/user/authentication';
+            }
+        });
+    });
+
+    $configSaveBtn.on('click', function (e) {
+        e.preventDefault();
+
+        $errorMsg.hide();
+
+        if (validateForm(configForm) !== true) {
+            return;
+        }
+
+        var data = $(configForm).serialize(),
+            url = $configSaveBtn.attr('data-save-url');
+
+        var id = $('input[name="provider_id"]', configForm).val();
+        url = url.replace(':id', id);
+
+        var jqxhr = $.post(url, data, function (response) {
+            successCallback(response, configForm, $configModal, $configErrorMsg);
+        }).fail(function (response) {
+            failCallback(response, configForm, $configModal, $configErrorMsg)
+        }).always(function (response) {
+        });
+    });
+
+    $('.configEditBtn').on('click', function(){
+        var $btn = $(this);
+
+        $.get($btn.attr('data-get-url'), function (data) {
+            if (data.success === true) {
+                resetForm(configForm, data.config);
+                $configModal.modal('show');
             }
         }).fail(function (response) {
             if (response.status === 403) {

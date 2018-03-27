@@ -39,22 +39,13 @@ class Provider extends Contragent
     protected $contactPerson;
 
     /**
-     * Идентификатор
+     * Настройки
      *
-     * @var string
+     * @var ProviderConfig
      *
-     * @ORM\Column(name="identifier", type="guid", nullable=false)
+     * @ORM\OneToOne(targetEntity="Application\Entity\ProviderConfig", mappedBy="provider")
      */
-    protected $identifier;
-
-    /**
-     * Приватный ключ
-     *
-     * @var string
-     *
-     * @ORM\Column(name="private_key", type="string", length=100, nullable=false, options={"fixed": true})
-     */
-    protected $privateKey;
+    protected $config;
 
     /**
      * @return string
@@ -117,41 +108,23 @@ class Provider extends Contragent
     }
 
     /**
-     * @return string
+     * @return \Application\Entity\ProviderConfig
      */
-    public function getIdentifier(): string
+    public function getConfig(): ProviderConfig
     {
-        return $this->identifier;
+        return $this->config;
     }
 
     /**
-     * @param string $identifier
+     * @param \Application\Entity\ProviderConfig $config
      *
      * @return Provider
      */
-    public function setIdentifier(string $identifier): Provider
+    public function setConfig(ProviderConfig $config): Provider
     {
-        $this->identifier = $identifier;
+        $config->setProvider($this);
 
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrivateKey(): string
-    {
-        return $this->privateKey;
-    }
-
-    /**
-     * @param string $privateKey
-     *
-     * @return Provider
-     */
-    public function setPrivateKey(string $privateKey): Provider
-    {
-        $this->privateKey = $privateKey;
+        $this->config = $config;
 
         return $this;
     }
@@ -191,6 +164,7 @@ class Provider extends Contragent
             'phone'         => $this->getPhone(),
             'email'         => $this->getEmail(),
             'contactPerson' => $this->getContactPerson(),
+            'config'        => $this->getConfig()->getArrayCopy(),
         ]);
 
         return $data;

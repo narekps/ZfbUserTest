@@ -22,6 +22,12 @@
             >
                 <i class="material-icons">mode_edit</i>
             </button>
+
+            <button type="button" class="btn btn-link btn-secondary bmd-btn-fab-sm configEditBtn"
+                    data-get-url="<?=$this->url('providers/get-config', ['id' => $provider->getId()]); ?>"
+            >
+                <i class="material-icons">build</i>
+            </button>
         <?php endif; ?>
     </td>
 </tr>

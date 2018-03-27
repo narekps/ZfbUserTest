@@ -3,7 +3,6 @@
  * @var \Application\Entity\Client   $client
  * @var \Application\Entity\Tariff[] $tariffs
  * @var string                       $activeTab
- * @var string                       $activeStatus
  */
 
 /** @var \Application\View\Helper\Navigation\Navbar $menu */
@@ -24,27 +23,6 @@ $statuses = \Application\Entity\Tariff::getStatuses();
         'activeTab' => $activeTab,
     ]);*/
     ?>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="btn-group">
-                <button class="btn dropdown-toggle" type="button" id="buttonMenu1" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    <?= isset($statuses[$activeStatus]) ? $statuses[$activeStatus] : 'Все тарифы'; ?>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="buttonMenu1">
-                    <a class="dropdown-item"
-                       href="<?= $this->url('tariffs/client', ['id' => $client->getId()]); ?>">Все</a>
-                    <?php foreach ($statuses as $statusKey => $statusTitle): ?>
-                        <a class="dropdown-item"
-                           href="<?= $this->url('tariffs/client', ['id' => $client->getId()], ['query' => 'status=' . $statusKey]); ?>">
-                            <?= $statusTitle ?>
-                        </a>
-                    <?php endforeach;; ?>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <?php if (empty($tariffs)): ?>
         <div class="alert alert-dark" role="alert">

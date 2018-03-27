@@ -1,9 +1,10 @@
 <?php
 /**
- * @var \Application\Entity\Provider[]     $providers
- * @var \Application\Form\NewProviderForm  $newProviderForm
- * @var \Application\Form\EditProviderForm $editProviderForm
- * @var string                             $search значение поискового поля
+ * @var \Application\Entity\Provider[]       $providers
+ * @var \Application\Form\NewProviderForm    $newProviderForm
+ * @var \Application\Form\EditProviderForm   $editProviderForm
+ * @var \Application\Form\ProviderConfigForm $configForm
+ * @var string                               $search значение поискового поля
  */
 
 $this->headLink()->appendStylesheet($this->basePath('css/contragents.css'));
@@ -16,7 +17,8 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="material-icons">&#xE8B6;</i></div>
                 </div>
-                <input class="form-control search-field" type="text" name="search" placeholder="Поиск по названию или ИНН" value="<?= $search; ?>">
+                <input class="form-control search-field" type="text" name="search"
+                       placeholder="Поиск по названию или ИНН" value="<?= $search; ?>">
             </div>
 
             <!--For submit by enter key-->
@@ -26,7 +28,7 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     <div class="col-md-3">
     </div>
     <div class="col-md-4 text-right">
-        <?php if($this->hasRole(['admin'])): ?>
+        <?php if ($this->hasRole(['admin'])): ?>
             <button type="button" class="btn btn-raised btn-primary btn-blue" id="addContragentBtn">
                 Добавить
             </button>
@@ -34,7 +36,7 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     </div>
 </div>
 
-<?php if(empty($providers)): ?>
+<?php if (empty($providers)): ?>
     <div class="alert alert-dark" role="alert">
         Нет данных для отображения
     </div>
@@ -62,7 +64,7 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     </table>
 <?php endif; ?>
 
-<?php if($this->hasRole(['admin'])): ?>
+<?php if ($this->hasRole(['admin'])): ?>
     <!-- Modal add new provider and user -->
     <?= $this->partial('application/providers/partial/modal', [
         'newProviderForm' => $newProviderForm,
@@ -71,5 +73,10 @@ $this->inlineScript()->appendFile($this->basePath('js/contragents.js'));
     <!-- Modal edit provider -->
     <?= $this->partial('application/providers/partial/editModal', [
         'editProviderForm' => $editProviderForm,
+    ]); ?>
+
+    <!-- Modal edit provider config -->
+    <?= $this->partial('application/providers/partial/configModal', [
+        'configForm' => $configForm,
     ]); ?>
 <?php endif; ?>

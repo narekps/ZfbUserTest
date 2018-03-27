@@ -45,7 +45,7 @@ class FromProviderController extends AbstractActionController
 
     public function indexAction()
     {
-        /*$key = 'd140869e65a3d7911c90116a875f6982d21cfeffe0533f56ca04bc10599a8962467e421c3679fea10f8d9cda27424144630a';
+        /*$key = '57bbf349b3eacedba757c2a8fb84ab5f03d1e8ef753c2d67bbdb1c2b818aac4037ea740d191547132c19f45a80320b2b72b6';
         $token = [
             'client_info' => [
                 'foo' => 'bar',
@@ -58,6 +58,8 @@ class FromProviderController extends AbstractActionController
         $jwt = JWT::encode($token, $key, 'HS256');
         echo $jwt;
         die;*/
+
+        $this->zfbAuthentication()->getAuthService()->clearIdentity();
 
         $identifier = $this->params()->fromRoute('identifier', null);
         $jwt = $this->params()->fromRoute('jwt', null);
@@ -81,7 +83,7 @@ class FromProviderController extends AbstractActionController
             ]));
 
             $session = new Session\Container('api');
-            $session->offsetSet('from_provider_identifier', $provider->getIdentifier());
+            $session->offsetSet('from_provider_identifier', $provider->getConfig()->getIdentifier());
 
             return $this->forward()->dispatch(AuthenticationController::class, ['action' => 'authenticate']);
         } catch (\Exception $ex) {

@@ -1,0 +1,74 @@
+<?php
+/**
+ * @var \Application\Form\ProviderConfigForm $configForm
+ */
+
+
+$csrfField = $configForm->get('csrf');
+$providerIdField = $configForm->get('provider_id');
+$providerIdField->setAttribute('id', 'provider_id');
+
+$identifierField = $configForm->get('identifier');
+$identifierField->setAttribute('id', 'identifier');
+
+$privateKeyField = $configForm->get('privateKey');
+$privateKeyField->setAttribute('id', 'privateKey');
+
+$paymentsUrlKeyField = $configForm->get('paymentsUrl');
+$paymentsUrlKeyField->setAttribute('id', 'paymentsUrl');
+
+$submitBtn = $configForm->get('submit');
+?>
+
+<div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="configModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="configModalLabel">Настройки сервис-провайдера</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <?= $this->form()->openTag($configForm); ?>
+
+                <?= $this->formHidden($csrfField); ?>
+                <?= $this->formInput($providerIdField); ?>
+
+                <div class="form-group">
+                    <label for="<?= $identifierField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $identifierField->getLabel(); ?></label>
+                    <?= $this->formInput($identifierField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $privateKeyField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $privateKeyField->getLabel(); ?></label>
+                    <?= $this->formInput($privateKeyField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="<?= $paymentsUrlKeyField->getAttribute('id'); ?>"
+                           class="bmd-label-floating"><?= $paymentsUrlKeyField->getLabel(); ?></label>
+                    <?= $this->formInput($paymentsUrlKeyField); ?>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="alert alert-warning error-msg" role="alert" style="display: none;"></div>
+
+                <button type="button" class="btn btn-primary btn-raised btn-blue btn-block" disabled
+                        id="configSaveBtn"
+                        data-save-url="<?=$this->url('providers/update-config', ['id' => ':id']); ?>"
+                        name="<?= $submitBtn->getName(); ?>"><?= $submitBtn->getLabel(); ?></button>
+
+                <?= $this->form()->closeTag(); ?>
+
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

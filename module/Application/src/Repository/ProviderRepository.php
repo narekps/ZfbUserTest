@@ -58,12 +58,37 @@ class ProviderRepository extends EntityRepository
      */
     public function getByIdentifier(string $identifier): ?ProviderEntity
     {
+        $qb = $this->createQueryBuilder('p')->select('p, c');
+        $qb->leftJoin('p.config', 'c');
+        $qb->andWhere('c.identifier = :identifier')->setParameter('identifier', $identifier);
+
         /** @var ProviderEntity|null $provider */
         $provider = null;
 
         try {
-            $provider = $this->findOneBy(['identifier' => $identifier]);
+            $provider = $qb->getQuery()->getSingleResult();
         } catch (DriverException $ex) {
+        } catch (\Exception $ex) {
+        }
+
+        return $provider;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return \Application\Entity\Provider|null
+     */
+    public function getById(int $id): ?ProviderEntity
+    {
+        $qb = $this->createQueryBuilder('p')->select('p, c');
+        $qb->leftJoin('p.config', 'c');
+        $qb->andWhere('p.id = :id')->setParameter('id', $id);
+
+        try {
+            /** @var ProviderEntity|null $provider */
+            $provider = $qb->getQuery()->getSingleResult();
+        } catch (\Exception $ex) {
         }
 
         return $provider;

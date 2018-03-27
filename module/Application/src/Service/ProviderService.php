@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Provider as ProviderEntity;
+use Application\Entity\ProviderConfig as ProviderConfigEntity;
 use Application\Entity\Contract as ContractEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -51,5 +52,30 @@ class ProviderService
         }
 
         return $provider;
+    }
+
+    /**
+     * @param \Application\Entity\ProviderConfig $config
+     * @param array                              $data
+     *
+     * @return \Application\Entity\ProviderConfig
+     * @throws \Exception
+     */
+    public function updateConfig(ProviderConfigEntity $config, array $data): ProviderConfigEntity
+    {
+        $config->exchangeArray($data);
+
+        $this->entityManager->beginTransaction();
+        try {
+            $this->entityManager->persist($config);
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+        } catch (\Exception $ex) {
+            $this->entityManager->rollback();
+
+            throw $ex;
+        }
+
+        return $config;
     }
 }

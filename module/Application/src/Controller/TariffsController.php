@@ -147,14 +147,12 @@ class TariffsController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        $status = $this->params()->fromQuery('status', '');
-        $tariffs = $this->tariffRepository->getProviderTariffs($provider, $status);
+        $tariffs = $this->tariffRepository->getProviderTariffs($provider, TariffEntity::STATUS_ACTIVE);
 
         $viewModel = new ViewModel([
             'client'       => $client,
             'tariffs'      => $tariffs,
             'activeTab'    => 'tariffs',
-            'activeStatus' => $status,
         ]);
 
         return $viewModel;

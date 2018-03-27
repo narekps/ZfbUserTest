@@ -52,15 +52,17 @@ return [
             \ZfcRbac\Guard\RouteGuard::class => [
                 // route => roles
 
-                'home' => ['user'],
+                'home'                     => ['user'],
                 'doctrine_orm_module_yuml' => ['admin'],
 
-                'api*' => ['guest'],
+                'api*' => ['guest', 'user'],
 
-                'providers'        => ['admin'],
-                'providers/info'   => ['admin', 'provider_admin', 'provider_user'],
-                'providers/get'    => ['admin'],
-                'providers/update' => ['admin'],
+                'providers'               => ['admin'],
+                'providers/info'          => ['admin', 'provider_admin', 'provider_user'],
+                'providers/get'           => ['admin'],
+                'providers/get-config'    => ['admin'],
+                'providers/update'        => ['admin'],
+                'providers/update-config' => ['admin'],
 
                 'trackers'        => ['admin'],
                 'trackers/info'   => ['admin', 'tracker_admin', 'tracker_user'],
@@ -92,7 +94,8 @@ return [
                 'clients'      => ['admin'],
                 'clients/info' => ['admin', 'client_user'],
 
-                'users'                      => [/*'admin', */'provider_admin', 'tracker_admin'],
+                'users'                      => [/*'admin', */
+                    'provider_admin', 'tracker_admin'],
                 'users/provider'             => ['admin'/*, 'provider_admin'*/],
                 'users/tracker'              => ['admin'/*, 'tracker_admin'*/],
 

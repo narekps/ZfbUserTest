@@ -2,26 +2,18 @@
 
 namespace Application\Controller\Factory;
 
-use Application\Form\InvoiceForm;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Application\Controller\ProvidersController;
 use Doctrine\ORM\EntityManagerInterface;
 use Application\Entity\Provider as ProviderEntity;
 use Application\Repository\ProviderRepository;
-use Application\Entity\Tariff as TariffEntity;
 use Application\Entity\Contract as ContractEntity;
-use Application\Entity\User as UserEntity;
-use Application\Repository\TariffRepository;
 use Application\Repository\ContractRepository;
 use Application\Form\NewProviderForm;
-use Application\Repository\UserRepository;
-use Application\Form\TariffForm;
 use Application\Form\EditProviderForm;
-use Application\Form\UpdateUserForm;
 use Application\Service\ProviderService;
-use Application\Entity\Invoice as InvoiceEntity;
-use Application\Repository\InvoiceRepository;
+use Application\Form\ProviderConfigForm;
 
 /**
  * Class ProvidersControllerFactory
@@ -47,17 +39,8 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var ProviderRepository $providerRep */
         $providerRep = $entityManager->getRepository(ProviderEntity::class);
 
-        /** @var TariffRepository $tariffRep */
-        $tariffRep = $entityManager->getRepository(TariffEntity::class);
-
         /** @var ContractRepository $contractRep */
         $contractRep = $entityManager->getRepository(ContractEntity::class);
-
-        /** @var InvoiceRepository $invoiceRep */
-        $invoiceRep = $entityManager->getRepository(InvoiceEntity::class);
-
-        /** @var UserRepository $userRepository */
-        $userRepository = $container->get('zfbuser_user_repository');
 
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $container->get('Request');
@@ -81,21 +64,15 @@ class ProvidersControllerFactory implements FactoryInterface
         /** @var NewProviderForm $newUserForm */
         $newUserForm = $container->get('zfbuser_new_user_form');
 
-        /** @var UpdateUserForm $updateUserForm */
-        $updateUserForm = $container->get('zfbuser_update_user_form');
-
-        /** @var TariffForm $tariffForm */
-        $tariffForm = $container->get(TariffForm::class);
-
         /** @var EditProviderForm $editProviderForm */
         $editProviderForm = $container->get(EditProviderForm::class);
 
-        /** @var InvoiceForm $invoiceForm */
-        $invoiceForm = $container->get(InvoiceForm::class);
+        /** @var ProviderConfigForm $providerConfigForm */
+        $providerConfigForm = $container->get(ProviderConfigForm::class);
 
         /** @var ProviderService $providerService */
         $providerService = $container->get(ProviderService::class);
 
-        return new ProvidersController($providerService, $providerRep, $tariffRep, $contractRep, $invoiceRep, $userRepository, $newUserForm, $updateUserForm, $tariffForm, $editProviderForm, $invoiceForm);
+        return new ProvidersController($providerService, $providerRep, $contractRep, $newUserForm, $editProviderForm, $providerConfigForm);
     }
 }

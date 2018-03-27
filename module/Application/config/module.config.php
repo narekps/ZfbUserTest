@@ -121,6 +121,34 @@ return [
                             ],
                         ],
                     ],
+                    'get-config'    => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'GET',
+                            'route'       => '/get-config/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\ProvidersController::class,
+                                'action'     => 'getConfig',
+                            ],
+                        ],
+                    ],
+                    'update-config' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'verb'        => 'POST',
+                            'route'       => '/update-config/:id',
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\ProvidersController::class,
+                                'action'     => 'updateConfig',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'trackers'  => [
@@ -517,6 +545,7 @@ return [
             Form\UpdateUserForm::class                            => Form\Factory\UpdateUserFormFactory::class,
             Form\TariffForm::class                                => Form\Factory\TariffFormFactory::class,
             Form\ContractForm::class                              => InvokableFactory::class,
+            Form\ProviderConfigForm::class                        => InvokableFactory::class,
             Form\InvoiceForm::class                               => Form\Factory\InvoiceFormFactory::class,
             Service\TariffService::class                          => Service\Factory\TariffServiceFactory::class,
             Service\InvoiceService::class                         => Service\Factory\InvoiceServiceFactory::class,

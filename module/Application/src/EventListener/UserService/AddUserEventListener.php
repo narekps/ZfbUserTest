@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ZfbUser\Service\Event\AddUserEvent;
 use Application\Entity\User as UserEntity;
 use Application\Entity\Provider as ProviderEntity;
+use Application\Entity\ProviderConfig as ProviderConfigEntity;
 use Application\Entity\Tracker as TrackerEntity;
 use Application\Entity\Contract as ContractEntity;
 use ZfbUser\EventProvider\EventResult;
@@ -79,8 +80,11 @@ class AddUserEventListener
 
         $length = 50;
         $privateKey = bin2hex(random_bytes($length));
-        $provider->setPrivateKey($privateKey);
-        $provider->setIdentifier(UUID::generate());
+        $providerConfig = new ProviderConfigEntity();
+        $providerConfig->setPrivateKey($privateKey);
+        $providerConfig->setIdentifier(UUID::generate());
+
+        $provider->setConfig($providerConfig);
 
         $user->setProvider($provider);
         $user->setRole('provider_admin');
@@ -91,6 +95,7 @@ class AddUserEventListener
 
         $this->entityManager->persist($contract);
         $this->entityManager->persist($provider);
+        $this->entityManager->persist($providerConfig);
 
         return $provider;
     }

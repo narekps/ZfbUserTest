@@ -67,7 +67,7 @@ class FromProviderService
     public function process(ProviderEntity $provider, string $jwt)
     {
         try {
-            $data = json_decode(json_encode(JWT::decode($jwt, $provider->getPrivateKey(), ['HS256'])), true);
+            $data = json_decode(json_encode(JWT::decode($jwt, $provider->getConfig()->getPrivateKey(), ['HS256'])), true);
 
             if (empty($data['client_info']['inn']) || empty($data['client_info']['kpp'])) {
                 $identity = $this->fakeUserConfig['identity'];
